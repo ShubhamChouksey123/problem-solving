@@ -38,7 +38,6 @@ class Solution {
         
         maxVal = Math.max(maxVal, leftDia + rightDia);
         
-        Integer dia = Math.max(leftDia , rightDia);
         return Math.max(leftDia , rightDia);
         
     }
