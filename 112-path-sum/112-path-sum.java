@@ -15,14 +15,6 @@
  */
 class Solution {
     
-    private boolean isLeaf(TreeNode root){
-        if(root == null)
-            return false;
-        if(root.left == null && root.right == null)
-            return true;
-        return false;
-    }
-    
     private boolean hasPathSumUtil(TreeNode root, int targetSum, int sum) {
         
         if(root == null)
