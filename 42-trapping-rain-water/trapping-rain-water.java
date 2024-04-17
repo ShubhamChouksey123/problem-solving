@@ -5,41 +5,38 @@ class Solution {
         if (n == 1 || n == 2)
             return 0;
 
-        int[] maxElementRight = new int[n];
-        int[] maxElementLeft = new int[n];
 
-        for (int i = 0; i < n; i++) {
-            maxElementLeft[i] = 0;
-            maxElementRight[i] = 0;
-        }
-
-        maxElementLeft[0] = 0;
-        maxElementRight[n - 1] = 0;
-
+        int totalWaterStored = 0;
+        int currentWaterStored = 0;
 
         int maxElementLeftValue = height[0];
-        for (int i = 1; i < n; i++) {
-            maxElementLeft[i] = Math.max(maxElementLeftValue - height[i], 0);
-            maxElementLeftValue = Math.max(maxElementLeftValue, height[i]);
-        }
-
-        // System.out.println("maxElementLeft : " + Arrays.toString(maxElementLeft));
-
         int maxElementRightValue = height[n - 1];
-        for (int i = n - 2; i >= 0; i--) {
-            maxElementRight[i] = Math.max(maxElementRightValue - height[i], 0);
-            maxElementRightValue = Math.max(maxElementRightValue, height[i]);
+
+        int leftPointer = 0;
+        int rightPointer = n - 1;
+
+        while (leftPointer < rightPointer) {
+
+            if (maxElementLeftValue <= maxElementRightValue) {
+                leftPointer++;
+                currentWaterStored = Math.max(maxElementLeftValue - height[leftPointer], 0);
+                maxElementLeftValue = Math.max(maxElementLeftValue, height[leftPointer]);
+                
+
+            } else {
+                rightPointer--;
+                currentWaterStored = Math.max(maxElementRightValue - height[rightPointer], 0);
+                maxElementRightValue = Math.max(maxElementRightValue, height[rightPointer]);
+               
+            }
+
+            totalWaterStored += currentWaterStored;
         }
 
-        // System.out.println("maxElementRight : " + Arrays.toString(maxElementRight));
 
-        int waterStored = 0;
-        for (int i = 1; i < n - 1; i++) {
-            waterStored += Math.min(maxElementLeft[i], maxElementRight[i]);
-        }
+        // System.out.println("totalWaterStored : " + totalWaterStored);
 
-        // System.out.println("waterStored : " + waterStored);
-        return waterStored;
+        return totalWaterStored;
 
         
     }
