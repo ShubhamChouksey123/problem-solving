@@ -1,5 +1,6 @@
 class Solution {
     
+    
     private boolean isDigit(Character c) {
 
         if (c >= '0' && c <= '9')
@@ -42,10 +43,19 @@ class Solution {
         return sum;
     }
 
+    private int getNumber(Character startChar, Integer index, Stack<String> st, String s) {
 
+        StringBuilder word = new StringBuilder();
+        word.append(startChar);
+        while (index + 1 < s.length() && isDigit(s.charAt(index + 1))) {
+            index++;
+            word.append(s.charAt(index));
+        }
+        st.push(word.toString());
+        return index;
+    }
 
     public int calculate(String s) {
-
         int n = s.length();
         Stack<String> st = new Stack<>();
 
@@ -58,26 +68,9 @@ class Solution {
             } else if (Objects.equals(c, ')')) {
                 evaluateAndAdd(st);
             } else if (Objects.equals(c, '-')) {
-                int index = i;
-                StringBuilder word = new StringBuilder();
-                word.append(c);
-                while (index + 1 < n && isDigit(s.charAt(index + 1))) {
-                    index++;
-                    word.append(s.charAt(index));
-                }
-                st.push(word.toString());
-                i = index;
-
+                i = getNumber(c, i, st, s);
             } else if (c >= '0' && c <= '9') {
-                int index = i;
-                StringBuilder word = new StringBuilder();
-                word.append(c);
-                while (index + 1 < n && isDigit(s.charAt(index + 1))) {
-                    index++;
-                    word.append(s.charAt(index));
-                }
-                st.push(word.toString());
-                i = index;
+                i = getNumber(c, i, st, s);
             }
 
 
