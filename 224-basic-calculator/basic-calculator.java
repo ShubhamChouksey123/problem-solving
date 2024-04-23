@@ -1,82 +1,59 @@
 class Solution {
     
-    
     private boolean isDigit(Character c) {
-
         if (c >= '0' && c <= '9')
             return true;
         return false;
     }
-
-    private void evaluateAndAdd(Stack<String> st) {
-
-        int amount = 0;
-        while (!st.isEmpty()) {
-            String topElement = st.pop();
-
-            if (Objects.equals(topElement, "(")) {
-                if (!st.isEmpty() && Objects.equals(st.peek(), "-")) {
-                    amount = amount * -1;
-                    st.pop();
-                }
-                break;
-            }
-            amount = amount + Integer.parseInt(topElement);
-        }
-        st.push(String.valueOf(amount));
-    }
-
-    private int evaluateSumOfStack(Stack<String> st) {
-
-        int sum = 0;
-        while (!st.isEmpty()) {
-            String topElement = st.pop();
-
-            if (Objects.equals(topElement, "-")) {
-                sum = sum * -1;
-            } else {
-                sum = sum + Integer.parseInt(topElement);
-            }
-
-
-        }
-        return sum;
-    }
-
-    private int getNumber(Character startChar, Integer index, Stack<String> st, String s) {
-
-        StringBuilder word = new StringBuilder();
-        word.append(startChar);
-        while (index + 1 < s.length() && isDigit(s.charAt(index + 1))) {
-            index++;
-            word.append(s.charAt(index));
-        }
-        st.push(word.toString());
-        return index;
-    }
-
+    
     public int calculate(String s) {
         int n = s.length();
-        Stack<String> st = new Stack<>();
+        Stack<Integer> st = new Stack<>();
+
+        int number = 0;
+        int result = 0;
+        int sign = 1;
 
         for (int i = 0; i < n; i++) {
 
             char c = s.charAt(i);
 
+            if (Objects.equals(c, ' ')) {
+                continue;
+            }
+
             if (Objects.equals(c, '(')) {
-                st.push(String.valueOf(c));
+                st.push(result);
+                st.push(sign);
+                number = 0;
+                result = 0;
+                sign = 1;
             } else if (Objects.equals(c, ')')) {
-                evaluateAndAdd(st);
+                result = result + (number * sign);
+                number = 0;
+                sign = st.pop();
+                result = result * sign;
+                result = st.pop() + result;
+            } else if (Objects.equals(c, '+')) {
+                result = result + (number * sign);
+                number = 0;
+                sign = 1;
             } else if (Objects.equals(c, '-')) {
-                i = getNumber(c, i, st, s);
-            } else if (c >= '0' && c <= '9') {
-                i = getNumber(c, i, st, s);
+                result = result + (number * sign);
+                number = 0;
+                sign = -1;
+            } else if (isDigit(c)) {
+                number = number * 10 + c - '0';
             }
 
 
         }
 
+        if (number != 0) {
+            result = result + (number * sign);
+        }
+
         System.out.println("st: " + st);
-        return evaluateSumOfStack(st);
+        return result;
     }
 }
