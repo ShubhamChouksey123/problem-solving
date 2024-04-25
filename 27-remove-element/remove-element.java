@@ -1,61 +1,23 @@
 class Solution {
+    private void swap(int[] nums, int a, int b) {
+        int tmp = nums[a];
+        nums[a] = nums[b];
+        nums[b] = tmp;
+    }
 
-     public void swapArrayElement(int[] nums, int index1, int index2){
+    public int removeElement(int[] nums, int val) {
 
         int n = nums.length;
+        int start = 0;
+        int current = 0;
 
-        int temp = nums[index1];
-        nums[index1] = nums[index2];
-        nums[index2] = temp;
-
-
-    }
-    public int removeElement(int[] nums, int val) {
-        
-
-         int n = nums.length;
-        int sortedTil = 0;
-        int index = 0;
-
-
-        while(index < n){
-            System.out.println("sorted array : " + Arrays.toString(nums));
-            System.out.println("sortedTil : " + sortedTil + " and index : " + index);
-
-            if(sortedTil > index){
-                index = sortedTil;
-                continue;
+        for (current = 0; current < n; current++) {
+            if (nums[current] != val) {
+                swap(nums, start, current);
+                start++;
             }
-
-            if(nums[index] == val){
-                index++;
-                continue;
-            }
-            if(nums[sortedTil] != val){
-                sortedTil++;
-                continue;
-            }
-
-            if(sortedTil == index){
-                index++;
-                continue;
-            }
-
-            System.out.println("nums[sortedTil] : " + nums[sortedTil] + " and nums[index] : " + nums[index]);
-
-            if(nums[sortedTil] == val && nums[index] != val){
-                swapArrayElement(nums,sortedTil ,index);
-                index++;
-                sortedTil++;
-            }
-
         }
 
-        int count = 0;
-        for(int i = 0 ; i < nums.length ; i++){
-            if(nums[i] != val)
-                count++;
-        }
-        return count;
+        return start;
     }
 }
