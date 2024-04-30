@@ -27,6 +27,7 @@ class Solution {
         nodeVisitedCount++;
         if (nodeVisitedCount == k) {
             kthSmallestNode = root.val;
+            return;
         }
 //        System.out.println("root.val : " + root.val);
         kthSmallestUtil(root.right, k);
