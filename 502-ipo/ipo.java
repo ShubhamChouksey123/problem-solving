@@ -25,9 +25,6 @@ class Solution {
             }
         }
 
-        System.out.println("minPQ : " + minPQ);
-        System.out.println("w : " + w);
-
         return w;
     }
 }
