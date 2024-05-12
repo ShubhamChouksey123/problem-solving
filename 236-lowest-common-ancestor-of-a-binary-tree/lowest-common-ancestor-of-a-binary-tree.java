@@ -73,7 +73,7 @@ class Solution {
         getAllAncestorsQ(root, q, new Stack<>());
         ancestorsQ.add(q);
 
-        System.out.println("ancestorsQ : " + ancestorsQ);
+        // System.out.println("ancestorsQ : " + ancestorsQ);
 
         int index = 0;
         TreeNode common = null;
