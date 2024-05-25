@@ -20,7 +20,7 @@ class Solution {
 
     }
 
-    private void flipToB(char[][] board, int m, int n, boolean[][] visitedDFS, int x, int y) {
+    private void flipToDesired(char[][] board, int m, int n, boolean[][] visitedDFS, int x, int y, char to) {
 
         if (x < 0 || x >= m || y < 0 || y >= n || board[x][y] == 'X' || board[x][y] == 'b' || board[x][y] == 'a')
             return;
@@ -29,32 +29,15 @@ class Solution {
             return;
 
         visitedDFS[x][y] = true;
-        board[x][y] = 'b';
+        board[x][y] = to;
 
-        flipToB(board, m, n, visitedDFS, x + 1, y);
-        flipToB(board, m, n, visitedDFS, x - 1, y);
-        flipToB(board, m, n, visitedDFS, x, y + 1);
-        flipToB(board, m, n, visitedDFS, x, y - 1);
-
-    }
-
-    private void flipToA(char[][] board, int m, int n, boolean[][] visitedDFS, int x, int y) {
-
-        if (x < 0 || x >= m || y < 0 || y >= n || board[x][y] == 'X' || board[x][y] == 'b' || board[x][y] == 'a')
-            return;
-
-        if (visitedDFS[x][y])
-            return;
-
-        visitedDFS[x][y] = true;
-        board[x][y] = 'a';
-
-        flipToA(board, m, n, visitedDFS, x + 1, y);
-        flipToA(board, m, n, visitedDFS, x - 1, y);
-        flipToA(board, m, n, visitedDFS, x, y + 1);
-        flipToA(board, m, n, visitedDFS, x, y - 1);
+        flipToDesired(board, m, n, visitedDFS, x + 1, y, to);
+        flipToDesired(board, m, n, visitedDFS, x - 1, y, to);
+        flipToDesired(board, m, n, visitedDFS, x, y + 1, to);
+        flipToDesired(board, m, n, visitedDFS, x, y - 1, to);
 
     }
+
 
     public void solve(char[][] board) {
 
@@ -69,9 +52,9 @@ class Solution {
 
                     boolean[][] visitedDFS = new boolean[m][n];
                     if (!canReachEnd(board, m, n, visited, i, j)) {
-                        flipToB(board, m, n, visitedDFS, i, j);
+                        flipToDesired(board, m, n, visitedDFS, i, j, 'b');
                     } else {
-                        flipToA(board, m, n, visitedDFS, i, j);
+                        flipToDesired(board, m, n, visitedDFS, i, j, 'a');
                     }
 
                 }
@@ -79,7 +62,6 @@ class Solution {
             }
         }
 
-        // print(board);
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
                 if (board[i][j] == 'b') {
@@ -90,7 +72,5 @@ class Solution {
                 }
             }
         }
-        // System.out.println();
-        // print(board);
     }
 }
