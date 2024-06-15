@@ -1,27 +1,30 @@
 class Solution {
     public int findMaximizedCapital(int k, int w, int[] profits, int[] capital) {
 
-        PriorityQueue<Integer[]> minPQ = new PriorityQueue<>((Integer[] a, Integer[] b) -> a[0] - b[0]);
+        PriorityQueue<Integer[]> lowestCapitals = new PriorityQueue<>(
+                (Integer[] a, Integer[] b) -> {
+                    return a[0] - b[0];
+                }
+        );
 
         int n = profits.length;
         for (int i = 0; i < n; i++) {
-            minPQ.add(new Integer[]{capital[i], profits[i]});
+
+            Integer[] temp = new Integer[]{capital[i], profits[i]};
+            lowestCapitals.add(temp);
         }
 
+        PriorityQueue<Integer> maximumProfits = new PriorityQueue<>((a, b) -> b - a);
 
-        PriorityQueue<Integer> maxPQ = new PriorityQueue<>((Integer a, Integer b) -> (b - a));
-        int times = k;
-        while (times-- > 0) {
-
-            while (!minPQ.isEmpty() && minPQ.peek()[0] <= w) {
-                Integer[] top = minPQ.poll();
-                int c = top[0];
-                int profit = top[1];
-                maxPQ.add(profit);
+        int totalProfit = 0;
+        while (k-- > 0) {
+            while (!lowestCapitals.isEmpty() && lowestCapitals.peek()[0] <= w) {
+                Integer[] lowestCapital = lowestCapitals.poll();
+                maximumProfits.add(lowestCapital[1]);
             }
 
-            if (!maxPQ.isEmpty()) {
-                w += maxPQ.poll();
+            if (!maximumProfits.isEmpty()) {
+                w += maximumProfits.poll();
             }
         }
 
