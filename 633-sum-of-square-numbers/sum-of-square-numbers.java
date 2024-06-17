@@ -1,29 +1,23 @@
 class Solution {
-    private boolean isPerfectSquare(int num) {
-
-        int rootValue = (int) Math.sqrt(num);
-
-        if (rootValue * rootValue == num) {
-            return true;
-        }
-
-        return false;
-    }
-
     public boolean judgeSquareSum(int c) {
 
-        if (c < 2) {
-            return true;
-        }
+        long start = 0;
+        long end = (long)Math.sqrt(c);
 
-        for (int a = 0; a < Math.sqrt(c); a++) {
-            int b = c - (a * a);
+        // System.out.println("start : " + start + " and end : " + end);
 
-            if (isPerfectSquare(b)) {
+        while(start <= end){
+            if(start * start + end * end == c){
                 return true;
             }
-        }
+            if(start * start + end * end < c){
+                start++;
+            }else{
+                end--;
+            }
 
+        }
         return false;
+        
     }
 }
