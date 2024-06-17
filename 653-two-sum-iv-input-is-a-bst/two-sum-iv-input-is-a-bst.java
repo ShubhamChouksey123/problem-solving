@@ -15,7 +15,7 @@
  */
 class Solution {
     
-    public boolean findTargetUtil(TreeNode root, int k, Set<Integer> elements) {
+    private boolean findTargetUtil(TreeNode root, int k, Set<Integer> elements) {
 
         if(root == null){
             return false;
@@ -30,9 +30,9 @@ class Solution {
 
         return foundLeft | foundRight;
     }
-    public boolean findTarget(TreeNode root, int k) {
 
-        Set<Integer> elements = new HashSet<>();
-        return findTargetUtil(root, k, elements); 
+
+    public boolean findTarget(TreeNode root, int k) {
+        return findTargetUtil(root, k, new HashSet<>()); 
     }
 }
