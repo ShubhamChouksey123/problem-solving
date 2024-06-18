@@ -1,155 +1,141 @@
 class LRUCache {
 
-    public class ListNode {
+    public class Node{
 
-    public int key;
-    public int val;
-    public ListNode next;
-    public ListNode previous;
+        public int key;
+        public int value;
+        public Node left;
+        public Node right;
 
-    public ListNode() {
+        public Node(){
+
+        }
+
+        public Node(int key, int value){
+            this.key = key;
+            this.value = value;
+        }
+
+        public void setValue(int value){
+            this.value = value;
+        }
+
+        @Override
+        public String toString(){
+            return "Node:(" + this.key + ","+ this.value+")";
+        }
     }
 
-    public ListNode(int key, int val) {
-        this.key = key;
-        this.val = val;
-    }
-
-    public ListNode(int val, ListNode next) {
-        this.val = val;
-        this.next = next;
-    }
-    }
-
-    
-    Map<Integer, ListNode> keyNode;
-    ListNode dummyHead;
-    ListNode dummyTail;
-
-    ListNode currentHead;
-    Integer capacity;
+    /**
+     * map of
+     * key -> Node(key, value)
+     */
+    private Map<Integer, Node> lookUp ;
+    private Integer capacity;
+    private Node dummyHead;
+    private Node dummyTail;
 
     public LRUCache(int capacity) {
         this.capacity = capacity;
+        lookUp = new HashMap<>();
 
-        keyNode = new HashMap<>();
-        dummyTail = new ListNode(0, 0);
-        dummyHead = new ListNode(100, 100);
+        dummyHead = new Node(-100, -100);
+        dummyTail = new Node(-200, -200);
 
-        dummyTail.next = dummyHead;
-        dummyTail.previous = null;
-
-        dummyHead.previous = dummyTail;
-        dummyHead.next = null;
-
-        currentHead = dummyTail;
-
+        dummyHead.right = dummyTail;
+        dummyTail.left = dummyHead;
     }
 
     public int get(int key) {
 
-        ListNode node = keyNode.get(key);
-        if (node != null) {
-            moveNodeToStart(node);
-            return node.val;
+        // System.out.println("get key : " + key);
+        Node node = lookUp.get(key);
+        
+        if(node == null){
+            return -1;  
         }
+    
+        removeNode(node);
+        addNodeAtStart(dummyHead, node);
 
-        return -1;
+        // print();
+        return node.value;
     }
 
     public void put(int key, int value) {
 
+        // System.out.println("put key : " + key + " and value : " + value);
+        Node node = lookUp.get(key);
+        if(node != null){
+            // update the value with that key
+            node.setValue(value);
+            lookUp.put(key, node);
 
-        ListNode node = keyNode.get(key);
-        if (node != null) {
-            node.val = value;
-            moveNodeToStart(node);
-        } else {
-            ListNode newNode = appendNodeAtStart(key, value);
-            keyNode.put(key, newNode);
+            removeNode(node);
+            addNodeAtStart(dummyHead, node);
+            return ;
         }
 
-        if (keyNode.size() > capacity) {
-            keyNode.remove(dummyTail.next.key);
-            removeLeftmostNode();
+        // insert the {key, value} in the map and in the linkedlist
+        Node newNode = new Node(key, value);
+        addNodeAtStart(dummyHead, newNode);
+        lookUp.put(key, newNode);
+        
+        udpateCapcity();
+        // print();
+    }
+
+    private void addNodeAtStart(Node dummyHead, Node newNode){
+
+
+        Node rightNode = dummyHead.right;
+
+        dummyHead.right = newNode;
+        newNode.left = dummyHead;
+
+        newNode.right = rightNode;
+        rightNode.left = newNode;
+    }
+
+    private void udpateCapcity(){
+        if(lookUp.size() > capacity){
+            Node lastNode = dummyTail.left;
+            lookUp.remove(lastNode.key);
+            evictLastElement();   
         }
-
     }
 
-    private void removeLeftmostNode() {
-        ListNode secondNode = dummyTail.next.next;
+    private void removeNodeAtLast(Node dummyTail){
 
-        secondNode.previous = dummyTail;
-        dummyTail.next = secondNode;
+        Node lastNode = dummyTail.left;
+        Node secondLastNode = lastNode.left;
+
+        secondLastNode.right = dummyTail;
+        dummyTail.left = secondLastNode;
     }
 
-    private ListNode appendNodeAtStart(int key, int value) {
+    private void removeNode(Node node){
 
-        ListNode newNode = new ListNode(key, value);
-        currentHead.next = newNode;
-        dummyHead.previous = newNode;
-        newNode.next = dummyHead;
-        newNode.previous = currentHead;
-
-        currentHead = newNode;
-        return currentHead;
+        Node previousNode = node.left;
+        Node nextNode = node.right;
+        
+        previousNode.right = nextNode;
+        nextNode.left = previousNode;
     }
 
-    private void moveNodeToStart(ListNode currentNode) {
-
-        ListNode leftNode = currentNode.previous;
-        ListNode rightNode = currentNode.next;
-
-        leftNode.next = rightNode;
-        rightNode.previous = leftNode;
-
-        currentHead = dummyHead.previous;
-
-        currentHead.next = currentNode;
-        dummyHead.previous = currentNode;
-        currentNode.next = dummyHead;
-        currentNode.previous = currentHead;
-
-        currentHead = currentNode;
+    private void evictLastElement(){
+        removeNodeAtLast(dummyTail);
     }
 
-
-    private void traverseForward(ListNode head) {
-
-        if (head != null) {
-            System.out.print(head.val);
-            head = head.next;
+    private void print(){
+        Node head = dummyHead;
+        while(head != null){
+            System.out.print("element (" + head.key
+                    + ","+head.value + ")-> ");
+            head = head.right;
         }
-
-
-        int count = 10;
-        while (head != null && count > 0) {
-            System.out.print(" -> " + head.val);
-            head = head.next;
-            count--;
-        }
-        System.out.println();
-
+        System.out.println(" " );
     }
-
-    private void traverseBackward(ListNode head) {
-
-        if (head != null) {
-            System.out.print(head.val);
-            head = head.previous;
-        }
-
-
-        int count = 10;
-        while (head != null && count > 0) {
-            System.out.print(" <- " + head.val);
-            head = head.previous;
-            count--;
-        }
-        System.out.println();
-
-    }
-
 }
 
 /**
