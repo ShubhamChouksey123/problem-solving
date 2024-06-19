@@ -8,8 +8,6 @@ class Solution {
             return a[1] - b[1];
         });
 
-        // System.out.println("intervals : " + Arrays.deepToString(intervals));
-
         int prevStart = Integer.MIN_VALUE;
         int prevEnd = Integer.MIN_VALUE;
 
@@ -23,18 +21,14 @@ class Solution {
             prevStart = intervals[i][0];
         }
 
-        // System.out.println("list : " + list);
-
 
         prevStart = list.get(0).get(0);
         prevEnd = list.get(0).get(1);
         int count = n - list.size();
-        // System.out.println("count : " + count);
 
         for(int i = 1 ; i < list.size() ; i++){
             int currentStart = list.get(i).get(0);
             int currentEnd = list.get(i).get(1);
-            // System.out.println("prevStart : " + prevStart + ", prevEnd : " + prevEnd + " and currentStart : " + currentStart + ", currentEnd : " + currentEnd);
             if(currentStart < prevEnd){
                 count++;
             }
