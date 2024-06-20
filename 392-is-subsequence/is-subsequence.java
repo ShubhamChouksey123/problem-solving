@@ -1,28 +1,23 @@
 class Solution {
     public boolean isSubsequence(String s, String t) {
+        int m = s.length();
+        int n = t.length();
 
-        int n = s.length();
-        int m = t.length();
-        if (n > m) {
+        if(m > n){
             return false;
         }
 
-        int indexInT = 0;
-        int countMatchWords = 0;
-        for (int i = 0; i < n; i++) {
-            while (indexInT < m && s.charAt(i) != t.charAt(indexInT)) {
-                indexInT++;
+        int index1 = 0;
+        for(int i = 0 ; i < n ; i++){
+            
+            if( index1 < m && s.charAt(index1) == t.charAt(i)){
+                index1++;
             }
-            if (indexInT < m && s.charAt(i) == t.charAt(indexInT)) {
-                countMatchWords++;
-                indexInT++;
-            }
-        }
+        }    
 
-        if (countMatchWords == n)
+        if(index1 == m){
             return true;
-
+        }
         return false;
-        
     }
 }
