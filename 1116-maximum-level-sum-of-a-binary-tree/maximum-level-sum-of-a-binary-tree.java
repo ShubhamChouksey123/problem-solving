@@ -31,8 +31,7 @@ class Solution {
             TreeNode top = queue.poll();
            
             if(top == null){
-            // System.out.println("top is null, level : " + level + " and currentLevelSum : "+ currentLevelSum +" and queue : " + queue);
-
+            
                 if(currentLevelSum > maxSumValueLevel){
                     maxSumValueLevel = currentLevelSum;
                     maxSumNumberLevel = level;
@@ -46,8 +45,6 @@ class Solution {
             }
 
             currentLevelSum += top.val;
-            // System.out.println("top : " + top.val + ", level : " + level + " and currentLevelSum : "+ currentLevelSum +" and queue : " + queue);
-
             
             if(top.left != null){
                 queue.add(top.left);
