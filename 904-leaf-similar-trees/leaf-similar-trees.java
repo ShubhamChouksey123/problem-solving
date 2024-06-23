@@ -35,9 +35,6 @@ class Solution {
 
         List<Integer> leafs2 = new ArrayList<>();
         getLeafNodes(root2, leafs2);
-
-        System.out.println("leafs1 : " + leafs1);
-        System.out.println("leafs2 : " + leafs2);
         if(leafs1.size() != leafs2.size()){
             return false;
         }
