@@ -7,15 +7,14 @@ class Solution {
         }
 
         int n = candies.length;
-        List<Boolean> ans = new ArrayList<>();
-        
-        System.out.println("ans : " + ans);
+        List<Boolean> ans = Arrays.asList(new Boolean[n]);
 
+        
         for(int i = 0 ; i < n ; i++){
             if(candies[i] + extraCandies >= maxCandy){
-                ans.add(true);
+                ans.set(i, true);
             }else{
-                ans.add(false);
+                ans.set(i, false);
             }
         }
         
