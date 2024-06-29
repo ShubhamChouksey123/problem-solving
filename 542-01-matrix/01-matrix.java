@@ -11,50 +11,6 @@ class Solution {
         return false;
     }
 
-    public int getNearestDistance(int[][] mat, int m, int n, int x , int y) {
-        
-        boolean[][] visited = new boolean[m][n];
-
-        Queue<Integer[]> queue = new LinkedList<>();
-        queue.add(new Integer[]{x, y});
-        queue.add(null);
-        visited[x][y] = true;
-
-        int distance = 0;
-        
-        while(!queue.isEmpty()){
-            Integer[] top = queue.poll();
-            if(top == null){
-                if(!queue.isEmpty()){
-                    distance++;
-                    queue.add(null);
-                    continue;
-                }else{
-                    return -1;
-                }
-            }
-
-            if(mat[top[0]][top[1]] == 0){
-                // return or break
-                break;
-            }
-
-
-            for(int[] direction : DIRECTIONS){
-                int xNew = top[0] + direction[0];
-                int yNew = top[1] + direction[1];
-                if(liesInRange(m, n, xNew, yNew) && !visited[xNew][yNew]){
-                    visited[xNew][yNew] = true;
-                    queue.add(new Integer[]{xNew, yNew});
-                }
-            }
-    
-        }
-
-        return distance;
-        
-    }
-
     public int[][] updateMatrix(int[][] mat) {
         int m = mat.length, n = mat[0].length;
         int[][] ans = new int[m][n];
