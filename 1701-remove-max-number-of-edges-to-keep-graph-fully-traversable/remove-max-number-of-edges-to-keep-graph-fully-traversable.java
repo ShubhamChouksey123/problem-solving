@@ -88,10 +88,6 @@ class Solution {
             }
         }   
 
-        // System.out.println("parentsAice : " + Arrays.toString(parentsAice));
-        // System.out.println("parentsBob : " + Arrays.toString(parentsBob));
-        // System.out.println("needed : " + needed);
-
         for(int i = 1 ; i <= n ; i++){
             parentsAice[i] = findParent(i, parentsAice);
             parentsBob[i] = findParent(i, parentsBob);
