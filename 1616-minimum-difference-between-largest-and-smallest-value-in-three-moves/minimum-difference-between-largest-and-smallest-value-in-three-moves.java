@@ -55,19 +55,15 @@ class Solution {
             set.add(value);
         }
 
-        System.out.println("set : " + set + " and set size : " + set.size());
-
         n = set.size();
         while( values.size() > n){
             values.remove(n);
         }
-        System.out.println("values : " + values);
 
         int index = 0;
         for(Integer value : set){
             values.set(index, value);index++;
         }
-        System.out.println("values : " + values);
         
     }
     
@@ -84,17 +80,13 @@ class Solution {
         List<Integer> minElements = new ArrayList<>();
         getMinElements(nums, n, minElements);
 
-        System.out.println("maxElements : " + maxElements);
-        System.out.println("minElements : " + minElements);
-
         List<Integer> values = new ArrayList<>();
         values.addAll(minElements); 
         values.addAll(maxElements);
 
         Collections.sort(values);
         removeDuplicates(n, values);
-        System.out.println("values : " + values);
-
+ 
         n = values.size();
         int minValue = Integer.MAX_VALUE;
 
