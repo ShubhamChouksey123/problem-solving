@@ -1,21 +1,37 @@
 class Solution {
+
+    private int robUtil(int[] nums, int n, int index, int[] dp){
+
+        if(dp[index] != -1){
+            return dp[index];
+        }
+        
+        if(index == 0){
+            dp[index] = nums[0];
+            return dp[index];
+        }
+        if(index == 1){
+            dp[index] = Math.max(nums[0], nums[1]);;
+            return dp[index];
+        }
+    
+        int a = 0;
+        if(index >= 2){
+            a = nums[index] + robUtil(nums, n, index -2, dp);
+        }
+        int b = robUtil(nums, n, index -1, dp);
+        
+        dp[index] = Math.max(a, b);
+        return dp[index];
+    }
+
     public int rob(int[] nums) {
-        int n = nums.length;
-        if (n <= 1) {
-            return nums[0];
-        }
+        
+        int n = nums.length; 
+        int[] dp = new int[n];
 
-        int[][] dp = new int[n][2];
-        dp[0][0] = 0;
-        dp[0][1] = nums[0];
-        dp[1][0] = nums[0];
-        dp[1][1] = nums[1];
-
-        for (int i = 2; i < n; i++) {
-            dp[i][0] = Math.max(dp[i - 1][0], dp[i - 1][1]);
-            dp[i][1] = nums[i] + dp[i - 1][0];
-        }
-        // System.out.println("nums : " + Arrays.toString(nums));
-        return Math.max(dp[n - 1][0], dp[n - 1][1]);
+        Arrays.fill(dp, -1);
+        robUtil(nums, n, n-1, dp);
+        return dp[n-1];
     }
 }
