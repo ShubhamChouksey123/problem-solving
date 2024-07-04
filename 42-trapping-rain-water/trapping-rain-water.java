@@ -6,24 +6,21 @@ class Solution {
             return 0;
         }
         
-        int[] maxElementRight = new int[n];
-        int[] maxElementLeft = new int[n];
+        int leftElementMax = height[0], rightElementMax = height[n-1], left = 0, right = n-1 ;
+        int water = 0, totalWater = 0;
 
-        int maxValue = height[0];
-        for(int i = 1; i < n ; i++){
-            maxElementLeft[i] = maxValue;
-            maxValue = Math.max(maxValue, height[i]);
-        }
+        while(left < right){
+            if(leftElementMax <= rightElementMax){
+                left++;
+                leftElementMax = Math.max(leftElementMax, height[left]);
+                water = Math.min(leftElementMax, rightElementMax) - height[left];
+            }
+            else if(leftElementMax > rightElementMax){
+                right--;
+                rightElementMax = Math.max(rightElementMax, height[right]);
+                water = Math.min(leftElementMax, rightElementMax) - height[right];
+            }
 
-        maxValue = height[n-1];
-        for(int i = n-2 ; i >= 0 ; i--){
-            maxElementRight[i] = maxValue;
-            maxValue = Math.max(maxValue, height[i]);
-        }
-
-        int totalWater = 0;
-        for(int i = 1 ; i < n-1 ; i++){
-            int water = Math.min(maxElementLeft[i], maxElementRight[i]) - height[i];
             if(water > 0){
                 totalWater += water;
             }
@@ -35,6 +32,8 @@ class Solution {
 
 
 /**
+
+
 
 maximum height on its left
 0, 1,0,2,1,0,1,3,2,1,2,1
