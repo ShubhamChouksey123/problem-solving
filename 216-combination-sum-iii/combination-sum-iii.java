@@ -8,6 +8,7 @@ class Solution {
             if(sum == n){
                 ans.add(new ArrayList<>(numbers));
             }
+            return ;
         }
 
         for(int i = start ; i <= Math.min(9, n) ; i++){
