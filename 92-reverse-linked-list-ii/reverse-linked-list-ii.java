@@ -10,68 +10,58 @@
  */
 class Solution {
 
-    private ListNode getStartNode(ListNode head, int left) {
+    private ListNode reverse(ListNode head){
 
-        if (head == null) {
-            return null;
-        }
+        ListNode current = null, prev = null, next = head;
 
-        int count = left - 2;
-        ListNode current = head;
-        while (current.next != null && count > 0) {
-            count--;
-            current = current.next;
+        while(next != null){
+            current = next;
+            next = next.next;
+            current.next = prev;
+            prev = current;
         }
 
         return current;
+
     }
 
     public ListNode reverseBetween(ListNode head, int left, int right) {
 
-        if (head == null || head.next == null || left == right) {
+        if(left == right){
             return head;
         }
 
+        ListNode dummy = new ListNode(1000);
+        dummy.next = head;
 
-        ListNode beforeStart = null;
-        ListNode startNode = null;
+        ListNode current = dummy;
+        int index = 1;
 
-        ListNode current = null;
-        if (left == 1) {
-            startNode = head;
-            current = head;
-        } else {
-            beforeStart = getStartNode(head, left);
-            startNode = beforeStart.next;
-            current = startNode;
-
-        }
-
-        ListNode previous = null;
-        ListNode next = current.next;
-
-        int count = right - left + 1;
-
-        while (current != null && count > 0) {
-
-            count--;
-
-            current.next = previous;
-            previous = current;
-            current = next;
-            if (next != null) {
-                next = next.next;
+        while(current != null){
+            if(index == left){
+                break;
             }
+            current = current.next;
+            index++;
         }
 
-        if (beforeStart == null) {
-            head = previous;
-        } else {
-            beforeStart.next = previous;
-        }
-        startNode.next = current;
+        ListNode beforeFirst = current;
+        ListNode lastNode = current.next;
 
-        return head;
-        
+        current = null; 
+        ListNode prev = null, next = lastNode;
+        int times = right - left  + 1;
+        while(times-- > 0){
+            current = next;
+            next = next.next;
+            current.next = prev;
+            prev = current;
+        }
+
+        lastNode.next = next;
+        beforeFirst.next = current;
+
+        return dummy.next;
+
     }
 }
