@@ -49,9 +49,7 @@ class Solution {
         ListNode current = dummy;
         
         int firstIndex = -1,lastIndex = -1,index = 0;
-        int minDist = -1, maxDist = -1;
-
-
+        
         while(current != null && current.next != null){
             if(isNextCriticalPoint(current)){
                 if(firstIndex == -1){
@@ -63,10 +61,6 @@ class Solution {
             }
             index++;
             current = current.next;
-        }
-
-        if(minDist == -1){
-            return ans;
         }
 
         return ans;
