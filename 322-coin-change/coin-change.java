@@ -1,35 +1,70 @@
 class Solution {
-    public int coinChange(int[] coins, int amount) {
+
+    public int coinChangeUtil(int[] coins, int amount) {
         
-        int k = coins.length;
-        int[][] dp = new int[amount+1][k];
-        
-        for(int[] arr : dp){
-            Arrays.fill(arr, Integer.MAX_VALUE);
+        if(amount == 0){
+            return 0;
         }
 
-        for(int j = 0 ; j < k ; j++){
-            dp[0][j] = 0;
-        }
-
-        for(int i = 1 ; i <= amount ; i++){
-            for(int j = 0 ; j < k ; j++){
-                dp[i][j] = Integer.MAX_VALUE;
-                int a = Integer.MAX_VALUE, b = Integer.MAX_VALUE;
-                if(j >= 1 && dp[i][j-1] != Integer.MAX_VALUE){
-                    a = dp[i][j-1];
-                }
-                if(i >= coins[j] && dp[i-coins[j]][j] != Integer.MAX_VALUE){
-                    b = 1 + dp[i-coins[j]][j];
-                }
-
-                dp[i][j] = Math.min(a, b);
+        int minCoins = Integer.MAX_VALUE;
+        for(int j = 0; j < coins.length ; j++){
+            if(amount >= coins[j]){
+                int coin = coinChangeUtil(coins, amount-coins[j]);  
+                if(coin != -1){
+                    minCoins = Math.min(minCoins, coin + 1);
+                }  
             }
         }
 
-        if(dp[amount][k-1] == Integer.MAX_VALUE){
+        if(minCoins == Integer.MAX_VALUE){
             return -1;
         }
-        return dp[amount][k-1];
+        return minCoins;
+
+    }
+
+    public int coinChangeUtil(int[] coins, int amount, int[] dp) {
+        
+        if(amount < 0){
+            return -1;
+        }
+        if(amount == 0){
+            return 0;
+        }
+
+        if(dp[amount] != Integer.MAX_VALUE){
+            return dp[amount];
+        }
+
+        int minCoins = Integer.MAX_VALUE;
+        for(int j = 0; j < coins.length ; j++){
+            if(amount >= coins[j]){
+                int coin = coinChangeUtil(coins, amount-coins[j], dp);  
+                if(coin != -1){
+                    minCoins = Math.min(minCoins, coin + 1);
+                }  
+            }
+        }
+
+        if(minCoins == Integer.MAX_VALUE){
+            dp[amount] = -1;
+        }
+        else{
+            dp[amount] = minCoins;
+        }
+        return dp[amount];
+
+    }
+
+    public int coinChange(int[] coins, int amount) {
+        
+        // initial recursion
+        // return coinChangeUtil(coins, amount);
+
+        int[] dp = new int[amount+1];
+        Arrays.fill(dp, Integer.MAX_VALUE);
+        dp[0] = 0;
+        return coinChangeUtil(coins, amount, dp);
+        
     }
 }
