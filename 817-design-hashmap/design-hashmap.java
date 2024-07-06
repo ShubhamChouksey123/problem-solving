@@ -19,7 +19,7 @@ class MyHashMap {
         }
     }
 
-    private static final int CAPACITY = 8;
+    private static final int CAPACITY = 5000;
     private Node[] nodes ;
 
     public MyHashMap() {
