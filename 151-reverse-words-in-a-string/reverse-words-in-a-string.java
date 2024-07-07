@@ -1,36 +1,24 @@
 class Solution {
-
-    private String appendReverseString(String reverseWord, String word) {
-
-        if (reverseWord.length() == 0) {
-            reverseWord = word + reverseWord;
-            return reverseWord;
-        }
-
-        return word +  " " + reverseWord;
-    }
     public String reverseWords(String s) {
+        s = s.trim();
+        String[] strings = s.split(" ");
 
-        String reverseWord = "";
-        String lastWord = "";
+        StringBuilder stringBuilder = new StringBuilder();
 
-        for (int i = 0; i < s.length(); i++) {
-            char currentChar = s.charAt(i);
-            if (currentChar == ' ') {
-                if (lastWord.length() > 0) {
-                    reverseWord = appendReverseString(reverseWord, lastWord);
-                    lastWord = "";
-                }
-            } else {
-                lastWord += currentChar;
+        for(int i = strings.length - 1; i >= 0 ; i--){
+            String str = strings[i].trim();
+            if(str.length() == 0){
+                continue;
             }
+            if(i != strings.length - 1){
+                stringBuilder.append(" ");
+            }
+            stringBuilder.append(strings[i].trim());
         }
+        // System.out.println("strings : " + Arrays.toString(strings));
 
-        if(lastWord.length() > 0){
-            reverseWord = appendReverseString(reverseWord, lastWord);
-        }
-
-        return reverseWord;
-        
+        String ans = stringBuilder.toString();
+        ans.trim();
+        return ans;
     }
 }
