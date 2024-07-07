@@ -1,140 +1,140 @@
 class LRUCache {
 
-    public class Node{
-
+    class Node{
         public int key;
         public int value;
         public Node left;
         public Node right;
-
-        public Node(){
-
-        }
 
         public Node(int key, int value){
             this.key = key;
             this.value = value;
         }
 
-        public void setValue(int value){
-            this.value = value;
-        }
-
         @Override
         public String toString(){
-            return "Node:(" + this.key + ","+ this.value+")";
+            return "Node{"+key+","+value+"}";
         }
     }
 
-    /**
-     * map of
-     * key -> Node(key, value)
-     */
-    private Map<Integer, Node> lookUp ;
-    private Integer capacity;
-    private Node dummyHead;
-    private Node dummyTail;
+    private Map<Integer, Node> mp;
+    private int capacity;  
+    private Node dummyLeft;
+    private Node dummyRight;
 
     public LRUCache(int capacity) {
+
+        mp = new HashMap<>();
         this.capacity = capacity;
-        lookUp = new HashMap<>();
 
-        dummyHead = new Node(-100, -100);
-        dummyTail = new Node(-200, -200);
+        dummyLeft = new Node(-1, -1);
+        dummyRight = new Node(100000, 100000);
 
-        dummyHead.right = dummyTail;
-        dummyTail.left = dummyHead;
-    }
-
-    public int get(int key) {
-
-        // System.out.println("get key : " + key);
-        Node node = lookUp.get(key);
+        dummyLeft.right = dummyRight;
+        dummyRight.left = dummyLeft;
         
-        if(node == null){
-            return -1;  
-        }
+    }
     
+    public int get(int key) {
+        
+        System.out.println("getting key : " + key);
+        Node node = mp.get(key);
+        if(node == null){
+            return -1;
+        }
+        
+        // remove the element from that position
         removeNode(node);
-        addNodeAtStart(dummyHead, node);
 
+        // add that at the start of the LL
+        addNodeAtStart(node);
         // print();
+
         return node.value;
     }
-
+    
     public void put(int key, int value) {
-
-        // System.out.println("put key : " + key + " and value : " + value);
-        Node node = lookUp.get(key);
+        System.out.println("adding key : " + key + " and value : " + value);
+        Node node = mp.get(key);
         if(node != null){
-            // update the value with that key
-            node.setValue(value);
-            lookUp.put(key, node);
+           
+            // udpate in the map
+            node.value = value;
 
+            // remove the element from that position
             removeNode(node);
-            addNodeAtStart(dummyHead, node);
-            return ;
+
+            // add that at the start of the LL
+            addNodeAtStart(node);
+
+            // print();
+            return;
         }
 
-        // insert the {key, value} in the map and in the linkedlist
         Node newNode = new Node(key, value);
-        addNodeAtStart(dummyHead, newNode);
-        lookUp.put(key, newNode);
         
-        udpateCapcity();
+        // add that at the start of the LL
+        addNodeAtStart(newNode);
+
+        // add in the map
+        mp.put(key, newNode);
+
+        // capacity check and remove the last element of capacity exceeds the capacity limit 
+        capacityUpdate();
+
         // print();
-    }
-
-    private void addNodeAtStart(Node dummyHead, Node newNode){
-
-
-        Node rightNode = dummyHead.right;
-
-        dummyHead.right = newNode;
-        newNode.left = dummyHead;
-
-        newNode.right = rightNode;
-        rightNode.left = newNode;
-    }
-
-    private void udpateCapcity(){
-        if(lookUp.size() > capacity){
-            Node lastNode = dummyTail.left;
-            lookUp.remove(lastNode.key);
-            evictLastElement();   
-        }
-    }
-
-    private void removeNodeAtLast(Node dummyTail){
-
-        Node lastNode = dummyTail.left;
-        Node secondLastNode = lastNode.left;
-
-        secondLastNode.right = dummyTail;
-        dummyTail.left = secondLastNode;
     }
 
     private void removeNode(Node node){
+        Node leftNode = node.left;
+        Node righNode = node.right;
 
-        Node previousNode = node.left;
-        Node nextNode = node.right;
-        
-        previousNode.right = nextNode;
-        nextNode.left = previousNode;
+        leftNode.right = righNode;
+        righNode.left = leftNode;
+
+        node.left = null;
+        node.right = null;
     }
 
-    private void evictLastElement(){
-        removeNodeAtLast(dummyTail);
+    private void addNodeAtStart(Node newNode){
+        Node secondNode = dummyLeft.right;
+
+        dummyLeft.right = newNode;
+        newNode.left = dummyLeft;
+
+        newNode.right = secondNode;
+        secondNode.left = newNode;
+    }
+
+    private void capacityUpdate(){
+
+        if(mp.size() <= capacity){
+            return;
+        }
+
+        Node lastNode = dummyRight.left;
+        Node secondLastNode = lastNode.left;
+
+        secondLastNode.right = dummyRight;
+        dummyRight.left = secondLastNode;
+
+        mp.remove(lastNode.key);
     }
 
     private void print(){
-        Node head = dummyHead;
-        while(head != null){
-            System.out.print("element (" + head.key
-                    + ","+head.value + ")-> ");
-            head = head.right;
-        }
-        System.out.println(" " );
+        Node current = dummyLeft;
+        while(current != null){
+            System.out.print("("+current.key + "," + current.value + ") => ");
+            current = current.right;
+        }System.out.println(" ");
+
+        current = dummyRight;
+        while(current != null){
+            System.out.print("("+current.key + "," + current.value + ") => ");
+            current = current.left;
+        }System.out.println(" ");
+
+        System.out.println("mp : " + mp);
     }
 }
 
