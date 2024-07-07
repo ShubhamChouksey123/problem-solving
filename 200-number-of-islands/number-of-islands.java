@@ -1,34 +1,44 @@
 class Solution {
-    private void numIslandsUtil(char[][] grid, int m, int n, boolean[][] visited, int x, int y) {
 
-        if (x < 0 || x >= m || y < 0 || y >= n || visited[x][y] || grid[x][y] == '0') {
-            return;
+    private static final int[][] DIRECTIONS = new int[][]{
+        {1,0}, {-1,0}, {0,1}, {0,-1}
+    };
+
+    private boolean liesInRange(int m, int n, int x, int y){
+        if(x >= 0 && x < m && y >= 0 && y < n){
+            return true;
         }
+        return false;
+    }
 
-        visited[x][y] = true;
+    private void numIslandsUtils(char[][] grid, int m, int n, int x, int y, boolean[][] visited) {
 
-        numIslandsUtil(grid, m, n, visited, x + 1, y);
-        numIslandsUtil(grid, m, n, visited, x - 1, y);
-        numIslandsUtil(grid, m, n, visited, x, y + 1);
-        numIslandsUtil(grid, m, n, visited, x, y - 1);
+        for(int[] direction : DIRECTIONS){
+            int xNew = x + direction[0];
+            int yNew = y + direction[1];
+
+            if(liesInRange(m, n, xNew, yNew) && !visited[xNew][yNew] && grid[xNew][yNew] == '1'){
+                visited[xNew][yNew] = true;
+                numIslandsUtils(grid, m, n, xNew, yNew, visited);
+            }
+        } 
     }
 
     public int numIslands(char[][] grid) {
 
-        int m = grid.length;
-        int n = grid[0].length;
-
+        int m = grid.length, n = grid[0].length;
         boolean[][] visited = new boolean[m][n];
-
         int totalIsland = 0;
-        for (int i = 0; i < m; i++) {
-            for (int j = 0; j < n; j++) {
-                if (!visited[i][j] && grid[i][j] == '1') {
-                    numIslandsUtil(grid, m, n, visited, i, j);
+
+        for(int i = 0 ; i < m ; i++){
+            for(int j = 0 ; j < n ; j++){   
+                if(!visited[i][j] && grid[i][j] == '1'){
+                    visited[i][j] = true;
                     totalIsland++;
+                    numIslandsUtils(grid, m, n, i, j, visited);
                 }
             }
-        }
-        return totalIsland;
+        } 
+        return totalIsland;   
     }
 }
