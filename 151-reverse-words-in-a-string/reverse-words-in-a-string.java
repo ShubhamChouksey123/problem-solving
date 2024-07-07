@@ -15,7 +15,6 @@ class Solution {
             }
             stringBuilder.append(strings[i].trim());
         }
-        // System.out.println("strings : " + Arrays.toString(strings));
 
         String ans = stringBuilder.toString();
         ans.trim();
