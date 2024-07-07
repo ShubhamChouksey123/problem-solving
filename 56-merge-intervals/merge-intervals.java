@@ -1,54 +1,41 @@
 class Solution {
-
-     private int[][] convertListToArray(List<List<Integer>> mergedIntervals){
-
-        int length = mergedIntervals.size();
-        int[][] mergedAns = new int[length][2];
-
-        for(int i = 0 ; i < length; i++){
-            mergedAns[i][0] = mergedIntervals.get(i).get(0);
-            mergedAns[i][1] = mergedIntervals.get(i).get(1);
-        }
-
-        return mergedAns;
-    }
     public int[][] merge(int[][] intervals) {
 
-        List<List<Integer>> mergedIntervals = new ArrayList<>();
-
-        int n = intervals.length;
-        if (n <= 1)
-            return intervals;
+        Arrays.sort(intervals, (int[] a, int[] b) -> {
+            if(a[0] != b[0]){
+                return a[0] - b[0];  
+            }
+            return a[1] - b[1];
+        });
         
-        Arrays.sort(intervals, (a,b)->a[0]-b[0]);
-        int index = 0;
-        while (index < n) {
+        int index = 0, n = intervals.length;
+        List<Integer[]> mergedIntervals = new ArrayList<>();
 
-            int startLast = intervals[index][0];
-            int endLast = intervals[index][1];
+        while(index < n){
+            
+            int start = intervals[index][0];
+            int end = intervals[index][1];
 
-            while (index + 1 < n && intervals[index + 1][0] <= endLast) {
+            // overlapping interval
+            while(index+1 < n && intervals[index+1][0] <= end){
                 index++;
-                int start = intervals[index][0];
-                int end = intervals[index][1];
-
-                startLast = Math.min(startLast, start);
-                endLast = Math.max(endLast, end);
-
+                end = Math.max(end, intervals[index][1]);
             }
 
-            List<Integer> interval = new ArrayList<>();
-            interval.add(startLast);
-            interval.add(endLast);
-            mergedIntervals.add(interval);
+            mergedIntervals.add(new Integer[]{start, end});
             index++;
         }
 
-        // System.out.println("mergedIntervals : " + mergedIntervals);
+        int[][] ans = new int[mergedIntervals.size()][2];
+        index = 0;
 
-        int[][] mergedAns = convertListToArray( mergedIntervals );
+        for(Integer[] interval : mergedIntervals){
+            ans[index][0] = interval[0];
+            ans[index][1] = interval[1];
+            index++;
+        }
 
-        return mergedAns;
-        
+        // System.out.println("");
+        return ans;
     }
 }
