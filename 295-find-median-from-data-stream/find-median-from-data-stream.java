@@ -1,85 +1,80 @@
 class MedianFinder {
 
-    /**
-     * top element is greatest : Max Heap
-     */
-    private PriorityQueue<Integer> minQueue;
-
-    /**
-     * top element is smallest : Min Heap
-     */
-    private PriorityQueue<Integer> maxQueue;
+    private Queue<Integer> greatElements;
+    private Queue<Integer> smallerElements;
 
     public MedianFinder() {
+        
+        greatElements = new PriorityQueue<>();
+        smallerElements = new PriorityQueue<>(
+            (a,b) -> {
+                return b - a;
+            }
+        );
 
-        minQueue = new PriorityQueue<>((Integer a, Integer b) -> (b - a));
-        maxQueue = new PriorityQueue<>();
-
+        smallerElements.add(-100001);
+        greatElements.add(100001);
+        
     }
-
-    public void makeSizeNearlyEqual() {
-
-        if (minQueue.size() == maxQueue.size() || minQueue.size() - maxQueue.size() == 1) {
-            return;
-        } else if (minQueue.size() > maxQueue.size()) {
-            int t1 = minQueue.poll();
-            maxQueue.add(t1);
-        } else {
-            int t2 = maxQueue.poll();
-            minQueue.add(t2);
-        }
-
-    }
-
+    
     public void addNum(int num) {
 
-        if (minQueue.isEmpty()) {
-            minQueue.add(num);
+        if(num < smallerElements.peek()){
+            smallerElements.add(num);
+        } 
+        else if(num > greatElements.peek()){
+            greatElements.add(num);
+        }else{
+            smallerElements.add(num);
+        }
+
+        makeSizeEqual();
+    }
+    
+    public double findMedian() {
+        
+        int smallQSize = smallerElements.size();
+        int greaterQSize = greatElements.size();
+    
+
+        if(smallQSize > 1 && greaterQSize > 1){
+
+            if(smallQSize == greaterQSize){
+                return ((double)smallerElements.peek() + (double)greatElements.peek()) / 2.0;
+            } 
+            else if(smallQSize > greaterQSize){
+                return (double)smallerElements.peek();
+            }
+            return (double)greatElements.peek();
+            
+        }
+        else if(smallQSize == 1){
+            return (double)greatElements.peek();
+        }
+        else if(greaterQSize == 1){
+            return (double)smallerElements.peek();
+        }
+        
+        return 0.0;
+    }
+
+    private void makeSizeEqual(){
+        int smallQSize = smallerElements.size();
+        int greaterQSize = greatElements.size();
+
+        if(Math.abs(smallQSize - greaterQSize) <= 1){
             return;
         }
 
-
-        Integer t1 = minQueue.peek();
-
-
-        Integer t2 = Integer.MAX_VALUE;
-        if (!maxQueue.isEmpty()) {
-            t2 = maxQueue.peek();
+        if(smallQSize > greaterQSize){
+            int top = smallerElements.poll();
+            greatElements.add(top);
         }
-
-
-        if (num < t1) {
-            minQueue.add(num);
-        } else if (num > t2) {
-            maxQueue.add(num);
-        } else {
-            minQueue.add(num);
+        else if(smallQSize < greaterQSize){
+            int top = greatElements.poll();
+            smallerElements.add(top);
         }
-
-        makeSizeNearlyEqual();
-    }
-
-    public double findMedian() {
-
-        Integer t1 = minQueue.peek();
-        Integer t2 = maxQueue.peek();
-
-        if (t1 == null && t2 == null) {
-            return 0.0;
-        } else if (t2 == null) {
-            return t1;
-        } else if (t1 == null) {
-            return t2;
-        }
-
-
-        if (minQueue.size() == maxQueue.size()) {
-            return ((double) t1 + t2) / 2;
-        }
-
-
-        return t1;
-    }
+    } 
 }
 
 /**
