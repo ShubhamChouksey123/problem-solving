@@ -1,46 +1,60 @@
 class Solution {
-    
 
-    private List<String> sequences = new ArrayList<>();
+    private List<String> ans ; 
 
-    private void convertToString(List<String> currentSeq) {
-        if (currentSeq.isEmpty())
-            return;
-
-        StringBuilder ans = new StringBuilder();
-        ans.append(currentSeq.get(0));
-
-        for (int i = 1; i < currentSeq.size(); i++) {
-            ans.append(" ");
-            ans.append(currentSeq.get(i));
-        }
-        sequences.add(String.valueOf(ans));
-    }
-
-    private void wordBreakUtil(String s, int len, List<String> wordDict, int n, int index, List<String> currentSeq) {
-
-        if (index == len) {
-            convertToString(currentSeq);
+    private void addList(List<String> words){
+        int n = words.size();
+        if(n < 1){
             return;
         }
 
-        for (int i = 0; i < n; i++) {
-            String wordExpected = wordDict.get(i);
-            int wordLength = wordExpected.length();
-            if (index + wordLength > len) {
-                continue;
-            }
-            String wordActual = s.substring(index, index + wordLength);
-            if (Objects.equals(wordActual, wordExpected)) {
-                currentSeq.add(wordExpected);
-                wordBreakUtil(s, len, wordDict, n, index + wordLength, currentSeq);
-                currentSeq.remove(currentSeq.size() - 1);
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(words.get(0));
+        for(int i = 1 ; i < words.size() ; i++){
+            stringBuilder.append(" ");
+            stringBuilder.append(words.get(i));
+        }
+
+        ans.add(stringBuilder.toString());
+    }
+
+    private boolean isMatchesSubStr(String s, int index, String word){
+
+        int expectedLength = word.length();
+
+        if(s.length() - index < expectedLength){
+            return false;
+        }
+
+        String actualStr = s.substring(index, index + expectedLength);
+
+        if(Objects.equals(word, actualStr)){
+            return true;
+        }
+        return false;
+
+    }
+
+    private void wordBreak(String s, List<String> wordDict, int index, List<String> words) {
+        if(s.length() == index){
+            addList(words);
+            return ;
+        }
+
+        for(String word : wordDict){
+            if(isMatchesSubStr(s, index, word)){
+                words.add(word);
+                wordBreak(s, wordDict, index + word.length(), words);
+                words.remove(words.size() - 1);
             }
         }
     }
+
 
     public List<String> wordBreak(String s, List<String> wordDict) {
-        wordBreakUtil(s, s.length(), wordDict, wordDict.size(), 0, new ArrayList<>());
-        return sequences;
+        ans = new ArrayList<>();
+        wordBreak(s, wordDict, 0, new ArrayList<>());
+
+        return ans; 
     }
 }
