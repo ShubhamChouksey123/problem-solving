@@ -12,9 +12,8 @@ class Solution {
 
         for(int[] customer : customers){
             startTime = Math.max(startTime, customer[0]); 
-            int endTime = startTime + customer[1];
-            totalWaitingTime += (endTime - customer[0]);
-            startTime = endTime;
+            totalWaitingTime += (startTime + customer[1] - customer[0]);
+            startTime = startTime + customer[1];
         }
 
         return ((double)totalWaitingTime)/customers.length;
