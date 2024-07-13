@@ -1,45 +1,43 @@
 class Solution {
+
+    /**
+    x and y are length of string 1 and string 2 
+     */
+    public int minDistance(String word1, String word2, int m, int n, int x, int y, int[][] dp) {
+        if(x == 0 && y == 0){
+            return 0;
+        }
+        if(x == 0 && y > 0){
+            return y;
+        }
+        if(y == 0 && x > 0){
+            return x;
+        }
+
+        if(dp[x][y] != -1){
+            return dp[x][y];
+        }
     
-
-      public int minDistance(String word1, String word2) {
-
-        int m = word1.length();
-        int n = word2.length();
-
-        if (m == 0 || n == 0)
-            return Math.max(m, n);
-
-        int[][] dp = new int[m + 1][n + 1];
-
-        dp[0][0] = 0;
-
-        for (int i = 1; i <= m; i++) {
-            dp[i][0] = i;
+        int ans = Integer.MAX_VALUE;
+        int a = minDistance(word1, word2, m, n, x-1, y-1, dp);
+        if(word1.charAt(x-1) == word2.charAt(y-1)){
+            dp[x][y] = a;
+            return a;
         }
+        int b =  minDistance(word1, word2, m, n, x-1, y, dp);
+        int c =  minDistance(word1, word2, m, n, x, y-1, dp);
 
-        for (int j = 1; j <= n; j++) {
-            dp[0][j] = j;
-
-        }
-
-        for (int i = 1; i <= m; i++) {
-            for (int j = 1; j <= n; j++) {
-                char char1 = word1.charAt(i - 1);
-                char char2 = word2.charAt(j - 1);
-
-                if (char1 == char2) {
-                    dp[i][j] = dp[i - 1][j - 1];
-                    continue;
-                }
-
-                int minValue = Math.min(dp[i - 1][j], dp[i][j - 1]);
-                minValue = Math.min(minValue, dp[i - 1][j - 1]);
-
-                dp[i][j] = minValue + 1;
-
-            }
-        }
-        return dp[m][n];
+        dp[x][y] = 1 + Math.min(a, Math.min(b, c));
+        return dp[x][y];
     }
-    
+
+    public int minDistance(String word1, String word2) {
+        int m = word1.length(), n = word2.length();
+        int[][] dp = new int[m+1][n+1];
+        for(int[] inner : dp){
+            Arrays.fill(inner, -1);
+        }
+
+        return minDistance(word1, word2, m, n, m, n, dp);     
+    }
 }
