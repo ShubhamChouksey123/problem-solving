@@ -1,29 +1,76 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
 class Solution {
-    private boolean find(TreeNode n, int val, StringBuilder sb) {
-        if (n.val == val)
-            return true;
-        
-        if (n.left != null && find(n.left, val, sb))
-            sb.append("L"); 
-        else if (n.right != null && find(n.right, val, sb))
-            sb.append("R");
-        
-        return sb.length() > 0;
+
+
+    private void findBranch(TreeNode root, int desiredNodeValue, List<Character> parents, List<Character> ans){
+
+        if(root == null){
+            return;
+        }
+
+
+        if(root.val == desiredNodeValue){
+            for(Character c : parents){
+                ans.add(c);
+            }
+            return;
+        }
+
+        parents.add('L');
+        findBranch(root.left, desiredNodeValue, parents, ans);
+        parents.remove(parents.size() - 1);
+
+        parents.add('R');
+        findBranch(root.right, desiredNodeValue, parents, ans);
+        parents.remove(parents.size() - 1);
+
+    }
+
+    private String createString(List<Character> starts, List<Character> dests){
+        int indexStart = 0, indexDest = 0, m = starts.size(), n = dests.size();
+
+        while(indexStart < m && indexDest < n && starts.get(indexStart) == dests.get(indexDest)){
+            indexStart++;
+            indexDest++;
+        }
+
+        StringBuilder stringBuilder = new StringBuilder();
+        while(indexStart < m){
+            stringBuilder.append("U");indexStart++;
+        }
+
+        while(indexDest < n){
+            stringBuilder.append(dests.get(indexDest));indexDest++;
+        }
+
+        System.out.println("stringBuilder : " + stringBuilder.toString());
+        return stringBuilder.toString();
     }
 
     public String getDirections(TreeNode root, int startValue, int destValue) {
-        StringBuilder s = new StringBuilder(); 
-        StringBuilder d = new StringBuilder(); 
+        
+        List<Character> starts = new ArrayList<>();
+        findBranch(root, startValue, new ArrayList<>(), starts);
 
-        find(root, startValue, s);
-        find(root, destValue, d);
+        List<Character> dests = new ArrayList<>();
+        findBranch(root, destValue, new ArrayList<>(), dests);
 
-        int i = 0;
-        int max_i = Math.min(d.length(), s.length());
-        while (i < max_i && s.charAt(s.length() - i - 1) == d.charAt(d.length() - i - 1))
-            ++i;
-
-
-        return "U".repeat(s.length() - i) + d.reverse().toString().substring(i);
+        System.out.println("starts : " + starts);
+        System.out.println("dests : " + dests);
+        return createString(starts, dests);
     }
 }
