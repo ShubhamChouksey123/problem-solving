@@ -31,7 +31,7 @@ class Solution {
                 }
             }
 
-            if((st.isEmpty() && rem) || (!st.isEmpty() && st.peek() < 0 && rem) ){
+            if(rem){
                 st.push(asteroids[end]);
                 continue;
             }
