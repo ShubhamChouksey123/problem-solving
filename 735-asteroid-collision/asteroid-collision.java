@@ -33,7 +33,6 @@ class Solution {
 
             if(rem){
                 st.push(asteroids[end]);
-                continue;
             }
         }
 
