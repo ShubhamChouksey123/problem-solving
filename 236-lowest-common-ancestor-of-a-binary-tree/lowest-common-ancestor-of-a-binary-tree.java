@@ -8,85 +8,55 @@
  * }
  */
 class Solution {
+    
 
-    private List<TreeNode> ancestorsP;
-    private List<TreeNode> ancestorsQ;
-    private void getAllAncestorsP(TreeNode root, TreeNode p, Stack<TreeNode> ancestors) {
+    private void getAncestors(TreeNode root, TreeNode p, List<TreeNode> parents, List<TreeNode> parentsFinal) {
 
-        if (root == null)
+        if(root == null){
             return;
-
-        if (root == p) {
-            this.ancestorsP = new ArrayList<>(ancestors);
         }
 
-        ancestors.add(root);
-
-        if (root.left != null) {
-            getAllAncestorsP(root.left, p, ancestors);
+        parents.add(root);
+        if(root == p){
+            parentsFinal.addAll(parents);
+            return ;
         }
 
-        if (root.right != null) {
-            getAllAncestorsP(root.right, p, ancestors);
-        }
+        getAncestors(root.left, p, parents, parentsFinal) ;
+        getAncestors(root.right, p, parents, parentsFinal) ;
 
-        ancestors.pop();
+        parents.remove(parents.size() -1);
     }
 
-    private void getAllAncestorsQ(TreeNode root, TreeNode p, Stack<TreeNode> ancestors) {
-
-        if (root == null)
-            return;
-
-        if (root == p) {
-            this.ancestorsQ = new ArrayList<>(ancestors);
+    private void print(List<TreeNode> parents){
+        for(TreeNode treeNode : parents){
+            System.out.print(treeNode.val + " ");
         }
+         System.out.println();
+    }
 
-        ancestors.add(root);
-
-        if (root.left != null) {
-            getAllAncestorsQ(root.left, p, ancestors);
+    private TreeNode lowestCommonAncestor(List<TreeNode> parentsP, List<TreeNode> parentsQ) {
+        
+        TreeNode ans = null;
+        for(int i = 0 ; i < Math.min(parentsP.size(), parentsQ.size()) ; i++){
+            if(parentsP.get(i) != parentsQ.get(i)){
+                break;
+            }
+            ans = parentsP.get(i);
         }
-
-        if (root.right != null) {
-            getAllAncestorsQ(root.right, p, ancestors);
-        }
-
-        ancestors.pop();
+        return ans;
     }
 
     public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        List<TreeNode> parentsP = new ArrayList<>();
+        List<TreeNode> parentsQ = new ArrayList<>();
 
+        getAncestors(root, p, new ArrayList<>(), parentsP);
+        getAncestors(root, q, new ArrayList<>(), parentsQ);
 
-        if (root == null)
-            return null;
+        // print(parentsP);
+        // print(parentsQ);
 
-        if (p == q)
-            return p;
-
-
-        getAllAncestorsP(root, p, new Stack<>());
-        ancestorsP.add(p);
-        System.out.println("ancestorsP : " + ancestorsP);
-
-
-        getAllAncestorsQ(root, q, new Stack<>());
-        ancestorsQ.add(q);
-
-        // System.out.println("ancestorsQ : " + ancestorsQ);
-
-        int index = 0;
-        TreeNode common = null;
-        while (index < ancestorsP.size() && index < ancestorsQ.size()) {
-            if (!Objects.equals(ancestorsP.get(index), ancestorsQ.get(index))) {
-                System.out.println("common: " + common);
-                return common;
-            }
-            common = ancestorsP.get(index);
-            index++;
-        }
-
-        // System.out.println("common: " + common);
-        return common;
+        return lowestCommonAncestor(parentsP,  parentsQ);
     }
 }
