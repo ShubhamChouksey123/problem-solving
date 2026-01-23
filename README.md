@@ -11,6 +11,7 @@ These are some of my solutions of practice problems of various coding platforms
 |  |
 | ------- |
 | [0088-merge-sorted-array](https://github.com/ShubhamChouksey123/problem-solving/tree/master/0088-merge-sorted-array) |
+| [1732-find-the-highest-altitude](https://github.com/ShubhamChouksey123/problem-solving/tree/master/1732-find-the-highest-altitude) |
 | [2215-find-the-difference-of-two-arrays](https://github.com/ShubhamChouksey123/problem-solving/tree/master/2215-find-the-difference-of-two-arrays) |
 | [3606-coupon-code-validator](https://github.com/ShubhamChouksey123/problem-solving/tree/master/3606-coupon-code-validator) |
 ## Hash Table
@@ -36,4 +37,8 @@ These are some of my solutions of practice problems of various coding platforms
 |  |
 | ------- |
 | [1021-remove-outermost-parentheses](https://github.com/ShubhamChouksey123/problem-solving/tree/master/1021-remove-outermost-parentheses) |
+## Prefix Sum
+|  |
+| ------- |
+| [1732-find-the-highest-altitude](https://github.com/ShubhamChouksey123/problem-solving/tree/master/1732-find-the-highest-altitude) |
 <!---LeetCode Topics End-->
