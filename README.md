@@ -10,6 +10,7 @@ These are some of my solutions of practice problems of various coding platforms
 ## Array
 |  |
 | ------- |
+| [0088-merge-sorted-array](https://github.com/ShubhamChouksey123/problem-solving/tree/master/0088-merge-sorted-array) |
 | [3606-coupon-code-validator](https://github.com/ShubhamChouksey123/problem-solving/tree/master/3606-coupon-code-validator) |
 ## Hash Table
 |  |
@@ -22,5 +23,10 @@ These are some of my solutions of practice problems of various coding platforms
 ## Sorting
 |  |
 | ------- |
+| [0088-merge-sorted-array](https://github.com/ShubhamChouksey123/problem-solving/tree/master/0088-merge-sorted-array) |
 | [3606-coupon-code-validator](https://github.com/ShubhamChouksey123/problem-solving/tree/master/3606-coupon-code-validator) |
+## Two Pointers
+|  |
+| ------- |
+| [0088-merge-sorted-array](https://github.com/ShubhamChouksey123/problem-solving/tree/master/0088-merge-sorted-array) |
 <!---LeetCode Topics End-->
