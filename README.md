@@ -11,10 +11,12 @@ These are some of my solutions of practice problems of various coding platforms
 |  |
 | ------- |
 | [0088-merge-sorted-array](https://github.com/ShubhamChouksey123/problem-solving/tree/master/0088-merge-sorted-array) |
+| [2215-find-the-difference-of-two-arrays](https://github.com/ShubhamChouksey123/problem-solving/tree/master/2215-find-the-difference-of-two-arrays) |
 | [3606-coupon-code-validator](https://github.com/ShubhamChouksey123/problem-solving/tree/master/3606-coupon-code-validator) |
 ## Hash Table
 |  |
 | ------- |
+| [2215-find-the-difference-of-two-arrays](https://github.com/ShubhamChouksey123/problem-solving/tree/master/2215-find-the-difference-of-two-arrays) |
 | [3606-coupon-code-validator](https://github.com/ShubhamChouksey123/problem-solving/tree/master/3606-coupon-code-validator) |
 ## String
 |  |
