@@ -19,6 +19,7 @@ These are some of my solutions of practice problems of various coding platforms
 ## String
 |  |
 | ------- |
+| [1021-remove-outermost-parentheses](https://github.com/ShubhamChouksey123/problem-solving/tree/master/1021-remove-outermost-parentheses) |
 | [3606-coupon-code-validator](https://github.com/ShubhamChouksey123/problem-solving/tree/master/3606-coupon-code-validator) |
 ## Sorting
 |  |
@@ -29,4 +30,8 @@ These are some of my solutions of practice problems of various coding platforms
 |  |
 | ------- |
 | [0088-merge-sorted-array](https://github.com/ShubhamChouksey123/problem-solving/tree/master/0088-merge-sorted-array) |
+## Stack
+|  |
+| ------- |
+| [1021-remove-outermost-parentheses](https://github.com/ShubhamChouksey123/problem-solving/tree/master/1021-remove-outermost-parentheses) |
 <!---LeetCode Topics End-->
