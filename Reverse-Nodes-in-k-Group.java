@@ -8,62 +8,55 @@
 8 *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
 9 * }
 10 */
-11class Solution {
+11class Solution {    
 12
-13    private boolean hasKElements(ListNode head, int k){
-14        int len = 0;
+13    private boolean hashKElements(ListNode head, int k){
+14        int count = 0;
 15        while(head != null){
-16            len++; 
-17            head = head.next;
-18            if(len == k){
-19                return true;
-20            }
-21        }
-22        return false;
-23    }
-24
-25    private ListNode reverseFirstK(ListNode prevNode, int k){
-26
-27        ListNode firsNode = prevNode.next;
-28
-29        ListNode cur = null ; 
-30        ListNode prev = null ;
-31        ListNode next = prevNode.next ;
-32
-33        while(next != null && k > 0){
-34            cur =  next;
-35            next = next.next;
-36            cur.next = prev;
-37            prev = cur;
-38            k--;
-39        }
-40
-41        ListNode newFirsNode = cur;
-42        prevNode.next = newFirsNode;
-43        firsNode.next = next;
-44        
-45        return firsNode;
-46    }
-47    
-48
-49    public ListNode reverseKGroup(ListNode head, int k) {
+16            head = head.next; count++;
+17            if(count == k){
+18                return true;
+19            }
+20        }
+21        return false;
+22    }
+23
+24    private ListNode reverseNextKNodes(ListNode prevNode, int k){
+25
+26        ListNode firstNode = prevNode.next;
+27        ListNode prev = null;
+28        ListNode cur = null;
+29        ListNode next = prevNode.next;
+30
+31        while(k > 0){
+32            k--;
+33            cur = next;
+34            next = next.next;
+35            cur.next = prev;
+36            prev = cur;
+37        }
+38
+39        firstNode.next = next;
+40        prevNode.next = cur;
+41
+42        return firstNode;
+43    }
+44
+45    public ListNode reverseKGroup(ListNode head, int k) {
+46
+47
+48        ListNode dummy = new ListNode(-1);
+49        dummy.next = head;
 50
-51        ListNode dummy = new ListNode(-1);
-52        dummy.next = head;
-53        ListNode prev = dummy;
-54
-55        while(prev.next != null){
-56
-57            ListNode firsNode = prev.next;
-58            boolean hasKElements = hasKElements(firsNode, k);
-59            if(!hasKElements){
-60                break;
-61            }
-62            ListNode newLastNode = reverseFirstK(prev, k);
-63            prev = newLastNode;
-64        }
-65
-66        return dummy.next;
-67        
-68    }
-69}
+51        ListNode prev = dummy;
+52
+53        while(prev != null && prev.next != null){
+54            if(!hashKElements(prev.next, k)){
+55                break;
+56            }
+57            prev = reverseNextKNodes(prev, k);
+58        }
+59
+60        return dummy.next;
+61    }
+62}
