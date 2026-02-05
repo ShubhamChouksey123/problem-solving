@@ -28,23 +28,14 @@
 28        dummy.next = head;
 29
 30        ListNode cur = head;
-31        int len = 0;
-32        while(cur != null){
-33            cur = cur.next;
-34            len++;
-35        }
-36
-37        int times = len/2;
-38
-39
-40        ListNode prev = dummy;
-41        while(times > 0){
-42            times--;
-43            prev = swap(prev);
-44
-45        }
-46
-47        return dummy.next;
-48        
-49    }
-50}
+31        ListNode prev = dummy;
+32
+33
+34        while(prev != null && prev.next != null && prev.next.next != null){
+35            prev = swap(prev);
+36        }
+37
+38        return dummy.next;
+39        
+40    }
+41}
