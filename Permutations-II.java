@@ -14,26 +14,31 @@
 14                continue;
 15            }
 16
-17            per.add(nums[i]);
-18            added[i] = true;
-19
-20            permuteUnique(nums, ans, added, per);
-21
-22            per.remove(per.size() - 1);
-23            added[i] = false;
-24        }
+17            if(i > 0 && nums[i] == nums[i-1] && added[i-1]){
+18                continue;
+19            }
+20
+21            per.add(nums[i]);
+22            added[i] = true;
+23
+24            permuteUnique(nums, ans, added, per);
 25
-26    }
-27
-28    public List<List<Integer>> permuteUnique(int[] nums) {
-29        
-30        int n = nums.length;
-31        Set<List<Integer>> ans = new HashSet<>();
-32        boolean[] added  = new boolean[n];
-33        List<Integer> per = new ArrayList<>();
-34
-35        permuteUnique(nums, ans, added, per);
-36
-37        return new ArrayList<>(ans);
-38    }
-39}
+26            per.remove(per.size() - 1);
+27            added[i] = false;
+28        }
+29
+30    }
+31
+32    public List<List<Integer>> permuteUnique(int[] nums) {
+33        
+34        int n = nums.length;
+35        Arrays.sort(nums);
+36        Set<List<Integer>> ans = new HashSet<>();
+37        boolean[] added  = new boolean[n];
+38        List<Integer> per = new ArrayList<>();
+39
+40        permuteUnique(nums, ans, added, per);
+41
+42        return new ArrayList<>(ans);
+43    }
+44}
