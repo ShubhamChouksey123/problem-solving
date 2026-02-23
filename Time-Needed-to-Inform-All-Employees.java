@@ -6,26 +6,30 @@
 6            return totalInformTime[empIndex];
 7        }
 8
-9        int managerIndex = manager[empIndex];
-10        totalInformTime[empIndex] = informTime[managerIndex] + getTime(n, headID, manager, informTime, managerIndex, totalInformTime);
-11        return totalInformTime[empIndex];
-12    }
-13
-14    public int numOfMinutes(int n, int headID, int[] manager, int[] informTime) {
-15
-16        int[] totalInformTime = new int[n];
-17        Arrays.fill(totalInformTime, -1);
-18
-19        for(int i = 0 ; i < n ; i++){
-20            if(totalInformTime[i] == -1){
-21                getTime(n, headID, manager, informTime, i, totalInformTime);
-22            }
-23        }
-24
-25        int max = 0;
-26        for(int i = 0 ; i < n ; i++){
-27            max = Math.max(max, totalInformTime[i]);
-28        }
-29        return max;
-30    }
-31}
+9        if(totalInformTime[empIndex] != -1){
+10            return totalInformTime[empIndex];
+11        }
+12
+13        int managerIndex = manager[empIndex];
+14        totalInformTime[empIndex] = informTime[managerIndex] + getTime(n, headID, manager, informTime, managerIndex, totalInformTime);
+15        return totalInformTime[empIndex];
+16    }
+17
+18    public int numOfMinutes(int n, int headID, int[] manager, int[] informTime) {
+19
+20        int[] totalInformTime = new int[n];
+21        Arrays.fill(totalInformTime, -1);
+22
+23        for(int i = 0 ; i < n ; i++){
+24            if(totalInformTime[i] == -1){
+25                getTime(n, headID, manager, informTime, i, totalInformTime);
+26            }
+27        }
+28
+29        int max = 0;
+30        for(int i = 0 ; i < n ; i++){
+31            max = Math.max(max, totalInformTime[i]);
+32        }
+33        return max;
+34    }
+35}
