@@ -14,44 +14,34 @@
 14 * }
 15 */
 16class Solution {
-17
-18    private String convertToPath(List<String> cur){
-19        StringBuilder sb = new StringBuilder(); 
-20        int i = 0;
-21        sb.append(cur.get(i));
-22        for(i = 1 ; i < cur.size() ; i++){
-23            sb.append("->");
-24            sb.append(cur.get(i));
-25        }
-26        return sb.toString();
-27    }
-28    
-29    public void binaryTreePathsUtils(TreeNode root, List<String> result, List<String> cur) {
-30
-31        if(root == null){
-32            return; 
-33        }
-34
-35        cur.add(String.valueOf(root.val));
+17    
+18    public void binaryTreePathsUtils(TreeNode root, List<String> result, String s) {
+19
+20        if(root == null){
+21            return; 
+22        }
+23
+24        String currentPath;
+25
+26        if(s.length() > 0){
+27            currentPath = s + "->" + String.valueOf(root.val);
+28        }else{
+29            currentPath = String.valueOf(root.val);
+30        }
+31
+32        if(root.left == null && root.right == null){
+33            result.add(currentPath);
+34        }
+35
 36        
-37        if(root.left != null){
-38            binaryTreePathsUtils(root.left, result, cur);
-39        }
-40        if(root.right != null){
-41            binaryTreePathsUtils(root.right, result, cur);
-42        }
+37        binaryTreePathsUtils(root.left, result, currentPath);
+38        binaryTreePathsUtils(root.right, result, currentPath);    
+39    }
+40    
+41    public List<String> binaryTreePaths(TreeNode root) {
+42        List<String> result = new ArrayList<>();
 43
-44        if(root.left == null && root.right == null){
-45            String s = convertToPath(cur);
-46            result.add(s);
-47        }
-48        cur.remove(cur.size() - 1);
-49    }
-50    
-51    public List<String> binaryTreePaths(TreeNode root) {
-52        List<String> result = new ArrayList<>();
-53
-54        binaryTreePathsUtils(root, result, new ArrayList<>());
-55        return result;
-56    }
-57}
+44        binaryTreePathsUtils(root, result, "");
+45        return result;
+46    }
+47}
