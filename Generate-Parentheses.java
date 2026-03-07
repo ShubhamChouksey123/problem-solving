@@ -1,38 +1,26 @@
 1class Solution {
-2
-3    public void generateParenthesisutil(int n, List<String> result, int openCount, int closeCount, StringBuilder stringBuilder) {
-4
-5        if(openCount == n && closeCount == n){
-6            String ans = stringBuilder.toString();
-7            result.add(ans); return;
-8        }
-9
-10        if(openCount + closeCount > 2*n){
-11            return;
-12        }
-13
-14        if(closeCount == n){
-15            return;
-16        }
-17
-18
-19        if(openCount < n){
-20            stringBuilder.append('(');
-21            generateParenthesisutil(n, result, openCount + 1, closeCount, stringBuilder);
-22            stringBuilder.deleteCharAt(stringBuilder.length() - 1);
-23        }
-24
-25        if(closeCount < n && openCount > closeCount){
-26            stringBuilder.append(')');
-27            generateParenthesisutil(n, result, openCount, closeCount + 1, stringBuilder);
-28            stringBuilder.deleteCharAt(stringBuilder.length() - 1);
-29        }
-30        
-31    }
-32
-33    public List<String> generateParenthesis(int n) {
-34        List<String> result = new ArrayList<>();
-35        generateParenthesisutil(n, result, 0, 0, new StringBuilder());
-36        return result;
-37    }
-38}
+2    public void generateParenthesisUtil(int n, int openCount, int closeCount, StringBuilder builder, List<String> result) {
+3        if(openCount + closeCount == 2*n){
+4            String s = builder.toString();
+5            result.add(s); 
+6            return;
+7        }
+8
+9        if(openCount < n){
+10            builder.append('(');
+11            generateParenthesisUtil(n, openCount + 1, closeCount, builder, result);
+12            builder.deleteCharAt(builder.length() - 1);
+13        }
+14        if(openCount > closeCount){
+15            builder.append(')');
+16            generateParenthesisUtil(n, openCount, closeCount + 1, builder, result);
+17            builder.deleteCharAt(builder.length() - 1);
+18        }
+19    }
+20    
+21    public List<String> generateParenthesis(int n) {
+22        List<String> result = new ArrayList<>();
+23        generateParenthesisUtil(n, 0, 0, new StringBuilder(), result);
+24        return result;
+25    }
+26}
