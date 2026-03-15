@@ -41,22 +41,14 @@
 41            return (double)minHeap.peek();   
 42        }
 43
-44        double result = 0.0;
-45        if(!maxHeap.isEmpty()){
-46            result += maxHeap.peek();
-47        }
-48        if(!minHeap.isEmpty()){
-49            result += minHeap.peek();
-50        }
-51
-52        return (double) result/2;
-53        
-54    }
-55}
-56
-57/**
-58 * Your MedianFinder object will be instantiated and called as such:
-59 * MedianFinder obj = new MedianFinder();
-60 * obj.addNum(num);
-61 * double param_2 = obj.findMedian();
-62 */
+44        return (maxHeap.peek() + minHeap.peek()) / 2.0;
+45        
+46    }
+47}
+48
+49/**
+50 * Your MedianFinder object will be instantiated and called as such:
+51 * MedianFinder obj = new MedianFinder();
+52 * obj.addNum(num);
+53 * double param_2 = obj.findMedian();
+54 */
