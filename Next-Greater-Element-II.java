@@ -8,22 +8,16 @@
 8        int[] nextGreaterOnRight = new int[n];
 9        Arrays.fill(nextGreaterOnRight, -1);
 10        
-11        for(int i = 0 ; i < n ; i++){
-12            while(!st.isEmpty() && st.peek()[0] < nums[i]){
+11        for(int i = 0 ; i < 2*n ; i++){
+12            while(!st.isEmpty() && st.peek()[0] < nums[i % n]){
 13                int[] topElement = st.pop();
-14                nextGreaterOnRight[topElement[1]] = nums[i];
+14                nextGreaterOnRight[topElement[1]] = nums[i % n];
 15            }
-16            st.push(new int[]{nums[i], i});
-17        }
-18
-19        for(int i = 0 ; i < n - 1 ; i++){
-20            while(!st.isEmpty() && st.peek()[0] < nums[i]){
-21                int[] topElement = st.pop();
-22                nextGreaterOnRight[topElement[1]] = nums[i];
-23            }
-24            st.push(new int[]{nums[i], i});
-25        }
-26        
-27        return nextGreaterOnRight;
-28    }
-29}
+16            if(i < n){
+17                st.push(new int[]{nums[i], i});
+18            }
+19            
+20        }
+21        return nextGreaterOnRight;
+22    }
+23}
