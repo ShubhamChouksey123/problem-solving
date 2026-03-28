@@ -1,31 +1,30 @@
 1class StockSpanner {
 2
-3    private List<Integer> prices;
-4    private List<Integer> spans;
-5
-6    public StockSpanner() {
-7        prices = new ArrayList<>();
-8        spans = new ArrayList<>();
-9    }
-10    
-11    public int next(int price) {
-12
-13        int span = 1;
-14        int n = prices.size(); int index = n - 1;
+3    /**
+4        Stack containing {price, span}
+5     */
+6    private Deque<int[]> pricesAndSpans;
+7
+8    public StockSpanner() {
+9        pricesAndSpans = new ArrayDeque<>();
+10    }
+11    
+12    public int next(int price) {
+13
+14        int span = 1;
 15        
-16        while(index >= 0 && prices.get(index) <= price){
-17            span = span + spans.get(index);
-18            index = index - spans.get(index);
+16        while(!pricesAndSpans.isEmpty() && pricesAndSpans.peek()[0] <= price){
+17            int[] priceAndSpan = pricesAndSpans.pop();
+18            span += priceAndSpan[1];
 19        }
 20
-21        prices.add(price);
-22        spans.add(span); 
-23        return span; 
-24    }
-25}
-26
-27/**
-28 * Your StockSpanner object will be instantiated and called as such:
-29 * StockSpanner obj = new StockSpanner();
-30 * int param_1 = obj.next(price);
-31 */
+21        pricesAndSpans.push(new int[]{price, span});
+22        return span; 
+23    }
+24}
+25
+26/**
+27 * Your StockSpanner object will be instantiated and called as such:
+28 * StockSpanner obj = new StockSpanner();
+29 * int param_1 = obj.next(price);
+30 */
