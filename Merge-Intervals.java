@@ -1,26 +1,38 @@
 1class Solution {
 2    public int[][] merge(int[][] intervals) {
-3        Arrays.sort(intervals, (a, b) -> Integer.compare(a[0], b[0]));
-4
-5        int index = 0;
-6        int n = intervals.length;
-7        List<int[]> list = new ArrayList<>();
-8        
-9
-10        while(index < n){
-11            int start = intervals[index][0];
-12            int end = intervals[index][1];
-13            while(index + 1 < n && intervals[index+1][0] <= end){
-14                end = Math.max(end, intervals[index+1][1]);
-15                index++;
-16            }
-17            list.add(new int[]{start, end});
-18            index++;
-19        }
-20        int[][] ans = new int[list.size()][2];
-21        for(int i = 0 ; i < list.size(); i++){
-22            ans[i] = list.get(i);
-23        }
-24        return ans;
-25    }
-26}
+3
+4        Arrays.sort(intervals, 
+5            (int[] a, int[] b) -> {
+6                if(a[0] != b[0]){
+7                    return Integer.compare(a[0], b[0]);
+8                }
+9                return Integer.compare(a[1], b[1]);
+10            } 
+11        );
+12
+13        int n = intervals.length;
+14        int start = 0, end = 0;
+15        List<int[]> mergedIntervals = new ArrayList<>();
+16
+17        while(start < n){
+18            end = start;
+19            int startTime = intervals[start][0];
+20            int endTime = intervals[start][1];
+21            while( end + 1 < n && endTime >= intervals[end + 1][0] ){
+22                end = end + 1;
+23                endTime = Math.max(endTime, intervals[end][1]);
+24            }
+25            mergedIntervals.add(new int[]{startTime, endTime});
+26            start = end + 1;
+27        }
+28
+29        int[][] ans = new int[mergedIntervals.size()][2];
+30
+31        int i = 0;
+32        for(int[] mergedInterval : mergedIntervals){
+33            ans[i] = mergedInterval; i++;
+34        }
+35        return ans;
+36        
+37    }
+38}
