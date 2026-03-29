@@ -12,23 +12,27 @@
 12public class Solution {
 13    public ListNode detectCycle(ListNode head) {
 14
-15        ListNode fast = head; ListNode slow = head;
-16        while(fast != null && fast.next != null){
-17            fast = fast.next.next;
+15        ListNode fast = head, slow = head;
+16
+17        while(fast != null && fast.next != null){
 18            slow = slow.next;
-19            if(slow == fast){
-20                break;
-21            }
-22        }
-23
-24        if(fast == null || fast.next == null)
-25            return null;
-26
-27        ListNode headPointer = head;
-28        while(headPointer != slow){
-29            headPointer = headPointer.next;
-30            slow = slow.next;
-31        }
-32        return slow; 
-33    }
-34}
+19            fast = fast.next.next;
+20            if(slow == fast){
+21                break;   
+22            }
+23        }
+24
+25        if(fast == null || fast.next == null){
+26            return null;
+27        }
+28
+29        fast = head;
+30        while(slow != fast){
+31            slow = slow.next;
+32            fast = fast.next;
+33        }
+34
+35        return slow;
+36        
+37    }
+38}
