@@ -1,25 +1,25 @@
 1class StockSpanner {
 2
 3    /**
-4        Stack containing {price, span}
+4        stack containt {price, span}
 5     */
-6    private Deque<int[]> pricesAndSpans;
+6    private Deque<int[]> stack;
 7
 8    public StockSpanner() {
-9        pricesAndSpans = new ArrayDeque<>();
+9        stack = new ArrayDeque<>();
 10    }
 11    
 12    public int next(int price) {
-13
+13        
 14        int span = 1;
-15        
-16        while(!pricesAndSpans.isEmpty() && pricesAndSpans.peek()[0] <= price){
-17            int[] priceAndSpan = pricesAndSpans.pop();
-18            span += priceAndSpan[1];
-19        }
-20
-21        pricesAndSpans.push(new int[]{price, span});
-22        return span; 
+15
+16        while(!stack.isEmpty() && stack.peek()[0] <= price){
+17            span += stack.pop()[1];
+18        }
+19
+20        stack.push(new int[]{price, span});
+21        return span;
+22
 23    }
 24}
 25
