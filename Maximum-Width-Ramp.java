@@ -1,26 +1,26 @@
 1class Solution {
 2    public int maxWidthRamp(int[] nums) {
-3
-4        int n = nums.length; 
-5        int start = 0;
-6        int maxRamp = 0, ramp = 0;
-7        int[] greatestOnRight = new int[n];
-8        greatestOnRight[n-1] = nums[n-1];
-9
-10        for(int j = n - 2 ; j >= 0 ; j--){
-11            greatestOnRight[j] = Math.max(greatestOnRight[j+1], nums[j]);
-12        }
-13
-14        for(int end = 1 ; end < n ; end++){
-15            while(end < n && nums[start] <= greatestOnRight[end]){
-16                maxRamp = Math.max(maxRamp, end - start);
-17                end++;
-18            }
-19            if(end < n && nums[start] > greatestOnRight[end]){
-20                start++;
-21            }
-22        }  
-23        return maxRamp; 
-24        
+3        
+4        int n = nums.length;
+5
+6        /**
+7        Stack containg decreasing elemets indexes
+8         */
+9        Deque<Integer> decreasingElements = new ArrayDeque<>();
+10        for(int i = 0 ; i < n ; i++){
+11            if(decreasingElements.isEmpty() || nums[decreasingElements.peek()] >= nums[i]){
+12                decreasingElements.push(i);
+13            }
+14        }
+15
+16        int maxRamp = 0, ramp = 0;
+17
+18        for(int j = n - 1 ; j > 0 ; j--){
+19            while(!decreasingElements.isEmpty() && nums[decreasingElements.peek()] <= nums[j]){
+20                ramp = j - decreasingElements.pop();
+21                maxRamp = Math.max(maxRamp, ramp);
+22            }
+23        }
+24        return maxRamp;
 25    }
 26}
