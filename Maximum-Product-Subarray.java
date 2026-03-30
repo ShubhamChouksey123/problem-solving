@@ -1,20 +1,18 @@
 1class Solution {
-2
-3    public int maxProduct(int[] nums) {
-4        int n = nums.length, index = 0;
-5        int minSoFar = nums[0] , maxSoFar = nums[0], result = nums[0];
-6        
-7
-8        for(int i = 1 ; i < n ; i++){
-9            int cur = nums[i]; 
-10            int tmp = minSoFar;
-11
-12            minSoFar = Math.min(cur, Math.min(minSoFar * cur , maxSoFar * cur) );
-13            maxSoFar = Math.max(cur, Math.max(tmp * cur , maxSoFar * cur) );
-14            result = Math.max(result, maxSoFar);
-15        
-16        } 
-17
-18        return result;
-19    }
-20}
+2    public int maxProduct(int[] nums) {
+3        
+4        int n = nums.length;
+5        int[] minProd = new int[n];
+6        int[] maxProd = new int[n];
+7        minProd[0] = nums[0]; maxProd[0] = nums[0];
+8        int maxProduct = maxProd[0];
+9
+10        for(int i = 1 ; i < n ; i++){
+11            minProd[i] = Math.min( nums[i] , Math.min( maxProd[i-1] * nums[i]  , minProd[i-1] * nums[i] ) );
+12            maxProd[i] = Math.max( nums[i] , Math.max( maxProd[i-1] * nums[i]  , minProd[i-1] * nums[i] ) );
+13            maxProduct = Math.max(maxProduct, maxProd[i]);
+14        }
+15
+16        return maxProduct;
+17    }
+18}
