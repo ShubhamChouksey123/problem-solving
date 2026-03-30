@@ -1,35 +1,28 @@
 1class Solution {
-2
-3
-4    public int findMinArrowShots(int[][] points) {
-5        int n = points.length;
-6        
-7        Arrays.sort(points, 
-8            (int[] a, int[] b) -> {
-9                if(a[0] != b[0]){
-10                    return (a[0] < b[0]) ? -1 : 1;
-11                }
-12                return (a[1] < b[1]) ? -1 : 1;
-13            } 
-14        );
-15        
-16        int count = 0;
-17        int index = 0;
-18
-19        while(index < n){
-20            int currentStart = points[index][0];
-21            int currentEnd = points[index][1];
-22
-23            while(index+1 < n && points[index+1][0] <= currentEnd){
-24                index++;
-25                currentStart = Math.max(currentStart, points[index][0]);
-26                currentEnd = Math.min(currentEnd, points[index][1]);
-27
-28            }
-29            count++;
-30            index++;
-31        }
-32
-33        return count;    
-34    }
-35}
+2    public int findMinArrowShots(int[][] points) {
+3        
+4        Arrays.sort(points, 
+5            (int[] pointA, int[] pointB) -> {
+6                if(pointA[1] != pointB[1]){
+7                    return Integer.compare(pointA[1], pointB[1]);
+8                }
+9                return Integer.compare(pointA[0], pointB[0]);
+10            }
+11        );
+12
+13        int n = points.length;
+14        int index = 0, countArrows = 0;
+15
+16        while(index < n){
+17            int start = points[index][0];
+18            int end   = points[index][1];
+19             
+20            while(index + 1 < n && end >= points[index + 1][0]){
+21                index++;
+22            }
+23            countArrows++;
+24            index++;
+25        }
+26        return countArrows;
+27    }
+28}
