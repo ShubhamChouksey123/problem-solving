@@ -1,38 +1,37 @@
 1class Solution {
 2    public long maximumSubarraySum(int[] nums, int k) {
 3
-4        int n = nums.length, size = 0, startIndex = 0, countDistinct = 0;
-5        long curSum = 0, maxSum = 0;
-6        Map<Integer, Integer> map = new HashMap<>(); 
+4        int n = nums.length;
+5        Map<Integer, Integer> countOfElemets = new HashMap<>();
+6        long sum = 0, maxSum = 0;
 7
-8
-9        for(int i = 0 ; i < n ; i++){
-10            int cur = nums[i];  
-11            curSum += nums[i];
-12
-13            if(i >= k){
-14                int count = map.get(nums[i-k]);
-15                if(count > 1){
-16                    map.put(nums[i-k], --count);
-17                }else{
-18                    map.remove(nums[i-k]);
-19                    countDistinct--;
-20                }
-21                curSum -= nums[i-k];
-22            }
-23            
-24            if(!map.containsKey(cur)){
-25                countDistinct++;
-26                map.put(cur, 1);
-27            }else{
-28                int count = map.get(cur);
-29                map.replace(cur, ++count);
-30            }
-31            if(countDistinct == k){
-32                maxSum = Math.max(maxSum, curSum);
-33            }
-34        }
-35
-36        return maxSum;
-37    }
-38}
+8        for(int i = 0 ; i < k ; i++){
+9            countOfElemets.put(nums[i], countOfElemets.getOrDefault(nums[i], 0) + 1);
+10            sum += nums[i];
+11        }
+12        if( countOfElemets.size() == k){
+13            maxSum = Math.max(maxSum, sum);
+14        }
+15
+16        for(int i = k ; i < n ; i++){
+17            sum -= nums[i-k];
+18            int currentOccuranceFirstElement = countOfElemets.get(nums[i-k]);
+19            if(currentOccuranceFirstElement == 1){
+20                countOfElemets.remove(nums[i-k]);
+21            }else{
+22                countOfElemets.put(nums[i-k], currentOccuranceFirstElement - 1);
+23            }
+24            
+25
+26            sum += nums[i];
+27            int currentOccurance = countOfElemets.getOrDefault(nums[i], 0);
+28            countOfElemets.put(nums[i], currentOccurance + 1);
+29            if(currentOccurance == 0 && countOfElemets.size() == k){
+30                maxSum = Math.max(maxSum, sum);
+31            }
+32        }
+33
+34        return maxSum;
+35        
+36    }
+37}
