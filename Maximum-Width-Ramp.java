@@ -8,7 +8,7 @@
 8         */
 9        Deque<Integer> decreasingElements = new ArrayDeque<>();
 10        for(int i = 0 ; i < n ; i++){
-11            if(decreasingElements.isEmpty() || nums[decreasingElements.peek()] >= nums[i]){
+11            if(decreasingElements.isEmpty() || nums[decreasingElements.peek()] > nums[i]){
 12                decreasingElements.push(i);
 13            }
 14        }
