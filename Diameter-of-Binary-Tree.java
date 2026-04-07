@@ -29,22 +29,16 @@
 29
 30    public int diameterOfBinaryTreeUtil(TreeNode root) {
 31        
-32        if(root.left == null && root.right == null){
-33            return 0;
-34        }  
-35        int left = 0, right = 0;  
-36        if(root.left != null){
-37            left  = diameterOfBinaryTreeUtil(root.left) + 1;
+32        int left = 0, right = 0;  
+33        if(root.left != null){
+34            left  = diameterOfBinaryTreeUtil(root.left) + 1;
+35        }
+36        if(root.right != null){
+37            right = diameterOfBinaryTreeUtil(root.right) + 1;
 38        }
-39        if(root.right != null){
-40            right = diameterOfBinaryTreeUtil(root.right) + 1;
-41        }
+39
+40        if(left + right > diameter) diameter = left + right;
+41        return Math.max(left, right);
 42
-43        if(left  > diameter) diameter = left;
-44        if(right > diameter) diameter = right;
-45
-46        if(left + right > diameter) diameter = left + right;
-47        return Math.max(left, right);
-48
-49    }
-50}
+43    }
+44}
