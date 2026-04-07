@@ -14,31 +14,31 @@
 14 * }
 15 */
 16class Solution {
-17
+17    
 18    private Integer diameter;
 19
 20    public int diameterOfBinaryTree(TreeNode root) {
-21
-22        if(root == null){
+21        diameter = 0;
+22        if(root == null)
 23            return 0;
-24        }
-25        diameter = 0;
-26        diameterOfBinaryTreeUtil(root);
-27        return diameter;
-28    }
-29
-30    public int diameterOfBinaryTreeUtil(TreeNode root) {
-31        
-32        int left = 0, right = 0;  
-33        if(root.left != null){
-34            left  = diameterOfBinaryTreeUtil(root.left) + 1;
-35        }
-36        if(root.right != null){
-37            right = diameterOfBinaryTreeUtil(root.right) + 1;
-38        }
-39
-40        if(left + right > diameter) diameter = left + right;
-41        return Math.max(left, right);
-42
+24        getHeight(root) ;
+25        return diameter;
+26    }
+27
+28    private int getHeight(TreeNode root) {
+29        if(root.left == null && root.right == null){
+30            return 0;
+31        }
+32
+33        int left = 0, right = 0;
+34        if(root.left != null){
+35            left = getHeight(root.left) + 1;
+36        }
+37        if(root.right != null){
+38            right = getHeight(root.right) + 1;
+39        }
+40        
+41        diameter = Math.max(diameter, left + right);
+42        return Math.max(left, right);
 43    }
 44}
