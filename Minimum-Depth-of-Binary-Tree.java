@@ -18,17 +18,11 @@
 18
 19        if(root == null)
 20            return 0;
-21        if(root.left == null && root.right == null){
-22            return 1;
-23        }
-24        int left = -1, right = -1; int minValue = Integer.MAX_VALUE;
-25        if(root.left != null){
-26            left  = minDepth(root.left); minValue = left;
-27        }
-28        if(root.right != null){
-29            right = minDepth(root.right); minValue = Math.min(minValue, right);
-30        }
-31        
-32        return minValue + 1;
-33    }
-34}
+21        
+22        if(root.left  == null) return minDepth(root.right) + 1; 
+23        if(root.right == null) return minDepth(root.left) + 1; 
+24        
+25        return Math.min(minDepth(root.left), minDepth(root.right)) + 1;
+26        
+27    }
+28}
