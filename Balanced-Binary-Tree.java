@@ -14,23 +14,25 @@
 14 * }
 15 */
 16class Solution {
-17    private int getHeight(TreeNode root) {
-18        if(root == null)
-19            return 0;
+17    public boolean isBalanced(TreeNode root) {     
+18        return getHeight(root) != -1;
+19    }
 20
-21        return Math.max(getHeight(root.left), getHeight(root.right)) + 1 ;
-22    }
-23    
-24    public boolean isBalanced(TreeNode root) {
-25
-26        if(root == null)
-27            return true;
-28
-29        int leftHeight  = getHeight(root.left);
-30        int rightHeight = getHeight(root.right);
-31
-32        if(Math.abs(leftHeight - rightHeight) > 1)
-33            return false;
-34        return isBalanced(root.left) && isBalanced(root.right);
-35    }
-36}
+21    public int getHeight(TreeNode root) {     
+22        
+23        if(root == null){
+24            return 0;
+25        }
+26
+27        int left = getHeight(root.left);
+28        if(left == -1) return -1;
+29
+30        int right = getHeight(root.right);
+31        if(right == -1) return -1;
+32
+33        if(Math.abs(left - right) > 1){
+34            return -1;
+35        }
+36        return Math.max(left, right) + 1;
+37    }
+38}
