@@ -17,31 +17,31 @@
 17    
 18    Integer totalSum;
 19
-20    private void sumNumbers(TreeNode root, StringBuilder builder) {
+20    private void sumNumbers(TreeNode root, Integer currentSum) {
 21
 22        if(root == null){
 23            return;
 24        }
 25
-26        builder.append(root.val);
+26        currentSum = currentSum * 10 + root.val;
 27
 28        if(root.left == null && root.right == null){
-29            Integer i = Integer.valueOf(builder.toString());
-30            totalSum += i;
-31        }
-32
-33        sumNumbers(root.left , builder);
-34        sumNumbers(root.right, builder);
-35
-36        
-37        builder.deleteCharAt(builder.length() - 1); 
+29            totalSum += currentSum;
+30        }
+31
+32        sumNumbers(root.left , currentSum);
+33        sumNumbers(root.right, currentSum);
+34
+35        
+36        currentSum -= root.val;
+37        currentSum /= 10;
 38        
 39    }
 40    
 41
 42    public int sumNumbers(TreeNode root) {
 43        totalSum = 0;
-44        sumNumbers(root, new StringBuilder());
+44        sumNumbers(root, 0);
 45        return totalSum;
 46    }
 47}
