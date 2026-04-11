@@ -9,44 +9,40 @@
 9 */
 10class Solution {
 11    
-12    List<TreeNode> leftAncestorList;
-13    List<TreeNode> rightAncestorList;
-14
-15    private void getAncestor(TreeNode root, TreeNode p, TreeNode q, List<TreeNode> path) {
-16
-17        if(root == null) return;
-18
-19        path.add(root);
+12    private TreeNode lowestCommonAncestor;
+13
+14    private Pair<Boolean, Boolean> lowestCommonAncestorUtil(TreeNode root, TreeNode p, TreeNode q) {
+15        
+16        if(root == null){
+17            return new Pair(false, false);
+18        }
+19
 20
-21        if(root == p){
-22            leftAncestorList = new ArrayList<>(path);
-23        }
-24        if(root == q){
-25            rightAncestorList = new ArrayList<>(path);
-26        }
-27        getAncestor(root.left, p, q, path);
-28        getAncestor(root.right, p, q, path);
-29
-30        path.remove(path.size() - 1);
-31    }
-32    
-33    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
-34        leftAncestorList = new ArrayList<>();
-35        rightAncestorList = new ArrayList<>();
-36
-37        getAncestor(root, p, q, new ArrayList<>());
-38
-39        int index1 = 0, index2 = 0;
-40        TreeNode commonAncestor = null;
-41
-42        for(int i = 0 ; i < Math.min(leftAncestorList.size(), rightAncestorList.size()) ; i++){
-43            if(leftAncestorList.get(i).val == rightAncestorList.get(i).val){
-44                commonAncestor = leftAncestorList.get(i);
-45            }
-46        }
-47
-48
-49
-50        return commonAncestor;
-51    }
-52}
+21        Pair<Boolean, Boolean> pqFoundLeft  = lowestCommonAncestorUtil(root.left,  p, q);
+22        Pair<Boolean, Boolean> pqFoundRight = lowestCommonAncestorUtil(root.right, p, q);
+23
+24        Pair<Boolean, Boolean> pqFound = new Pair(
+25            pqFoundLeft.getKey() | pqFoundRight.getKey(), 
+26            pqFoundLeft.getValue() | pqFoundRight.getValue()
+27        );
+28
+29        if(root == p){
+30            pqFound = new Pair(true, pqFound.getValue());
+31        }
+32        if(root == q){
+33            pqFound = new Pair(pqFound.getKey(), true);
+34        }
+35
+36        if(lowestCommonAncestor == null && pqFound.getKey() && pqFound.getValue()){
+37            lowestCommonAncestor = root;
+38        }
+39        return pqFound;
+40    }
+41    
+42    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+43
+44        lowestCommonAncestor = null;
+45        lowestCommonAncestorUtil(root, p, q);
+46        return lowestCommonAncestor;
+47    }
+48}
