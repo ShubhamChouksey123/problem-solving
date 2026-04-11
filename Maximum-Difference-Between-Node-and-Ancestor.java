@@ -14,56 +14,32 @@
 14 * }
 15 */
 16class Solution {
-17
+17    
 18    private Integer maxRange;
-19    
-20    /**
-21        Pair returning min and max values in subtree from this root node
-22     */
-23    private Pair<Integer, Integer> maxAncestorDiffUtil(TreeNode root) {
-24
-25        if(root.left == null && root.right == null){
-26            return new Pair(root.val, root.val);
-27        }
+19
+20    private void maxAncestorDiffUtil(TreeNode root, int minRangeSoFar, int maxRangeSoFar) {
+21
+22        if(root == null){
+23            return ; 
+24        }
+25
+26        maxRange = Math.max(maxRange, Math.abs(root.val - minRangeSoFar));
+27        maxRange = Math.max(maxRange, Math.abs(root.val - maxRangeSoFar));
 28
-29        Pair<Integer, Integer> leftSubTreeRange = null, rightSubTreeRange = null;
-30        int difference = 0;
-31        int minValue = root.val, maxValue = root.val;
+29        minRangeSoFar = Math.min(minRangeSoFar, root.val);
+30        maxRangeSoFar = Math.max(maxRangeSoFar, root.val);
+31
 32
-33        if(root.left != null){
-34            leftSubTreeRange  = maxAncestorDiffUtil(root.left);
-35            difference = Math.max( 
-36                Math.abs(root.val - leftSubTreeRange.getKey()),
-37                Math.abs(root.val - leftSubTreeRange.getValue())   
-38            ); 
-39            maxRange = Math.max(maxRange, difference);
-40            minValue = Math.min(minValue, leftSubTreeRange.getKey());
-41            maxValue = Math.max(maxValue, leftSubTreeRange.getValue());
-42        }
-43        if(root.right != null){
-44            rightSubTreeRange = maxAncestorDiffUtil(root.right);
-45            difference = Math.max( 
-46                Math.max( 
-47                    Math.abs(root.val - rightSubTreeRange.getKey()),
-48                    Math.abs(root.val - rightSubTreeRange.getValue())
-49                ),
-50                difference   
-51            ); 
-52            maxRange = Math.max(maxRange, difference);
-53            minValue = Math.min(minValue, rightSubTreeRange.getKey());
-54            maxValue = Math.max(maxValue, rightSubTreeRange.getValue());
-55        }
-56
-57        
-58        return new Pair(minValue, maxValue);
-59    }
-60    
-61    public int maxAncestorDiff(TreeNode root) {
-62
-63        maxRange = 0;
-64        if(root != null){
-65            maxAncestorDiffUtil(root);
-66        }
-67        return maxRange;
-68    }
-69}
+33        maxAncestorDiffUtil(root.left, minRangeSoFar, maxRangeSoFar);
+34        maxAncestorDiffUtil(root.right, minRangeSoFar, maxRangeSoFar);
+35    }
+36    
+37    public int maxAncestorDiff(TreeNode root) {
+38        maxRange = 0;
+39        if(root != null){
+40            maxAncestorDiffUtil(root, root.val, root.val);
+41        }
+42        return maxRange;
+43        
+44    }
+45}
