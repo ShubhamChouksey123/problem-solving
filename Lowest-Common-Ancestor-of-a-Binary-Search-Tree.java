@@ -15,42 +15,41 @@
 15    /**
 16        pair returninf whether p and q found in this subtree or not 
 17     */
-18    public Pair<Boolean, Boolean> lowestCommonAncestorUtil(TreeNode root, TreeNode p, TreeNode q) {
+18    public void lowestCommonAncestorUtil(TreeNode root, TreeNode p, TreeNode q) {
 19        if(root == null){
-20            return new Pair(false, false);
+20            return;
 21        }
 22
-23        Pair<Boolean, Boolean> leftFound  = new Pair(false, false);
-24        Pair<Boolean, Boolean> rightFound = new Pair(false, false);
-25
-26        if(p.val < root.val || q.val < root.val){
-27            leftFound  = lowestCommonAncestorUtil(root.left,  p, q);
-28        }
-29
-30        if(p.val > root.val || q.val > root.val){
-31            rightFound = lowestCommonAncestorUtil(root.right, p, q);
-32        }
-33        
-34        boolean pFound = leftFound.getKey() || rightFound.getKey() ;
-35        boolean qFound = leftFound.getValue() || rightFound.getValue() ;
-36
-37        if(root == p){
-38            pFound = true;
-39        }
-40        if(root == q){
-41            qFound = true;
-42        }
-43
-44        if(lowestCommonAncestor == null && pFound && qFound){
-45            lowestCommonAncestor = root;
-46        }
-47        return new Pair(pFound, qFound);
-48
-49    }
-50    
-51    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
-52        lowestCommonAncestor = null;
-53        lowestCommonAncestorUtil(root, p, q);
-54        return lowestCommonAncestor;
-55    }
-56}
+23        if(lowestCommonAncestor == null && p.val <= root.val && q.val >= root.val){
+24            lowestCommonAncestor = root;
+25            return ;
+26        }
+27
+28        if(lowestCommonAncestor == null && (p == root || q == root)){
+29            lowestCommonAncestor = root;
+30            return ;
+31        }
+32
+33        if(q.val < root.val){
+34            lowestCommonAncestorUtil(root.left, p, q);
+35            return ;
+36        }
+37
+38        if(p.val > root.val){
+39            lowestCommonAncestorUtil(root.right, p, q);
+40            return;
+41        }
+42    }
+43    
+44    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+45        lowestCommonAncestor = null;
+46
+47        if(p.val > q.val){
+48            lowestCommonAncestorUtil(root, q, p);
+49        }else{
+50            lowestCommonAncestorUtil(root, p, q);
+51        }
+52        
+53        return lowestCommonAncestor;
+54    }
+55}
