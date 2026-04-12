@@ -23,7 +23,7 @@
 23            return false;
 24        }
 25
-26        return isValidBST(root.left, minValue, root.val) & isValidBST(root.right, root.val, maxValue); 
+26        return isValidBST(root.left, minValue, root.val) && isValidBST(root.right, root.val, maxValue); 
 27    }
 28    
 29    public boolean isValidBST(TreeNode root) {
