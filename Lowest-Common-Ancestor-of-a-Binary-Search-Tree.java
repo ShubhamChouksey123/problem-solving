@@ -10,28 +10,39 @@
 10
 11class Solution {
 12
-13    private TreeNode lowestCommonAncestorUtil(TreeNode root, TreeNode p, TreeNode q) {
-14
-15        if(root == null)
-16            return null;
-17        
-18        if(root == p || root == q){
-19            return root;
-20        }
-21        
-22        TreeNode left  = lowestCommonAncestorUtil(root.left , p, q); 
-23        TreeNode right = lowestCommonAncestorUtil(root.right, p, q);
-24        
+13    private TreeNode lowestCommonAncestor ;
+14    
+15    /**
+16        pair returninf whether p and q found in this subtree or not 
+17     */
+18    public Pair<Boolean, Boolean> lowestCommonAncestorUtil(TreeNode root, TreeNode p, TreeNode q) {
+19        if(root == null){
+20            return new Pair(false, false);
+21        }
+22
+23        Pair<Boolean, Boolean> leftFound  = lowestCommonAncestorUtil(root.left,  p, q);
+24        Pair<Boolean, Boolean> rightFound = lowestCommonAncestorUtil(root.right, p, q);
 25
-26        if(left != null && right != null){
-27            return root;
-28        }
-29
-30
-31        return (left != null) ? left : right; 
-32    }
-33
-34    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
-35        return lowestCommonAncestorUtil(root, p, q); 
-36    }
-37}
+26        boolean pFound = leftFound.getKey() || rightFound.getKey() ;
+27        boolean qFound = leftFound.getValue() || rightFound.getValue() ;
+28
+29        if(root == p){
+30            pFound = true;
+31        }
+32        if(root == q){
+33            qFound = true;
+34        }
+35
+36        if(lowestCommonAncestor == null && pFound && qFound){
+37            lowestCommonAncestor = root;
+38        }
+39        return new Pair(pFound, qFound);
+40
+41    }
+42    
+43    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+44        lowestCommonAncestor = null;
+45        lowestCommonAncestorUtil(root, p, q);
+46        return lowestCommonAncestor;
+47    }
+48}
