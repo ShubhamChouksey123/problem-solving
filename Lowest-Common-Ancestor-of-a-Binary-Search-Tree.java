@@ -20,29 +20,37 @@
 20            return new Pair(false, false);
 21        }
 22
-23        Pair<Boolean, Boolean> leftFound  = lowestCommonAncestorUtil(root.left,  p, q);
-24        Pair<Boolean, Boolean> rightFound = lowestCommonAncestorUtil(root.right, p, q);
+23        Pair<Boolean, Boolean> leftFound  = new Pair(false, false);
+24        Pair<Boolean, Boolean> rightFound = new Pair(false, false);
 25
-26        boolean pFound = leftFound.getKey() || rightFound.getKey() ;
-27        boolean qFound = leftFound.getValue() || rightFound.getValue() ;
-28
-29        if(root == p){
-30            pFound = true;
-31        }
-32        if(root == q){
-33            qFound = true;
-34        }
-35
-36        if(lowestCommonAncestor == null && pFound && qFound){
-37            lowestCommonAncestor = root;
-38        }
-39        return new Pair(pFound, qFound);
-40
-41    }
-42    
-43    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
-44        lowestCommonAncestor = null;
-45        lowestCommonAncestorUtil(root, p, q);
-46        return lowestCommonAncestor;
-47    }
-48}
+26        if(p.val < root.val || q.val < root.val){
+27            leftFound  = lowestCommonAncestorUtil(root.left,  p, q);
+28        }
+29
+30        if(p.val > root.val || q.val > root.val){
+31            rightFound = lowestCommonAncestorUtil(root.right, p, q);
+32        }
+33        
+34        boolean pFound = leftFound.getKey() || rightFound.getKey() ;
+35        boolean qFound = leftFound.getValue() || rightFound.getValue() ;
+36
+37        if(root == p){
+38            pFound = true;
+39        }
+40        if(root == q){
+41            qFound = true;
+42        }
+43
+44        if(lowestCommonAncestor == null && pFound && qFound){
+45            lowestCommonAncestor = root;
+46        }
+47        return new Pair(pFound, qFound);
+48
+49    }
+50    
+51    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+52        lowestCommonAncestor = null;
+53        lowestCommonAncestorUtil(root, p, q);
+54        return lowestCommonAncestor;
+55    }
+56}
