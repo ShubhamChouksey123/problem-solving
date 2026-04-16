@@ -1,59 +1,62 @@
 1class Solution {
-2
-3    private final int[][] directions = new int[][]{
-4        {1, 0}, {-1, 0}, {0, 1}, {0, -1}
-5    };
-6
-7    private boolean liesInRange(int n, int m, int x, int y){
-8        if(x >= 0. && x < n && y >= 0 && y < m)
-9            return true;
-10        return false;
-11    }
-12
-13    private void dfs(int[][] grid, boolean[][] visited, int x, int y){
-14
-15        if(grid[x][y] == 1){
-16            return;
-17        } 
-18
-19        visited[x][y] = true;
-20        int n = grid.length, m = grid[0].length;
-21        for(int i = 0 ; i < 4 ; i++){
-22            int x1 = x + directions[i][0];
-23            int y1 = y + directions[i][1];
-24
-25            if(liesInRange(n, m, x1, y1) && grid[x1][y1] == 0 && !visited[x1][y1]){
-26                dfs(grid, visited, x1, y1);
-27            }
-28        }
-29    }
-30    
-31    public int closedIsland(int[][] grid) {
-32        
-33        int n = grid.length, m = grid[0].length;
-34        boolean[][] visited = new boolean[n][m];
-35
-36        
-37        for(int i = 0 ; i < n ; i++){
-38            dfs(grid, visited, i, 0);   // left boundry
-39            dfs(grid, visited, i, m-1); // left boundry
-40        }
-41
-42        for(int j = 0 ; j < m ; j++){
-43            dfs(grid, visited, 0, j);    // top boundry
-44            dfs(grid, visited, n-1, j);  // bottom boundry
-45        }
-46
-47
-48        int count = 0;
-49        for(int i = 0 ; i < n ; i++){
-50            for(int j = 0 ; j < m ; j++){
-51                if(grid[i][j] == 0 && !visited[i][j]){
-52                    dfs(grid, visited, i, j);
-53                    count++;
-54                }
-55            }
-56        }        
-57        return count;
-58    }
-59}
+2    
+3    private int N;
+4    private int M;
+5    private static final int[][] DIRCETIONS = new int[][]{
+6        {1, 0}, {0, 1}, {-1, 0}, {0, -1}
+7    };
+8
+9    private void markAsVisited(int[][] grid, boolean[][] visited, int x, int y){
+10        
+11        visited[x][y] = true;
+12        
+13        for(int[] direction : DIRCETIONS){
+14            int x1 = x + direction[0];
+15            int y1 = y + direction[1];
+16            if(x1 >= 0 && x1 < N && y1 >= 0 && y1 < M && grid[x1][y1] == 0 && !visited[x1][y1]){
+17                markAsVisited(grid, visited, x1, y1);
+18            }
+19        }
+20    }
+21
+22
+23    public int closedIsland(int[][] grid) {
+24        N = grid.length;
+25        M = grid[0].length;
+26        int countClosedIsland = 0;
+27
+28        boolean[][] visited = new boolean[N][M];
+29
+30        for(int j = 0 ; j < M ; j++){
+31            if(grid[0][j] == 0){
+32                markAsVisited(grid, visited, 0, j);    
+33            }
+34            if(grid[N-1][j] == 0){
+35                markAsVisited(grid, visited, N-1, j);    
+36            }
+37        }
+38
+39        for(int i = 0 ; i < N ; i++){
+40            if(grid[i][0] == 0){
+41                markAsVisited(grid, visited, i, 0);    
+42            }
+43            if(grid[i][M-1] == 0){
+44                markAsVisited(grid, visited, i, M-1);    
+45            }
+46        }
+47        
+48
+49
+50        for(int i = 0 ; i < N ; i++){
+51            for(int j = 0 ; j < M ; j++){
+52                if(grid[i][j] == 0 && !visited[i][j]){
+53                    markAsVisited(grid, visited, i, j);    
+54                    countClosedIsland++;
+55                }
+56            }
+57        }
+58        return countClosedIsland;
+59    }
+60}
+61
+62
