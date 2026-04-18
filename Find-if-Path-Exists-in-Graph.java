@@ -1,20 +1,20 @@
 1class Solution {
 2
-3    private boolean dfs(int n, List<List<Integer>> adj, boolean[] visited, int destination, int node){
-4        visited[node] = true;
-5
-6        for(int neighbour : adj.get(node)){
-7            if(neighbour == destination){
-8                visited[neighbour] = true;
-9                return true;
-10            }
+3    private boolean isPathExists(int n, List<List<Integer>> adj, boolean[] visited, int destination, int node){
+4
+5        if(destination == node){
+6            return true;
+7        }
+8        visited[node] = true;
+9
+10        for(int neighbour : adj.get(node)){
 11            if(!visited[neighbour]){
-12                if(!dfs(n, adj, visited, destination, neighbour)){
-13                    return false;
+12                if(isPathExists(n, adj, visited, destination, neighbour)){
+13                    return true;
 14                }
 15            }
 16        }
-17        return true;
+17        return false;
 18    }
 19
 20    /**
@@ -33,7 +33,6 @@
 33
 34        boolean[] visited = new boolean[n];
 35
-36        dfs(n, adj, visited, destination, source); 
-37        return visited[destination];
-38    }
-39}
+36        return isPathExists(n, adj, visited, destination, source); 
+37    }
+38}
