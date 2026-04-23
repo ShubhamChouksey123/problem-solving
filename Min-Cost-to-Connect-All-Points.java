@@ -34,7 +34,7 @@
 34
 35        while(!priorityQueue.isEmpty()){
 36            int[] edge = priorityQueue.poll();
-37            u = edge[0]; u = edge[1]; w = edge[2];
+37            u = edge[0]; v = edge[1]; w = edge[2];
 38            if(visited[u] && visited[v]) continue;
 39
 40            cost += w;
