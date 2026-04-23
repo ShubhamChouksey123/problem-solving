@@ -30,7 +30,7 @@
 30        visited[0] = true;
 31        addAllNeigbours(priorityQueue, visited, 0, points);
 32
-33        int u = 0, v = 0, w = 0, cost = 0;
+33        int u = 0, v = 0, w = 0, cost = 0, edgeUsed = 0;
 34
 35        while(!priorityQueue.isEmpty()){
 36            int[] edge = priorityQueue.poll();
@@ -45,9 +45,11 @@
 45            else{
 46                visited[v] = true;
 47                addAllNeigbours(priorityQueue, visited, v, points);
-48            } 
-49        }
-50
-51        return cost;
-52    }
-53}
+48            }
+49            edgeUsed++;
+50            if(edgeUsed == n-1) break;
+51        }
+52
+53        return cost;
+54    }
+55}
