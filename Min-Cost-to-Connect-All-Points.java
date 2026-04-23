@@ -5,7 +5,7 @@
 5        
 6        int x1 = points[index][0], y1 = points[index][1];
 7        for(int j = 0 ; j < visited.length ; j++){
-8            if( index != j && !visited[j]){
+8            if(!visited[j]){
 9                int x2 = points[j][0], y2 = points[j][1];
 10                int w = Math.abs(x1 - x2) + Math.abs(y1 - y2);
 11                priorityQueue.add(new int[]{index, j, w});
