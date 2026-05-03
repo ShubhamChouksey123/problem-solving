@@ -1,64 +1,59 @@
 1class Solution {
 2
-3    private int N;
-4    private int wordLength;
-5    
-6    private boolean isAdjacent(String a , String b){
-7        int diff = 0;
-8        for(int i = 0 ; i < wordLength ; i++){
-9            if(a.charAt(i) != b.charAt(i)){
-10                diff++;
-11            }
-12            if(diff > 1) return false;
-13        }
-14        return (diff == 1);
-15    }
-16
-17    private void createAdjList(List<String> wordList, boolean[][] adj){
-18
-19        for(int i = 0 ; i < N ; i++){
-20            for(int j = 0 ; j < N ; j++){
-21                if(i != j && isAdjacent(wordList.get(i), wordList.get(j))){
-22                    adj[i][j] = true;
-23                }
-24            }
-25        }
-26    }
-27
-28    public int ladderLength(String beginWord, String endWord, List<String> wordList) {
-29
-30        N = wordList.size();
-31        wordLength = beginWord.length();
-32        boolean[] visited = new boolean[N];
-33        boolean[][] adj = new boolean[N][N];
-34        createAdjList(wordList, adj);
-35
-36        Deque<int[]> queue = new ArrayDeque<>();
-37        int time = 0;
-38
-39        for(int i = 0 ; i < N ; i++){
-40            if(!wordList.get(i).equals(beginWord) && isAdjacent(wordList.get(i), beginWord)){
-41                visited[i] = true; time = 2;
-42                queue.offerLast(new int[]{i, 2});
-43            }
-44        }
-45
-46        while(!queue.isEmpty()){
-47            int[] node = queue.pollFirst();
-48            int nodeIndex = node[0]; 
-49            time = node[1];
-50            if(wordList.get(nodeIndex).equals(endWord)){
-51                return time;
-52            }
-53
-54            for(int i = 0 ; i < N ; i++){
-55                if(i != nodeIndex && adj[nodeIndex][i] && !visited[i]){
-56                    visited[i] = true;
-57                    queue.offerLast(new int[]{i, time + 1});
-58                }
-59            }
-60        }
-61        return 0;
-62        
-63    }
-64}
+3    private boolean areNeighbours(String a, String b){
+4        if(a.length() != b.length()) return false;
+5
+6        int countDifferences = 0;
+7        for(int i = 0 ; i < a.length() ; i++){
+8            if(a.charAt(i) != b.charAt(i)){
+9                countDifferences++;
+10            }
+11        }
+12        return countDifferences == 1;
+13    }
+14
+15    public int ladderLength(String beginWord, String endWord, List<String> wordList) {
+16        
+17        int n = wordList.size();
+18        boolean[] visited = new boolean[n];
+19        List<List<Integer>> adj = new ArrayList<>();
+20        for(int i = 0; i < n ; i++){
+21            adj.add(new ArrayList<>());
+22        }
+23        
+24        for(int i = 0 ; i < n ; i++){
+25            for(int j = 0 ; j < n ; j++){
+26                if(i != j && areNeighbours(wordList.get(i), wordList.get(j))){
+27                    adj.get(i).add(j);
+28                }
+29            }
+30        }
+31
+32        Deque<int[]> queue = new ArrayDeque<>();
+33        int step = 2;
+34
+35        for(int i = 0 ; i < n ; i++){    
+36            if(areNeighbours(beginWord, wordList.get(i))){
+37                visited[i] = true;
+38                queue.offerLast(new int[]{i, 2});
+39            }
+40        }
+41
+42        while(!queue.isEmpty()){
+43            int[] node = queue.pollFirst();
+44            step = node[1];
+45            if(endWord.equals(wordList.get(node[0]))){
+46                return step;
+47            }
+48
+49            for(int neighbour : adj.get(node[0])){
+50                if(!visited[neighbour]){
+51                    visited[neighbour] = true;
+52                    queue.offerLast(new int[]{neighbour, step + 1});
+53                }
+54            }
+55        }
+56        return 0;
+57
+58    }
+59}
