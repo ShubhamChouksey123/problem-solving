@@ -40,33 +40,21 @@
 40    
 41    public List<String> watchedVideosByFriends(List<List<String>> watchedVideos, int[][] friends, int id, int level) {
 42
-43        List<String> ans = new ArrayList<>();
+43        
 44        Map<String, Integer> frequencyOfWatchedVideo = new HashMap<>();
-45
-46        bfs(watchedVideos, friends, id, level, frequencyOfWatchedVideo);
-47
-48        Map<Integer, List<String>> sortByFreq = new TreeMap<>();
-49
-50        for(Map.Entry<String, Integer> entry : frequencyOfWatchedVideo.entrySet()){
-51
-52            String movie = entry.getKey(); Integer times = entry.getValue();
-53            if(sortByFreq.containsKey(times)){
-54                sortByFreq.get(times).add(movie);
-55            }else{
-56                List<String> list = new ArrayList<>(); list.add(movie);
-57                sortByFreq.put(times ,list);
-58            }
-59        }
-60
-61        for(Map.Entry<Integer, List<String>> entry : sortByFreq.entrySet()){
-62
-63            Collections.sort(entry.getValue());
-64            ans.addAll(entry.getValue());
-65        }
-66
-67
-68
-69
-70        return ans;
-71    }
-72}
+45        bfs(watchedVideos, friends, id, level, frequencyOfWatchedVideo);
+46
+47        List<String> ans = new ArrayList<>(frequencyOfWatchedVideo.keySet());
+48
+49        Collections.sort(ans, (a,b) -> {
+50            if(frequencyOfWatchedVideo.get(a) == frequencyOfWatchedVideo.get(b)){
+51                return a.compareTo(b);
+52            }
+53            return Integer.compare(frequencyOfWatchedVideo.get(a), frequencyOfWatchedVideo.get(b));
+54
+55        });
+56
+57
+58        return ans;
+59    }
+60}
