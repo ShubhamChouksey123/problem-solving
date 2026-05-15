@@ -1,67 +1,47 @@
 1class Solution {
 2
-3    private int[] parent;
-4    private int[] rank;
-5
-6    private int find(int x){
-7        if(parent[x] != x){
-8            parent[x] = find(parent[x]); 
-9        }
-10        return parent[x];
-11    }
-12
-13    private boolean union(int x, int y){
-14        int rootX = find(x);
-15        int rootY = find(y);
-16
-17        if(rootX == rootY){
-18            return false;
-19        }
-20
-21        if(rank[rootX] > rank[rootY]){
-22            parent[rootY] = parent[rootX];
-23        }
-24        if(rank[rootX] < rank[rootY]){
-25            parent[rootX] = parent[rootY];
-26        }
-27        else{
-28            parent[rootY] = parent[rootX];
-29            rank[rootX]++;
-30        }
-31        return true;
-32    }
-33
-34    public int removeStones(int[][] stones) {
-35        int n = stones.length; 
-36
-37        parent = new int[n];
-38        rank = new int[n];
-39
-40        for(int i = 0; i < n ; i++){
-41            parent[i] = i;
-42            rank[i] = 1;
-43        }
+3    private void dfs(List<Integer>[] adj, boolean[] visited, int start){
+4
+5        visited[start] = true;
+6
+7        for(Integer neighbour : adj[start]){
+8            if(!visited[neighbour]){
+9                dfs(adj, visited, neighbour);
+10            }
+11        }
+12    }
+13
+14
+15    public int removeStones(int[][] stones) {
+16        int n = stones.length;
+17
+18        List<Integer>[] adj = new ArrayList[n];
+19        for(int i = 0 ; i < n ; i++){
+20            adj[i] = new ArrayList<>();
+21        }
+22
+23        for(int i = 0 ; i < n ; i++){
+24            int row = stones[i][0], col = stones[i][1];
+25            for(int j = i + 1 ; j < n ; j++){
+26                if(i == j) continue;
+27
+28                if(row == stones[j][0] || col == stones[j][1]){
+29                    adj[i].add(j);
+30                    adj[j].add(i);
+31                }
+32            }    
+33        } 
+34
+35        boolean[] visited = new boolean[n];
+36        int connectedComponent = 0;
+37
+38        for(int i = 0; i < n ; i++){
+39            if(!visited[i]){
+40                connectedComponent++;
+41                dfs(adj, visited, i);
+42            }  
+43        }   
 44
-45        
-46        for(int i = 0 ; i < n ; i++){
-47            int row = stones[i][0], col = stones[i][1];
-48            for(int j = i + 1 ; j < n ; j++){
-49                if(stones[j][0] == row || stones[j][1] == col){
-50                    union(i, j);   
-51                }
-52            }
-53        }    
-54
-55        Set<Integer> set = new HashSet<>();
-56        for(int i = 0 ; i < n ; i++){
-57            set.add(find(i));
-58        }
-59
-60        return n - set.size();
-61
-62
-63
-64
-65
-66    }
-67}
+45        return n - connectedComponent;
+46    }
+47}
