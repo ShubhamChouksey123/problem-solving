@@ -34,40 +34,34 @@
 34    public int removeStones(int[][] stones) {
 35        int n = stones.length; 
 36
-37        int maxValue = 0;
-38        for(int i = 0 ; i < n ; i++){
-39            maxValue = Math.max( Math.max(stones[i][0], stones[i][1]), maxValue);
-40        }    
-41
-42        int size = maxValue;
-43        parent = new int[n];
-44        rank = new int[n];
-45
-46        for(int i = 0; i < n ; i++){
-47            parent[i] = i;
-48            rank[i] = 1;
-49        }
-50
-51        
-52        for(int i = 0 ; i < n ; i++){
-53            int row = stones[i][0], col = stones[i][1];
-54            for(int j = i + 1 ; j < n ; j++){
-55                if(stones[j][0] == row || stones[j][1] == col){
-56                    union(i, j);   
-57                }
-58            }
-59        }    
-60
-61        Set<Integer> set = new HashSet<>();
-62        for(int i = 0 ; i < n ; i++){
-63            set.add(find(i));
-64        }
+37        parent = new int[n];
+38        rank = new int[n];
+39
+40        for(int i = 0; i < n ; i++){
+41            parent[i] = i;
+42            rank[i] = 1;
+43        }
+44
+45        
+46        for(int i = 0 ; i < n ; i++){
+47            int row = stones[i][0], col = stones[i][1];
+48            for(int j = i + 1 ; j < n ; j++){
+49                if(stones[j][0] == row || stones[j][1] == col){
+50                    union(i, j);   
+51                }
+52            }
+53        }    
+54
+55        Set<Integer> set = new HashSet<>();
+56        for(int i = 0 ; i < n ; i++){
+57            set.add(find(i));
+58        }
+59
+60        return n - set.size();
+61
+62
+63
+64
 65
-66        return n - set.size();
-67
-68
-69
-70
-71
-72    }
-73}
+66    }
+67}
