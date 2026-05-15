@@ -51,7 +51,7 @@
 51        
 52        for(int i = 0 ; i < n ; i++){
 53            int row = stones[i][0], col = stones[i][1];
-54            for(int j = 0 ; j < n ; j++){
+54            for(int j = i + 1 ; j < n ; j++){
 55                if(stones[j][0] == row || stones[j][1] == col){
 56                    union(i, j);   
 57                }
