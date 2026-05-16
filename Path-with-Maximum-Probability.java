@@ -32,19 +32,21 @@
 32            
 33            if(p < dist[node]) {
 34                continue;
-35            }    
+35            }
 36
-37            for(double[] neighbourNode : adj[node]){
-38                double newProbability = p * neighbourNode[1];
-39                int neighbourNodeIndex = (int) neighbourNode[0];
-40
-41                
-42                if(newProbability > dist[neighbourNodeIndex]){
-43                    dist[neighbourNodeIndex] = newProbability;
-44                    queue.add(new double[]{neighbourNodeIndex, newProbability});
-45                }
-46            }
-47        }
-48        return dist[end_node];
-49    }
-50}
+37            if(node == end_node) break;    
+38
+39            for(double[] neighbourNode : adj[node]){
+40                double newProbability = p * neighbourNode[1];
+41                int neighbourNodeIndex = (int) neighbourNode[0];
+42
+43                
+44                if(newProbability > dist[neighbourNodeIndex]){
+45                    dist[neighbourNodeIndex] = newProbability;
+46                    queue.add(new double[]{neighbourNodeIndex, newProbability});
+47                }
+48            }
+49        }
+50        return dist[end_node];
+51    }
+52}
