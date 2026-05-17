@@ -2,88 +2,80 @@
 2
 3    private int[] parent;
 4    private int[] rank;
-5
-6    private static final int[][] DIRECTIONS = new int[][]{
-7        {1, 0}, {0, 1}
-8    };
-9
-10    private int getIndex(int m, int x, int y){
-11        return x * m + y;
-12    } 
-13
-14    private int find(int x){
-15        if(parent[x] != x){
-16            parent[x] = find(parent[x]);
-17        }
-18        return parent[x];
-19    }
-20
-21    private boolean union(int x, int y){
-22        int rootX = find(x);
-23        int rootY = find(y);
-24
-25        if(rootX == rootY) return false;
-26
-27        if(rank[rootX] > rank[rootY]){
-28            parent[rootY] = rootX;
-29        }
-30        else if(rank[rootX] < rank[rootY]){
-31            parent[rootX] = rootY;
-32        }
-33        else{
-34            parent[rootY] = rootX;
-35            rank[rootX]++;
-36        } 
-37        return true;
-38    }
-39
-40    public int numIslands(char[][] grid) {
+5    private int numberOfIsland ;
+6
+7    private static final int[][] DIRECTIONS = new int[][]{
+8        {1, 0}, {0, 1}
+9    };
+10
+11    private int getIndex(int m, int x, int y){
+12        return x * m + y;
+13    } 
+14
+15    private int find(int x){
+16        if(parent[x] != x){
+17            parent[x] = find(parent[x]);
+18        }
+19        return parent[x];
+20    }
+21
+22    private boolean union(int x, int y){
+23        int rootX = find(x);
+24        int rootY = find(y);
+25
+26        if(rootX == rootY) return false;
+27
+28        if(rank[rootX] > rank[rootY]){
+29            parent[rootY] = rootX;
+30        }
+31        else if(rank[rootX] < rank[rootY]){
+32            parent[rootX] = rootY;
+33        }
+34        else{
+35            parent[rootY] = rootX;
+36            rank[rootX]++;
+37        } 
+38        numberOfIsland--;
+39        return true;
+40    }
 41
-42        int n = grid.length, m = grid[0].length;
-43        parent = new int[n * m];
-44        rank = new int[n * m];
-45
-46        for(int i = 0 ; i < n ; i++){
-47            for(int j = 0 ; j < m ; j++){
-48                if(grid[i][j] == '0') continue;
-49
-50                parent[getIndex(m, i, j)] = getIndex(m, i, j);
-51                rank[getIndex(m, i, j)] = 1;  
-52            }
-53        }
-54
-55
-56
-57
-58        for(int i = 0 ; i < n ; i++){
-59            for(int j = 0 ; j < m ; j++){
-60
-61                if(grid[i][j] == '0') continue;
+42    public int numIslands(char[][] grid) {
+43
+44        int n = grid.length, m = grid[0].length;
+45        parent = new int[n * m];
+46        rank = new int[n * m];
+47        numberOfIsland = 0;
+48
+49        for(int i = 0 ; i < n ; i++){
+50            for(int j = 0 ; j < m ; j++){
+51                if(grid[i][j] == '0') continue;
+52
+53                parent[getIndex(m, i, j)] = getIndex(m, i, j);
+54                rank[getIndex(m, i, j)] = 1;  
+55                numberOfIsland++;
+56            }
+57        }
+58
+59
+60        for(int i = 0 ; i < n ; i++){
+61            for(int j = 0 ; j < m ; j++){
 62
-63                for(int[] direction : DIRECTIONS){
-64                    int x = i + direction[0];
-65                    int y = j + direction[1];
-66
-67                    if(x < 0 || x >= n || y < 0 || y >= m) continue;
+63                if(grid[i][j] == '0') continue;
+64
+65                for(int[] direction : DIRECTIONS){
+66                    int x = i + direction[0];
+67                    int y = j + direction[1];
 68
-69                    if(grid[x][y] == '1'){
-70                        union(getIndex(m, i, j), getIndex(m, x, y));
-71                    }
-72                }
-73            }
-74        }
-75
-76        
-77        Set<Integer> st = new HashSet<>();
+69                    if(x < 0 || x >= n || y < 0 || y >= m) continue;
+70
+71                    if(grid[x][y] == '1'){
+72                        union(getIndex(m, i, j), getIndex(m, x, y));
+73                    }
+74                }
+75            }
+76        }
+77
 78
-79        for(int i = 0 ; i < n ; i++){
-80            for(int j = 0 ; j < m ; j++){
-81                if(grid[i][j] == '0') continue;
-82                int root = find(getIndex(m, i, j));
-83                st.add(root);
-84            }
-85        }
-86
-87        return st.size();
-88    }
-89}
+79        return numberOfIsland;
+80    }
+81}
