@@ -4,7 +4,7 @@
 4    private int[] rank;
 5
 6    private static final int[][] DIRECTIONS = new int[][]{
-7        {1, 0}, {0, 1}, {-1, 0}, {0, -1}
+7        {1, 0}, {0, 1}
 8    };
 9
 10    private int getIndex(int m, int x, int y){
