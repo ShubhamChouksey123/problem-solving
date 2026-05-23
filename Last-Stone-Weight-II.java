@@ -1,44 +1,28 @@
 1class Solution {
 2
-3    private int[][] memo;
+3    public int lastStoneWeightII(int[] stones) {
 4
-5    private int maxSum(int[] stones, int target, int index, int sum){
-6
-7        if(index == stones.length){
-8            return sum;
-9        }
-10
-11        if(memo[index][sum] != -1){
-12            return memo[index][sum];
-13        }
+5        int n = stones.length;
+6        int totalValue = 0;
+7
+8        for(int stone : stones){
+9            totalValue += stone;
+10        }
+11        int target = totalValue / 2;
+12        int[] dp = new int[target + 1];
+13        
 14
-15        int exclude = maxSum(stones, target, index + 1, sum);
-16
-17        int include = 0;
-18        if(target - sum >= stones[index]){
-19            include = maxSum(stones, target, index + 1, sum + stones[index]);
-20        }
-21        
-22        memo[index][sum] = Math.max(include, exclude);
-23        return memo[index][sum];
-24    }
-25
-26    public int lastStoneWeightII(int[] stones) {
-27
-28        int n = stones.length;
-29        int totalValue = 0;
-30
-31        for(int stone : stones){
-32            totalValue += stone;
-33        }
-34        int target = totalValue / 2;
-35        memo = new int[n][target + 1];
-36        for(int[] row : memo){
-37            Arrays.fill(row, -1);
-38        }
-39
-40        int s1 = maxSum(stones, target, 0, 0);
-41        
-42        return totalValue - 2 * s1;
-43    }
-44}
+15        for(int element = 1 ; element <= n ; element++){
+16            for(int sum = target ; sum >= 0 ; sum--){
+17                int index = element - 1;
+18
+19                if(sum >= stones[index]){
+20                    dp[sum] = Math.max(dp[sum] , stones[index] + dp[sum - stones[index]] );
+21                }  
+22            }
+23        }
+24            
+25        int s1 = dp[target];
+26        return totalValue - 2 * s1;
+27    }
+28}
