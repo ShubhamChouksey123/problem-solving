@@ -9,9 +9,9 @@
 9        
 10        for(int element = 1 ; element <= n ; element++ ){
 11            int index = element - 1;
-12            for(int j = 1 ; j <= amount ; j++){
-13                if(j >= coins[index]){
-14                    dp[j] += dp[j - coins[index]];
+12            for(int sum = 1 ; sum <= amount ; sum++){
+13                if(sum >= coins[index]){
+14                    dp[sum] += dp[sum - coins[index]];
 15                } 
 16            }
 17        }
