@@ -2,27 +2,24 @@
 2    public int coinChange(int[] coins, int amount) {
 3
 4        int n = coins.length;
-5        int[][] dp = new int[n+1][amount+1];
-6        for(int[] row : dp){
-7            Arrays.fill(row, Integer.MAX_VALUE);
-8        }
-9
-10        for(int i = 0 ; i <= n ; i++){
-11            dp[i][0] = 0;
-12        }
-13
-14        for(int element = 1 ; element <= n ; element++){
-15            int index = element - 1;
-16            for(int j = 1; j <= amount ; j++){
-17                dp[element][j] = dp[element - 1][j];
-18                if(j >= coins[index] && dp[element][j - coins[index]] != Integer.MAX_VALUE){
-19                    dp[element][j] = Math.min(
-20                        dp[element][j], 
-21                        1 + dp[element][j - coins[index]]
-22                    ) ; 
-23                }
-24            }
-25        } 
-26        return (dp[n][amount] == Integer.MAX_VALUE) ? -1 : dp[n][amount];
-27    }
-28}
+5        int[] dp = new int[amount+1];
+6        Arrays.fill(dp, Integer.MAX_VALUE);
+7        dp[0] = 0;
+8
+9        
+10
+11        for(int element = 1 ; element <= n ; element++){
+12            int index = element - 1;
+13            for(int j = coins[index]; j <= amount ; j++){
+14                if(j >= coins[index] && dp[j - coins[index]] != Integer.MAX_VALUE){
+15                    dp[j] = Math.min(
+16                        dp[j], 
+17                        1 + dp[j - coins[index]]
+18                    ) ; 
+19                }
+20            }
+21            
+22        } 
+23        return (dp[amount] == Integer.MAX_VALUE) ? -1 : dp[amount];
+24    }
+25}
