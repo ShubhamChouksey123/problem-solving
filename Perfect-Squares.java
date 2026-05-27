@@ -10,15 +10,12 @@
 10        }
 11
 12
-13
-14        for(int i = 2 ; i * i <= n ; i++){
-15            for(int j = 4 ; j <= n ; j++){
-16                if(j >= i * i){
-17                    dp[j] = Math.min(dp[j], 1 + dp[j - i*i]);
-18                }
-19            }
-20        }
-21        return dp[n];
-22            
-23    }
-24}
+13        for(int target = 4 ; target <= n ; target++){
+14            for(int i = 2 ; i*i <= target ; i++){
+15                dp[target] = Math.min(dp[target], 1 + dp[target - i*i]);
+16            }
+17        }
+18        return dp[n];
+19            
+20    }
+21}
