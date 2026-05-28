@@ -12,7 +12,7 @@
 12        int maxSubsetSize = 1, maxSubsetIndex = 0;
 13        for(int i = 1 ; i < n ; i++){
 14            for(int j = 0 ; j < i ; j++){
-15                if(nums[j] < nums[i] && nums[i] % nums[j] == 0 && 1 + dp[j] > dp[i] ){
+15                if(nums[i] % nums[j] == 0 && 1 + dp[j] > dp[i] ){
 16                    dp[i] = 1 + dp[j];
 17                    parent[i] = j;
 18                }
