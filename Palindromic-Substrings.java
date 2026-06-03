@@ -1,34 +1,32 @@
 1class Solution {
-2    public int countSubstrings(String s) {
-3
-4        int n = s.length();
-5        boolean[][] dp = new boolean[n][n];
-6
-7        int countPalindrome = n;
-8
-9        // length : 1 string, every 1 length string is a palindrome
-10        for(int i = 0; i < n ; i++){
-11            dp[i][i] = true;
-12        }
-13
-14        // length : 2 string
-15        for(int i = 0 ; i < n - 1; i++){
-16            if(s.charAt(i) == s.charAt(i+1)){
-17                dp[i][i+1] = true;
-18                countPalindrome++;
-19            }
-20        }
-21
-22        for(int len = 3 ; len <= n ; len++){
-23            for(int startIndex = 0 ; startIndex < n - len + 1 ; startIndex++){
-24                int endIndex = startIndex + len - 1;
-25                if(s.charAt(startIndex) == s.charAt(endIndex) && dp[startIndex + 1][endIndex - 1]){
-26                    dp[startIndex][endIndex] = true;
-27                    countPalindrome++;
-28                }
-29            }
-30        }
-31        return countPalindrome;
-32        
-33    }
-34}
+2    
+3    public int countSubstrings(String s, int n , int start, int end) {
+4
+5        int count = 0;
+6        while(start >= 0 && end < n && s.charAt(start) == s.charAt(end)){
+7            count++;
+8            start--;
+9            end++;
+10        }
+11        return count;
+12    }
+13    
+14    public int countSubstrings(String s) {
+15
+16        int n = s.length();
+17        int count = 0;
+18
+19        // odd length palindrome
+20        for(int i = 0 ; i < n ; i++){
+21            count += countSubstrings(s, n , i, i); 
+22        }
+23
+24        // odd length palindrome
+25        for(int i = 0 ; i < n - 1 ; i++){
+26            count += countSubstrings(s, n , i, i + 1); 
+27        }
+28
+29        return count;
+30    
+31    }
+32}
