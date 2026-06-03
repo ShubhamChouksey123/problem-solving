@@ -9,30 +9,31 @@
 9        if(x == 0 && y == 0)
 10            return 0;
 11
-12        if(dp[x-1][y-1] != -1)
-13            return dp[x-1][y-1];
+12        if(dp[x][y] != -1)
+13            return dp[x][y];
 14        
 15        if(word1.charAt(x - 1) == word2.charAt(y - 1)){
-16            return minDistance(word1, word2, n , m, dp, x - 1, y - 1);
-17        }
-18
-19        int a = minDistance(word1, word2, n , m, dp, x - 1, y);
-20        int b = minDistance(word1, word2, n , m, dp, x, y - 1);
-21        int c = minDistance(word1, word2, n , m, dp, x - 1, y - 1);
-22
-23        int optimalValue = Math.min(a, Math.min(b, c)) + 1;
-24        dp[x-1][y-1] = optimalValue;
-25        return optimalValue;
-26    }
-27
-28    public int minDistance(String word1, String word2) {
-29        
-30        int n = word1.length(), m = word2.length();
-31        int[][] dp = new int[n][m];
-32        for(int[] row : dp){
-33            Arrays.fill(row, -1);
-34        }
-35        
-36        return  minDistance(word1, word2, n , m, dp, n, m);
-37    }
-38}
+16            dp[x][y] = minDistance(word1, word2, n , m, dp, x - 1, y - 1);
+17            return dp[x][y];
+18        }
+19
+20        int a = minDistance(word1, word2, n , m, dp, x - 1, y);
+21        int b = minDistance(word1, word2, n , m, dp, x, y - 1);
+22        int c = minDistance(word1, word2, n , m, dp, x - 1, y - 1);
+23
+24        int optimalValue = Math.min(a, Math.min(b, c)) + 1;
+25        dp[x][y] = optimalValue;
+26        return optimalValue;
+27    }
+28
+29    public int minDistance(String word1, String word2) {
+30        
+31        int n = word1.length(), m = word2.length();
+32        int[][] dp = new int[n+1][m+1];
+33        for(int[] row : dp){
+34            Arrays.fill(row, -1);
+35        }
+36        
+37        return  minDistance(word1, word2, n , m, dp, n, m);
+38    }
+39}
