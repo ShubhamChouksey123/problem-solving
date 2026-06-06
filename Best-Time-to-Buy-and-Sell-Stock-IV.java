@@ -1,46 +1,44 @@
 1class Solution {
 2
-3    private int maxProfit(int[] prices, int[][][] dp, int index, int buy, int k) {
+3    public int maxProfit(int k, int[] prices) {
 4
-5        if(k == 0) return 0;
-6        if(index == prices.length) return 0;
+5        int n = prices.length;
+6        if(n == 1) return 0;
 7
-8        if(dp[index][buy][k] != -1)
-9            return dp[index][buy][k];
-10
-11
-12        int a = 0, b = 0, optimalValue = 0;
-13        if(buy == 1){
-14            // skip buying on that day
-15            a = maxProfit(prices, dp, index + 1, 1, k);
-16
-17            // buy on that day
-18            b = -prices[index] + maxProfit(prices, dp, index + 1, 0, k);
-19        }
-20        else{
-21            // skip selling on that day
-22            a = maxProfit(prices, dp, index + 1, 0, k);
-23
-24            // sell on that day
-25            b = prices[index] + maxProfit(prices, dp, index + 1, 1, k - 1);
-26        }
-27        
-28        optimalValue = Math.max(a, b);
-29        dp[index][buy][k] = optimalValue;
-30        return optimalValue;
-31    }
+8        int[][][] dp = new int[n+1][2][k+1];  
+9
+10        for(int j = 0 ; j < 2 ; j++){
+11            for(int cap = 0 ; cap <= k ; cap++){
+12                dp[n][j][cap] = 0;
+13            }
+14        }
+15
+16        for(int i = 0 ; i <= n ; i++){
+17            for(int j = 0 ; j < 2 ; j++){
+18                dp[i][j][0] = 0;
+19            }
+20        }
+21        for(int i = n - 1 ; i >= 0 ; i--){
+22            for(int cap = 1 ; cap <= k ; cap++){
+23            
+24                
+25                // skip buying on that day
+26                int skipBuy = dp[i+1][1][cap];
+27                // buy on that day
+28                int buyDay = -prices[i] + dp[i+1][0][cap];
+29
+30                dp[i][1][cap] = Math.max(skipBuy, buyDay);
+31                
 32
-33    public int maxProfit(int k, int[] prices) {
-34
-35        int n = prices.length;
-36        int[][][] dp = new int[n][2][k+1];  
-37        for(int[][] matrix : dp){
-38            for(int[] row : matrix){
-39                Arrays.fill(row, -1);
-40            }
-41        } 
-42
-43        return maxProfit(prices, dp, 0, 1, k);
-44        
-45    }
-46}
+33                int skipSell = dp[i+1][0][cap];
+34                int sellDay = prices[i] + dp[i+1][1][cap-1];
+35                dp[i][0][cap] = Math.max(skipSell, sellDay);
+36                
+37            
+38            }
+39        }
+40
+41        return dp[0][1][k];
+42        
+43    }
+44}
