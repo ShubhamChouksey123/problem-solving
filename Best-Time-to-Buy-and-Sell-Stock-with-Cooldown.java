@@ -1,35 +1,32 @@
 1class Solution {
-2
-3    private int maxProfit(int[] prices, int[][] dp, int index, int buy) {
-4
-5        if(index >= prices.length) return 0;
+2    public int maxProfit(int[] prices) {
+3
+4        int n = prices.length;
+5        int[][] dp = new int[n+2][2];
 6
-7        if(dp[index][buy] != -1)
-8            return dp[index][buy];
-9
-10        int optimalValue = 0;
-11        if(buy == 1){
-12            int skipDay = maxProfit(prices, dp, index + 1, 1); 
-13            int buyDay = -prices[index] + maxProfit(prices, dp, index + 1, 0); 
-14            optimalValue = Math.max(skipDay, buyDay);
-15        }
-16        else{
-17            int skipDay = maxProfit(prices, dp, index + 1, 0); 
-18            int sellDay = prices[index] + maxProfit(prices, dp, index + 2, 1); 
-19            optimalValue = Math.max(skipDay, sellDay);
-20        }
-21        dp[index][buy] = optimalValue;
-22        return optimalValue;
-23    }
-24
-25    public int maxProfit(int[] prices) {
-26
-27        int n = prices.length;
-28        int[][] dp = new int[n][2];
-29        for(int[] row : dp){
-30            Arrays.fill(row, -1);
-31        }
-32
-33        return maxProfit(prices, dp, 0, 1);
-34    }
-35}
+7
+8        // n == 0 => dp[n][.] = 0
+9        for(int j = 0 ; j < 2 ; j++){
+10            dp[n][j] = 0;
+11        }
+12
+13        for(int i = n - 1; i >= 0 ; i--){
+14            // Buy
+15            // not buying on that day
+16            int skipBuyDay = dp[i+1][1];
+17            // Buy stock on that day
+18            int buyDay = -prices[i] + dp[i+1][0];
+19
+20            dp[i][1] = Math.max(skipBuyDay, buyDay);
+21
+22            // Sell
+23            // Not selling on that day
+24            int skipSellDay = dp[i+1][0];
+25            // Sell stock on that day
+26            int sellDay = prices[i] + dp[i+2][1];
+27            
+28            dp[i][0] = Math.max(skipSellDay, sellDay);
+29        }
+30        return dp[0][1];
+31    }
+32}
