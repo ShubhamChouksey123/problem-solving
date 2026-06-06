@@ -2,17 +2,24 @@
 2    public int maxProfit(int[] prices) {
 3
 4        int n = prices.length;
-5        int startPrice = Integer.MAX_VALUE, profit = 0;
-6
-7        for(int i = 0 ; i < n ; i++){
-8            if(prices[i] < startPrice){
-9                startPrice = prices[i]; 
-10            }
-11            else {
-12                profit += prices[i] - startPrice;
-13                startPrice = prices[i];
-14            }
-15        }
-16        return profit;
-17    }
-18}
+5        if(n <= 1)
+6            return 0;
+7        
+8
+9        int index = 0, profit = 0;
+10        while(index < n){
+11            while(index + 1 < n && prices[index] > prices[index+1]){
+12                index++;
+13            }
+14
+15            int startIndex = index;
+16            while(index + 1 < n && prices[index] < prices[index+1]){
+17                index++;
+18            }
+19            int endIndex = index;
+20            profit += prices[endIndex] - prices[startIndex];
+21            index++;
+22        }
+23        return profit;
+24    }
+25}
