@@ -1,28 +1,35 @@
 1class Solution {
-2
-3    public int lastStoneWeightII(int[] stones) {
-4
-5        int n = stones.length;
-6        int totalValue = 0;
-7
-8        for(int stone : stones){
-9            totalValue += stone;
-10        }
-11        int target = totalValue / 2;
-12        int[] dp = new int[target + 1];
-13        
-14
-15        for(int element = 1 ; element <= n ; element++){
-16            for(int sum = target ; sum >= 0 ; sum--){
-17                int index = element - 1;
-18
-19                if(sum >= stones[index]){
-20                    dp[sum] = Math.max(dp[sum] , stones[index] + dp[sum - stones[index]] );
-21                }  
-22            }
-23        }
-24            
-25        int s1 = dp[target];
-26        return totalValue - 2 * s1;
-27    }
-28}
+2    public int lastStoneWeightII(int[] stones) {
+3
+4        int n = stones.length; 
+5        int totalSum = 0;
+6        for(int stone : stones){
+7            totalSum += stone;
+8        }
+9
+10        int target = totalSum / 2 ;
+11        boolean[][] dp = new boolean[n+1][target + 1];
+12
+13
+14        for(int element = 0 ; element <= n ; element++){
+15            dp[element][0] = true;
+16        }
+17
+18        int maxPossibleSum = 0;
+19        for(int element = 1 ; element <= n ; element++){
+20
+21            int index = element - 1;
+22            for(int sum = 1 ; sum <= target ; sum ++){
+23                dp[element][sum] = dp[element-1][sum];
+24
+25                if(sum >= stones[index]){
+26                    dp[element][sum] = dp[element][sum] || dp[element-1][sum - stones[index]];
+27                } 
+28                if(dp[element][sum] && maxPossibleSum < sum) maxPossibleSum = sum;
+29            }
+30        }
+31
+32        return totalSum - (2 * maxPossibleSum);
+33        
+34    }
+35}
