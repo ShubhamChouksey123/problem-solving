@@ -9,70 +9,66 @@
 9        int row2 = row1 + col1 - col2;
 10
 11        if(row1 == n - 1 && col1 == n - 1){
-12            // Base case
-13            if(row1 == row2 && col1 == col2){
-14                return grid[row1][col1];
-15            }    
-16            return grid[row1][col1] + grid[row2][col2];  
+12            return grid[row1][col1];
+13        }
+14
+15        if(memo[row1][col1][col2] != -1){
+16            return memo[row1][col1][col2];
 17        }
 18
-19        if(memo[row1][col1][col2] != -1){
-20            return memo[row1][col1][col2];
-21        }
-22
-23        int currentCherryPick = 0;
-24        // Same cell
-25        if(row1 == row2 && col1 == col2){
-26            currentCherryPick = grid[row1][col1];
+19        int currentCherryPick = 0;
+20        // Same cell
+21        if(row1 == row2 && col1 == col2){
+22            currentCherryPick = grid[row1][col1];
+23        }
+24        else{
+25            // differet cells
+26            currentCherryPick = grid[row1][col1] + grid[row2][col2];
 27        }
-28        else{
-29            // differet cells
-30            currentCherryPick = grid[row1][col1] + grid[row2][col2];
-31        }
-32
-33        
-34        int maxNextCherryPick = Integer.MIN_VALUE;
-35        for(int i = 0 ; i < 2 ; i++){
-36            int newRow1 = row1 + DIRECTION_RIGHT_DOWN[i][0];
-37            int newCol1 = col1 + DIRECTION_RIGHT_DOWN[i][1];
-38 
-39            if(newRow1 < 0 || newRow1 >= n || newCol1 < 0 || newCol1 >= n) continue;
-40            if(grid[newRow1][newCol1] == -1) continue;
-41
-42            for(int j = 0 ; j < 2 ; j++){
-43
-44                int newRow2 = row2 + DIRECTION_RIGHT_DOWN[j][0];
-45                int newCol2 = col2 + DIRECTION_RIGHT_DOWN[j][1];
+28
+29        
+30        int maxNextCherryPick = Integer.MIN_VALUE;
+31        for(int i = 0 ; i < 2 ; i++){
+32            int newRow1 = row1 + DIRECTION_RIGHT_DOWN[i][0];
+33            int newCol1 = col1 + DIRECTION_RIGHT_DOWN[i][1];
+34 
+35            if(newRow1 < 0 || newRow1 >= n || newCol1 < 0 || newCol1 >= n) continue;
+36            if(grid[newRow1][newCol1] == -1) continue;
+37
+38            for(int j = 0 ; j < 2 ; j++){
+39
+40                int newRow2 = row2 + DIRECTION_RIGHT_DOWN[j][0];
+41                int newCol2 = col2 + DIRECTION_RIGHT_DOWN[j][1];
+42
+43                
+44                if(newRow2 < 0 || newRow2 >= n || newCol2 < 0 || newCol2 >= n) continue;
+45                if(grid[newRow2][newCol2] == -1) continue;
 46
-47                
-48                if(newRow2 < 0 || newRow2 >= n || newCol2 < 0 || newCol2 >= n) continue;
-49                if(grid[newRow2][newCol2] == -1) continue;
-50
-51                int nextCherryPick = cherryPickup(grid, memo, n, newRow1 , newCol1 , newCol2);
-52                maxNextCherryPick = Math.max(maxNextCherryPick, nextCherryPick);
-53            }
-54        }
-55
-56        if(maxNextCherryPick == Integer.MIN_VALUE){
-57            memo[row1][col1][col2] =Integer.MIN_VALUE;
-58            return Integer.MIN_VALUE;
-59        }
-60
-61        memo[row1][col1][col2] = currentCherryPick + maxNextCherryPick;
-62        return currentCherryPick + maxNextCherryPick;
-63    }
-64    
-65    public int cherryPickup(int[][] grid) {
-66        int n = grid.length;
-67        int[][][] memo = new int[n][n][n];
-68
-69        for(int[][] matrix : memo){
-70            for(int[] row : matrix){
-71                Arrays.fill(row, -1);
-72            }
-73        }
-74
-75        int ans = cherryPickup(grid, memo, n, 0, 0 , 0); 
-76        return ans == Integer.MIN_VALUE ? 0 : ans;
-77    }
-78}
+47                int nextCherryPick = cherryPickup(grid, memo, n, newRow1 , newCol1 , newCol2);
+48                maxNextCherryPick = Math.max(maxNextCherryPick, nextCherryPick);
+49            }
+50        }
+51
+52        if(maxNextCherryPick == Integer.MIN_VALUE){
+53            memo[row1][col1][col2] =Integer.MIN_VALUE;
+54            return Integer.MIN_VALUE;
+55        }
+56
+57        memo[row1][col1][col2] = currentCherryPick + maxNextCherryPick;
+58        return currentCherryPick + maxNextCherryPick;
+59    }
+60    
+61    public int cherryPickup(int[][] grid) {
+62        int n = grid.length;
+63        int[][][] memo = new int[n][n][n];
+64
+65        for(int[][] matrix : memo){
+66            for(int[] row : matrix){
+67                Arrays.fill(row, -1);
+68            }
+69        }
+70
+71        int ans = cherryPickup(grid, memo, n, 0, 0 , 0); 
+72        return ans == Integer.MIN_VALUE ? 0 : ans;
+73    }
+74}
