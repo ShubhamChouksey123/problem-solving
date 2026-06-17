@@ -1,34 +1,34 @@
 1class Solution {
 2    
-3    public int longestPalindromeSubseq(String s, int n, int[][] dp, int x, int y) {
-4
-5        if(x == n || y < 0)
-6            return 0;
+3    public int longestPalindromeSubseq(String s, int n, int[][] memoCache , int start, int end) {
+4        
+5        if(start == end) return 1;
+6        if(start > end) return 0;
 7
-8        if(dp[x][y] != -1)
-9            return dp[x][y];
-10
-11        if(s.charAt(x) == s.charAt(y)){
-12            int ans = 1 + longestPalindromeSubseq(s, n, dp, x + 1, y - 1); 
-13            dp[x][y] = ans;
-14            return ans;
-15        }
-16
-17        int a = longestPalindromeSubseq(s, n, dp, x + 1, y);
-18        int b = longestPalindromeSubseq(s, n, dp, x, y - 1);
-19
-20        int optimalValue = Math.max(a, b);
-21        dp[x][y] = optimalValue;
-22        return optimalValue;
-23    }
-24    
-25    public int longestPalindromeSubseq(String s) {
-26
-27        int n = s.length();   
-28        int[][] dp = new int[n][n];
-29        for(int[] row : dp){
-30            Arrays.fill(row, -1);
-31        }
-32        return longestPalindromeSubseq(s, n, dp, 0, n - 1); 
+8        if(memoCache[start][end] != -1) return memoCache[start][end];
+9
+10        int longestPalLength = 1;
+11        if(s.charAt(start) == s.charAt(end)){
+12            longestPalLength = 2 + longestPalindromeSubseq(s, n, memoCache , start + 1, end - 1); 
+13        }
+14        else{
+15            longestPalLength = Math.max(
+16                longestPalindromeSubseq(s, n, memoCache , start + 1, end),
+17                longestPalindromeSubseq(s, n, memoCache , start, end - 1)
+18            );
+19        }
+20        memoCache[start][end] = longestPalLength;
+21        return longestPalLength;
+22    }
+23    
+24    public int longestPalindromeSubseq(String s) {
+25
+26        int n = s.length();
+27        int[][] memoCache = new int[n][n];
+28        for(int[] row : memoCache){
+29            Arrays.fill(row, -1);
+30        }
+31        
+32        return longestPalindromeSubseq(s, n, memoCache , 0, n - 1); 
 33    }
 34}
