@@ -1,42 +1,41 @@
 1class Solution {
-2
-3    private int numDistinct(String s, String t, int[][] dp, int indexS, int indexT) {
-4
-5        if(indexS == s.length() && indexT < t.length()){
-6            return 0;
-7        }
-8        
-9        if(indexT == t.length())
-10            return 1;
-11
-12        if(dp[indexS][indexT] != -1){
-13            return dp[indexS][indexT];
+2    
+3    private int numDistinct(String s, String t, int n, int m, int[][] memoCache, int index1, int index2) {
+4        
+5        if(index1 == n && index2 == m) return 1;
+6        if(index1 >= n && index2 < m) return 0;
+7
+8        if(memoCache[index1][index2] != -1) return memoCache[index1][index2];
+9
+10        if(index1 < n && index2 == m){
+11            int ans = numDistinct(s, t, n, m, memoCache, index1 + 1, index2);
+12            memoCache[index1][index2] = ans; 
+13            return ans;
 14        }
 15
-16
-17        if(s.charAt(indexS) != t.charAt(indexT)){
-18            dp[indexS][indexT] = numDistinct(s, t, dp, indexS + 1, indexT); 
-19            return dp[indexS][indexT];
+16        if(index1 < n && index2 < m && s.charAt(index1) != t.charAt(index2)){
+17            int ans = numDistinct(s, t, n, m, memoCache, index1 + 1, index2);
+18            memoCache[index1][index2] = ans; 
+19            return ans;
 20        }
 21
-22        int a = numDistinct(s, t, dp, indexS + 1, indexT + 1);
-23        int b = numDistinct(s, t, dp, indexS + 1, indexT);
+22        int a = numDistinct(s, t, n, m, memoCache, index1 + 1, index2 + 1);
+23        int b = numDistinct(s, t, n, m, memoCache, index1 + 1, index2);
 24        
-25        int optimalValue = a + b;
-26        dp[indexS][indexT] = optimalValue;
-27        return optimalValue;
-28    }
-29
-30    public int numDistinct(String s, String t) {
-31        
-32        if(s.length() < t.length()){
-33            return 0;
-34        }
-35
-36        int[][] dp = new int[s.length()][t.length()];
-37        for(int[] row : dp){
-38            Arrays.fill(row, -1);
-39        }
-40        return numDistinct(s, t, dp, 0, 0);
-41    }
-42}
+25        
+26        int optimalValue = a + b;
+27        memoCache[index1][index2] = optimalValue;
+28        return optimalValue;
+29    }
+30    
+31    public int numDistinct(String s, String t) {
+32        
+33        int n = s.length(), m = t.length();
+34        int[][] memoCache = new int[n+1][m+1];
+35        for(int[] row : memoCache){
+36            Arrays.fill(row , -1);
+37        }
+38
+39        return numDistinct(s, t, n, m, memoCache, 0, 0);
+40    }
+41}
