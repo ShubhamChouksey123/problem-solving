@@ -1,25 +1,30 @@
 1class Solution {
-2    public int[] xorQueries(int[] arr, int[][] queries) {
-3        int n = arr.length;
-4        int[] xors = new int[n];
-5
-6        xors[0] = arr[0];
-7        for(int i = 1 ; i < n ; i++){
-8            xors[i] = xors[i-1] ^ arr[i];
-9        }
-10
-11
-12        int[] ans = new int[queries.length];
-13        for(int i = 0 ; i < queries.length; i++){
-14            if(queries[i][0] > 0){
-15                ans[i] = xors[queries[i][1]] ^ xors[queries[i][0] - 1];
-16            }
-17            else{
-18                ans[i] = xors[queries[i][1]];
-19            }
-20            
-21        }  
-22        return ans;
-23        
-24    }
-25}
+2    
+3    private void precompute(int[] dp, int[] arr){
+4        dp[0] = arr[0];
+5        for(int i = 1 ; i < arr.length ; i++){
+6            dp[i] = dp[i-1] ^ arr[i];   
+7        }
+8    }
+9    public int[] xorQueries(int[] arr, int[][] queries) {
+10        
+11        int n = arr.length;
+12        // dp[i] represent XOR from arr[0] ^ arr[1] ^ ... ^ arr[i]
+13        int[] dp = new int[n];
+14
+15        precompute(dp, arr);
+16
+17        int[] result = new int[queries.length];
+18        for(int i = 0 ; i < queries.length ; i++ ){
+19            int[] query = queries[i];
+20            int start = query[0], end = query[1];
+21            if(start == 0){
+22                result[i] = dp[end];
+23            }
+24            else{
+25                result[i] = dp[end] ^ dp[start - 1];
+26            }
+27        }
+28        return result;
+29    }
+30}
