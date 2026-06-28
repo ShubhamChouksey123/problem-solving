@@ -18,7 +18,7 @@
 18        
 19        int mid = start + (end - start)/2;
 20        if(mountainArr.get(mid) < mountainArr.get(mid + 1)){
-21            return findPeakIndex(mountainArr, mid, end);
+21            return findPeakIndex(mountainArr, mid + 1, end);
 22        }
 23        return findPeakIndex(mountainArr, start, mid);
 24
