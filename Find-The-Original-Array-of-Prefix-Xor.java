@@ -1,6 +1,6 @@
 1class Solution {
-2    
-3    public int[] findArray(int[] pref) {
+2    public int[] findArray(int[] pref) {
+3        
 4
 5        int n = pref.length;
 6        int[] ans = new int[n];
