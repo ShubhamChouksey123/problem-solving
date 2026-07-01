@@ -8,7 +8,7 @@
 8        );
 9        
 10        int n = nums1.length, m = nums2.length;
-11        for(int i = 0 ; i < n ; i++){
+11        for(int i = 0 ; i < n && i < k; i++){
 12            pq.add(new int[]{i, 0, nums1[i] + nums2[0]});
 13        }
 14
