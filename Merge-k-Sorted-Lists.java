@@ -10,31 +10,42 @@
 10 */
 11class Solution {
 12    public ListNode mergeKLists(ListNode[] lists) {
-13        ListNode cur = null, tmp = null;
-14        ListNode dummy = new ListNode(-1);
-15        cur = dummy;
-16
-17        Queue<ListNode> minHeap = new PriorityQueue<>(
-18            (ListNode a, ListNode b) -> {
-19                return Integer.compare(a.val, b.val);
-20            }
-21        );
-22
-23        for(int i = 0 ; i < lists.length ; i++){
-24            if(lists[i] != null){
-25                minHeap.add(lists[i]);
-26            }
-27        }
+13
+14        int n = lists.length;
+15        Queue<Element> minHeap = new PriorityQueue<>(
+16            (a, b) -> {
+17                return Integer.compare(a.val, b.val);
+18            }
+19        );
+20
+21        for(int i = 0 ; i < n ; i++){
+22            if(lists[i] != null)
+23                minHeap.add(new Element(lists[i], lists[i].val));   
+24        }
+25
+26        ListNode head = new ListNode(-1);
+27        ListNode cur = head;
 28
 29        while(!minHeap.isEmpty()){
-30            tmp = minHeap.poll();
-31            cur.next = tmp;
+30            Element topElelment = minHeap.poll();
+31            cur.next = new ListNode(topElelment.node.val);
 32            cur = cur.next;
-33            if(tmp.next != null){
-34                minHeap.add(tmp.next);
-35            }
-36        }
-37
-38        return dummy.next;
-39    }
-40}
+33
+34            if(topElelment.node.next != null){
+35                minHeap.add(new Element(topElelment.node.next, topElelment.node.next.val));   
+36            }
+37        }
+38        return head.next;
+39        
+40    }
+41
+42    private class Element{
+43        ListNode node;
+44        int val;
+45
+46        public Element(ListNode node, int val){
+47            this.node = node;
+48            this.val = val;
+49        }
+50    }
+51}
