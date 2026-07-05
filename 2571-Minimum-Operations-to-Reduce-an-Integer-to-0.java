@@ -1,14 +1,5 @@
 class Solution {
     
-    private int minOps(int n){
-
-        int countOnes = 0;
-        for(int i = 0 ; i < 32 ; i++){
-            if(((n>>i) & 1) == 1) countOnes++;
-        }
-        return countOnes;
-    }
-    
     public int minOperations(int n) {
 
         if(n <= 1) return n;
