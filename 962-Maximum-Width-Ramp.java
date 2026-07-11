@@ -6,7 +6,7 @@ class Solution {
         Deque<int[]> stack = new ArrayDeque<>();
         
         for(int i = 0 ; i < n ; i++){
-            if(stack.isEmpty() || stack.peekLast()[0] >= nums[i]){
+            if(stack.isEmpty() || stack.peekLast()[0] > nums[i]){
                 stack.offerLast(new int[]{nums[i], i});
             }
         }
