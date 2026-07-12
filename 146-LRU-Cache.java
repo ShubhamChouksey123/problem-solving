@@ -36,13 +36,13 @@ class LRUCache {
     }
     
     public int get(int key) {
-        if(keyToNode.containsKey(key)){
-            Node node = keyToNode.get(key);
-            removeNode(node);
-            addAtStart(node);
-            return node.value;
-        }
-        return -1;
+
+        Node node = keyToNode.get(key);
+        if(node == null) return -1;
+        
+        removeNode(node);
+        addAtStart(node);
+        return node.value;
     }
     
     public void put(int key, int value) {
