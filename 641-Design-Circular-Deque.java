@@ -1,68 +1,68 @@
 class MyCircularDeque {
 
-    private Deque<Integer> deque;
+    private int[] data;
+    private int front;
+    private int rear;
     private int size;
+    private int capacity;
 
     public MyCircularDeque(int k) {
-        deque = new ArrayDeque<>();
-        size = k;
+        this.size = 0;
+        this.data = new int[k];
+        this.front = 0;
+        this.rear = 0;
+        this.capacity = k;
     }
     
     public boolean insertFront(int value) {
-        
-        if(deque.size() == size){
-            return false;
-        }
-        deque.offerFirst(value);
+        if(isFull()) return false;
+
+        front = (front - 1 + capacity) % capacity;
+        data[front] = value;
+        size++;
         return true;
     }
     
     public boolean insertLast(int value) {
-        if(deque.size() == size){
-            return false;
-        }
-        deque.offerLast(value);
+        if(isFull()) return false;
+
+        data[rear] = value;
+        rear = (rear + 1) % capacity;
+        size++;
         return true;
     }
     
     public boolean deleteFront() {
-        
-        if(deque.size() == 0){
-            return false;
-        }
-        deque.pollFirst();
+        if(isEmpty()) return false;
+        front = (front + 1) % capacity;
+        size--;
         return true;
     }
     
     public boolean deleteLast() {
-        
-        if(deque.size() == 0){
-            return false;
-        }
-        deque.pollLast();
+        if(isEmpty()) return false;
+        rear = (rear - 1 + capacity) % capacity;
+        size--;
         return true;
     }
     
     public int getFront() {
-        if(deque.size() == 0){
-            return -1;
-        }
-        return deque.peekFirst();
+        if(isEmpty()) return -1;
+
+        return data[front];
     }
     
     public int getRear() {
-        if(deque.size() == 0){
-            return -1;
-        }
-        return deque.peekLast();   
+        if(isEmpty()) return -1;
+        return data[(rear - 1 + capacity) % capacity];
     }
     
     public boolean isEmpty() {
-        return deque.isEmpty();
+        return size == 0;
     }
     
     public boolean isFull() {
-        return (deque.size() == size);
+        return size == capacity;
     }
 }
 
