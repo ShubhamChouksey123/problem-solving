@@ -1,45 +1,50 @@
 class LRUCache {
 
-    private Map<Integer, Node> keyToNode; 
-    private int capacity;
+    private Map<Integer, Node> keyToNode;   
+    private int size;
+    private int capacity; 
     private Node start;
     private Node end;
 
     public LRUCache(int capacity) {
+        this.keyToNode= new HashMap<>();
+        this.size = 0;
         this.capacity = capacity;
-        keyToNode = new HashMap<>();
+        this.start = new Node(100001, 100001);
+        this.end = new Node(-1, -1);
 
-        start = new Node(-1, -1);
-        end = new Node(10001, 10001);
-
+        end.next = start;
         start.prev = end;
-        end.next = start; 
     }
 
     private void addAtStart(Node newNode){
+        Node prevNode = start.prev;
 
-        Node firstNode = start.prev;   
-        firstNode.next = newNode;
-        newNode.prev = firstNode;
+        prevNode.next = newNode;
+        newNode.prev = prevNode;
 
         newNode.next = start;
         start.prev = newNode;
+        size++;
     }
 
     private void removeNode(Node node){
 
-        Node prevNode = node.prev;   
-        Node nextNode = node.next;   
+        Node prevNode = node.prev;
+        Node nextNode = node.next;
 
         prevNode.next = nextNode;
         nextNode.prev = prevNode;
+        size--;
     }
     
     public int get(int key) {
+        
+        if(!keyToNode.containsKey(key)){
+            return -1;
+        }
 
         Node node = keyToNode.get(key);
-        if(node == null) return -1;
-        
         removeNode(node);
         addAtStart(node);
         return node.value;
@@ -47,41 +52,48 @@ class LRUCache {
     
     public void put(int key, int value) {
 
-        if(keyToNode.containsKey(key)){
+
+        if(!keyToNode.containsKey(key)){
+
+            Node node = new Node(key, value);
+            addAtStart(node);
+            keyToNode.put(key, node);
+    
+        }
+        else {
             Node node = keyToNode.get(key);
+            node.value = value;
             removeNode(node);
             addAtStart(node);
-            node.value = value;
-            return;
         }
-
-        Node newNode = new Node(key, value);
-        // added to linked list
-        addAtStart(newNode);
-        // added to map
-        keyToNode.put(key, newNode);
-
-        if(keyToNode.size() > capacity){
-
-            // removed from map
-            keyToNode.remove(end.next.key);
-            // removed from linked list
-            removeNode(end.next);
+        
+        
+        if(size > capacity){
+            Node nodeToRemove = end.next;
+            removeNode(nodeToRemove);
+            keyToNode.remove(nodeToRemove.key);
         }
+        
     }
 
 
-
-    public class Node{
+    class Node{
         int key;
         int value;
         Node prev;
         Node next;
 
+        public Node(int key, int value, Node prev, Node next){
+            this.key = key;
+            this.value = value;
+            this.prev = prev;
+            this.next = next; 
+        }
+
         public Node(int key, int value){
             this.key = key;
             this.value = value;
-        }
+        }    
     }
 }
 
