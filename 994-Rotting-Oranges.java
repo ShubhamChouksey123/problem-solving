@@ -8,13 +8,11 @@ class Solution {
         
         int n = grid.length, m = grid[0].length;
         Deque<int[]> queue = new ArrayDeque<>();
-        boolean[][] visited = new boolean[n][m];
-
+        
         for(int i = 0 ; i < n ; i++){
             for(int j = 0 ; j < m ; j++){
                 if(grid[i][j] == 2){
                     queue.offerLast(new int[]{i, j, 0});
-                    visited[i][j] = true;
                 }
             }
         }
@@ -30,10 +28,8 @@ class Solution {
                 int xNew = x + direction[0];
                 int yNew = y + direction[1];
 
-                if(xNew < 0 || xNew >= n || yNew < 0 || yNew >= m || grid[xNew][yNew] == 0 || grid[xNew][yNew] == 2 
-                    || visited[xNew][yNew]) continue;
+                if(xNew < 0 || xNew >= n || yNew < 0 || yNew >= m || grid[xNew][yNew] == 0 || grid[xNew][yNew] == 2 ) continue;
 
-                visited[xNew][yNew] = true;
                 grid[xNew][yNew] = 2;
                 queue.offerLast(new int[]{xNew, yNew, time + 1});
             }
