@@ -1,35 +1,34 @@
 class Solution {
     public int maximumProduct(int[] nums) {
-        // a >= b >= c
-        int a = Integer.MIN_VALUE, b = Integer.MIN_VALUE, c = Integer.MIN_VALUE;
         int n = nums.length;
 
-        for(int i = 0 ; i < n ; i++){
-            if(nums[i] > a){
-                c = b;
-                b = a;
-                a = nums[i];
+        int maxValue = Integer.MIN_VALUE, secondMaxValue = Integer.MIN_VALUE, thirdMaxValue = Integer.MIN_VALUE;
+        int minValue = Integer.MAX_VALUE, secondMinValue = Integer.MAX_VALUE;
+
+        for(int num : nums){
+
+            if(num > maxValue){
+                thirdMaxValue = secondMaxValue; 
+                secondMaxValue = maxValue;
+                maxValue = num;
             }
-            else if(nums[i] > b){
-                c = b;
-                b = nums[i];
+            else if(num > secondMaxValue){
+                thirdMaxValue = secondMaxValue; 
+                secondMaxValue = num;
             }
-            else if(nums[i] > c){
-                c = nums[i];
+            else if(num > thirdMaxValue){
+                thirdMaxValue = num; 
+            }
+
+            if(num < minValue){
+                secondMinValue = minValue;
+                minValue = num;
+            }
+            else if(num < secondMinValue){
+                secondMinValue = num;
             }
         }
 
-        int x = Integer.MAX_VALUE, y = Integer.MAX_VALUE;
-        // x < y
-        for(int i = 0 ; i < n ; i++){
-            if(nums[i] < x){
-                y = x;
-                x = nums[i];
-            }
-            else if(nums[i] < y){
-                y = nums[i];
-            }
-        }
-        return Math.max(a * b * c, x * y * a);
+        return Math.max(maxValue * secondMaxValue * thirdMaxValue, maxValue * minValue * secondMinValue);
     }
 }
