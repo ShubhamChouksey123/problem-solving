@@ -14,37 +14,25 @@
  * }
  */
 class Solution {
-    public TreeNode reverseOddLevels(TreeNode root) {
-
-        if(root == null) return root;
+    public void reverseOddLevels(TreeNode root1, TreeNode root2, int level) {
         
-        List<TreeNode> currentList = new ArrayList<>();
-        currentList.add(root);
+        if(root1 == null) return;
 
-        List<TreeNode> nextList = new ArrayList<>();
-        int depth = 0;
-
-        while(!currentList.isEmpty()){
-
-            int size = currentList.size();
-            nextList = new ArrayList<>();
-
-            if(depth % 2 != 0){
-                for(int i = 0 ; i < size /2 ; i++){
-                    int tmp = currentList.get(i).val;
-                    currentList.get(i).val = currentList.get(size - i - 1).val;
-                    currentList.get(size - i - 1).val = tmp;
-                }
-            }
-
-            for(int i = 0 ; i < size ; i++){
-                if(currentList.get(i).left != null) nextList.add(currentList.get(i).left);
-                if(currentList.get(i).right != null) nextList.add(currentList.get(i).right);
-            }
-
-            currentList = nextList;
-            depth++;
+        if(level % 2 != 0){
+            int tmp = root1.val;
+            root1.val = root2.val;
+            root2.val = tmp; 
+            
         }
+        
+        reverseOddLevels(root1.left, root2.right, level + 1);
+        reverseOddLevels(root1.right, root2.left, level + 1); 
+
+    }
+
+    public TreeNode reverseOddLevels(TreeNode root) {
+        
+        reverseOddLevels(root.left, root.right, 1);
         return root;
     }
 }
