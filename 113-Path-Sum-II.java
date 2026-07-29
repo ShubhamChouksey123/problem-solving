@@ -28,12 +28,8 @@ class Solution {
             }
         }
 
-        if(root.left != null){
-            pathSumUtil(root.left, targetSum, ans, cur, ancestralSum);
-        }
-        if(root.right != null){
-            pathSumUtil(root.right, targetSum, ans, cur, ancestralSum);
-        }
+        pathSumUtil(root.left, targetSum, ans, cur, ancestralSum);
+        pathSumUtil(root.right, targetSum, ans, cur, ancestralSum);
         
         cur.remove(cur.size() - 1);
     }
