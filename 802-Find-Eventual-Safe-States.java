@@ -1,44 +1,44 @@
 class Solution {
-    
-    public boolean isSafeNode(int[][] adj, List<Integer> ans, int[] visited, boolean[] isSafeNode, int start) {
-        
-        if(visited[start] == 1) return false;
-        if(visited[start] == 2) {
-            return isSafeNode[start];
+
+    private boolean dfs(int[][] graph, boolean[] visited, boolean[] isTerminalNode, boolean[] inStack, int node){
+
+        if(inStack[node]) {
+            return false;
         }
+        if(visited[node]) return isTerminalNode[node];
 
-        visited[start] = 1;
+        inStack[node] = true;
 
-        boolean isSafe = true;
-        for(int neighbour : adj[start]){
-            if(!isSafeNode(adj, ans, visited, isSafeNode, neighbour)){
-                isSafe = false;
+        for(int neighbour : graph[node]){
+            if(!dfs(graph, visited, isTerminalNode, inStack, neighbour)){
+                isTerminalNode[node] = false;
+                return false;
             }
-        }
-        visited[start] = 2;
-        isSafeNode[start] = isSafe;
-        if(isSafe) ans.add(start);
-        return isSafe;
-    }
-    
-    public List<Integer> eventualSafeNodes(int[][] graph) {
-        
-        int n = graph.length;
-        /**
-            0 => unvisited, 1 => visisting, and 2 => visisted
-         */
-        int[] visited = new int[n];
-        boolean[] isSafeNode = new boolean[n];
-        Arrays.fill(visited, 0);
+        }        
 
-        List<Integer> ans = new ArrayList<>();
+        inStack[node] = false;
+        isTerminalNode[node] = true;
+        visited[node] = true;
+        return true;
+    }
+
+    public List<Integer> eventualSafeNodes(int[][] graph) {
+
+        int n = graph.length;
+        boolean[] visited = new boolean[n];
+        boolean[] isTerminalNode = new boolean[n];
 
         for(int i = 0 ; i < n ; i++){
-            if(visited[i] == 0){
-                isSafeNode(graph, ans, visited, isSafeNode, i); 
+            if(!visited[i]) {
+                boolean[] inStack = new boolean[n];
+                dfs(graph, visited, isTerminalNode, inStack, i);
             }
         }
-        Collections.sort(ans);
-        return ans;
+        
+        List<Integer> terminalNodes = new ArrayList<>();
+        for(int i = 0 ; i < n ; i++){
+            if(isTerminalNode[i]) terminalNodes.add(i);
+        }
+        return terminalNodes;
     }
 }
