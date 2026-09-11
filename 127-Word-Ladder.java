@@ -1,11 +1,12 @@
 class Solution {
 
-    private boolean isNeighbour(String a, String b){
-        if(a.length() != b.length()) return false;
+    private boolean areNeighbour(String p, String q){
+
+        if(p.length() != q.length()) return false;
 
         int diff = 0;
-        for(int i = 0 ; i < a.length() ; i++){
-            if(a.charAt(i) != b.charAt(i)) diff++;
+        for(int i = 0 ; i < p.length() ; i++){
+            if(p.charAt(i) != q.charAt(i)) diff++;
 
             if(diff > 1) return false;
         }
@@ -14,49 +15,58 @@ class Solution {
     }
 
     public int ladderLength(String beginWord, String endWord, List<String> wordList) {
-
+        
+        
         int n = wordList.size();
-        boolean[] visited = new boolean[n];
-
         List<Integer>[] adj = new ArrayList[n];
         for(int i = 0 ; i < n ; i++){
             adj[i] = new ArrayList<>();
         }
+
+        int endIndex = Integer.MAX_VALUE;
         for(int i = 0 ; i < n ; i++){
             for(int j = 0 ; j < n ; j++){
                 if(i == j) continue;
-                if(isNeighbour(wordList.get(i), wordList.get(j) ) ){
-                    adj[i].add(j);
+                if(areNeighbour(wordList.get(i), wordList.get(j))){
+                    adj[i].add(j); 
                 }
             }
+            if(Objects.equals(wordList.get(i), endWord)){
+                endIndex = i;
+            }
         }
+
+        if(endIndex == Integer.MAX_VALUE) return 0;
+        
 
         Deque<int[]> queue = new ArrayDeque<>();
+        boolean[] visited = new boolean[n];
         
         for(int i = 0 ; i < n ; i++){
-            if(isNeighbour(beginWord, wordList.get(i)) ){
-                visited[i] = true;
+            if(areNeighbour(wordList.get(i), beginWord)){
                 queue.offerLast(new int[]{i, 2});
-            }
-        }   
-
-
-        while(!queue.isEmpty()){
-
-            int[] element = queue.pollFirst();
-            int node = element[0], numberofWords = element[1];
-            if(Objects.equals(wordList.get(node), endWord)){
-                return numberofWords;
-            }
-
-            for(int neighbour : adj[node]){
-                if(!visited[neighbour]){
-                    visited[neighbour] = true;
-                    queue.offerLast(new int[]{neighbour, numberofWords + 1});
-                }
+                visited[i] = true; 
             }
         }
 
-        return 0;
+
+        int node = 0, length = 0;
+        int ans = 0;
+        while(!queue.isEmpty()){
+            int[] top = queue.pollFirst();
+            node = top[0]; length = top[1];
+
+            if(node == endIndex) return length;
+
+            for(int neighbour : adj[node]){
+
+                if(visited[neighbour]) continue;
+
+                visited[neighbour] = true;
+                queue.offerLast(new int[]{neighbour, length + 1});
+            }
+        }
+
+        return ans;
     }
 }
