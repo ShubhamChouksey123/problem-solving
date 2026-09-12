@@ -1,82 +1,80 @@
 class Solution {
 
-    private Double id; 
+    private Map<String, Integer> stringToId;
+    private int id;
 
-    private double bfs(List<double[]>[] adj, Map<String, Double> stringToId, List<String> query){
-
-        double start = stringToId.getOrDefault(query.get(0), -1d);
-        double end = stringToId.getOrDefault(query.get(1), -1d);
-
-        if(start == -1d || end == -1d) return -1d;
-
-        if(start == end) return 1d;
-
-
-        boolean[] visited = new boolean[adj.length];
-
+    private double findSolution(List<Pair<Integer, Double>>[] adj, int n, int source, int destination){
+        
+        if(source == -1 || destination == -1) return -1d;
+        if(source == destination) return 1d;
+        
+        
+        boolean[] visited = new boolean[n]; 
         Deque<double[]> queue = new ArrayDeque<>();
-        queue.offerLast(new double[]{start, 1d});
-        visited[(int)start] = true;
-
-        double node = -1d, factor = 1;
+        queue.offerLast(new double[]{source, 1d});
+        visited[source] = true;
 
         while(!queue.isEmpty()){
-            double[] element = queue.pollFirst();
-            node = element[0];
-            factor = element[1];
+            double[] top = queue.pollFirst();
 
-            if(node == end) return factor;
+            int node = (int)top[0];
+            double factor = top[1];
 
-            for(double[] neighbourInfo : adj[(int)node]){
-                double neighbourNode = neighbourInfo[0];
-                double multiplier = neighbourInfo[1];
+            if(node == destination) return factor;
 
-                if(!visited[(int)neighbourNode]){
-                    visited[(int)neighbourNode] = true;
-                    queue.offerLast(new double[]{neighbourNode, factor * multiplier});
-                }
-            }   
+            for(Pair<Integer, Double> pair : adj[node]){
+                int neighbour = pair.getKey();
+                
+                if(visited[neighbour]) continue;
+
+                visited[neighbour] = true;
+                queue.offerLast(new double[]{neighbour, factor * pair.getValue()});
+
+            }
         }
-        return -1d;
+        return -1.0;
     }
 
     public double[] calcEquation(List<List<String>> equations, double[] values, List<List<String>> queries) {
 
-        id = 0d;
-        Map<String, Double> stringToId = new HashMap<>();
-        for(int i = 0 ; i < equations.size() ; i++){
-            if(!stringToId.containsKey(equations.get(i).get(0))){
-                stringToId.put(equations.get(i).get(0), id++);
-            }
-            if(!stringToId.containsKey(equations.get(i).get(1))){
-                stringToId.put(equations.get(i).get(1), id++);
-            }
-        } 
-
-        int n = stringToId.size();
-        List<double[]>[] adj = new ArrayList[n];
-        for(int i = 0 ; i < n ; i++){
-            adj[i] = new ArrayList<>();
-        } 
+        int length = equations.size();
+        id = 0;
+        stringToId = new HashMap<>();
+        
 
         for(int i = 0 ; i < equations.size() ; i++){
-            String a = equations.get(i).get(0);
-            String b = equations.get(i).get(1);
-            double value = values[i];
-            double aId = stringToId.get(a);
-            double bId = stringToId.get(b);
-
-            adj[(int)aId].add(new double[]{bId, value});
-            adj[(int)bId].add(new double[]{aId, 1.0/value});
-        } 
-
-        int queriesLength = queries.size();
-        double[] ans = new double[queriesLength];
-
-        for(int i = 0 ; i < queriesLength ; i++){
-            ans[i] = bfs(adj, stringToId, queries.get(i));
+            String u = equations.get(i).get(0);
+            String v = equations.get(i).get(1);
+            stringToId.putIfAbsent(u, id++);
+            stringToId.putIfAbsent(v, id++);
         }
 
-        return ans;
+        int n = id;
+        List<Pair<Integer, Double>>[] adj = new ArrayList[n];
+        for(int i = 0 ; i < n ; i++){
+            adj[i] = new ArrayList<>();
+        }
+
+        for(int i = 0 ; i < equations.size() ; i++){
+            String u = equations.get(i).get(0);
+            String v = equations.get(i).get(1);
+            int uId = stringToId.get(u);
+            int vId = stringToId.get(v);
+            adj[uId].add(new Pair<>(vId, values[i]));
+            adj[vId].add(new Pair<>(uId, 1/values[i]));
+        }
+
+        int queriesLength = queries.size();
+        double[] result = new double[queriesLength];
+        for(int i = 0 ; i < queriesLength ; i++){
+            String u = queries.get(i).get(0);
+            String v = queries.get(i).get(1);   
+            int uId = stringToId.getOrDefault(u, -1);
+            int vId = stringToId.getOrDefault(v, -1);
+
+
+            result[i] = findSolution(adj, n, uId, vId);
+        }
+        return result;
     }
 }
