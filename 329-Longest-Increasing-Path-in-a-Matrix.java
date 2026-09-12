@@ -4,60 +4,47 @@ class Solution {
         {1, 0}, {0, 1}, {-1, 0}, {0, -1}
     };
 
-    private int dfs(int[][] matrix, int[][] state, int[][] maxIncreasingPath, int n, int m, int x, int y){
+    private int dfs(int[][] matrix, int n, int m, Integer[][] longestIncreaingPath, int a, int b) {
 
-        if(state[x][y] == 1) return 0;
-        if(state[x][y] == 2) return maxIncreasingPath[x][y];
-
-        state[x][y] = 1;
+        if(longestIncreaingPath[a][b] != null) return longestIncreaingPath[a][b];
         
-        int maxInnerLength = 0;
+        int maxNeighboutPathLength = 0;
         for(int[] direction : DIRECTIONS){
-            int x1 = x + direction[0];
-            int y1 = y + direction[1];
+            int x = a + direction[0];
+            int y = b + direction[1];
 
-            if(x1 < 0 || x1 >= n || y1 < 0 || y1 >= m) continue;
-            if(state[x1][y1] == 1) continue;
-            if(matrix[x1][y1] <= matrix[x][y]) continue;
+            if(x < 0 || x >= n || y < 0 || y >= m) continue;
 
-            int innerLength = dfs(matrix, state, maxIncreasingPath, n, m, x1, y1);
-            maxInnerLength = Math.max(innerLength, maxInnerLength);
+            if(matrix[x][y] > matrix[a][b]){
+                int neighboutPathLength = dfs(matrix, n, m, longestIncreaingPath, x, y);
+                maxNeighboutPathLength = Math.max(maxNeighboutPathLength, neighboutPathLength);
+            }
         }
 
-        int maxLength = 1 + maxInnerLength;
-
-        state[x][y] = 2;
-        maxIncreasingPath[x][y] = maxLength;
-        return maxLength;
-    }
+        longestIncreaingPath[a][b] = 1 + maxNeighboutPathLength;
+        return 1 + maxNeighboutPathLength;
+    }    
 
     public int longestIncreasingPath(int[][] matrix) {
-
-        int n = matrix.length, m = matrix[0].length;
-        /**
-            0 => unvisited, 1 => visiting and 2 => visited 
-         */
-        int[][] state = new int[n][m];  
-        int[][] maxIncreasingPath = new int[n][m];  
-        for(int[] row : state){
-            Arrays.fill(row, 0);
-        }  
         
-        for(int i = 0 ; i < n ; i++){
-            for(int j = 0 ; j < m ; j++){
-                if(state[i][j] == 0){
-                    dfs(matrix, state, maxIncreasingPath, n, m, i, j);
+        int n = matrix.length, m = matrix[0].length;
+        Integer[][] longestIncreaingPath = new Integer[n][m];
+
+        for(int i = 0 ; i < n; i++){
+            for(int j = 0; j < m ; j++){
+                if(longestIncreaingPath[i][j] == null){
+                    dfs(matrix, n, m, longestIncreaingPath, i, j); 
                 }
             }
         }
 
-        int ans = 0;
-        for(int i = 0 ; i < n ; i++){
-            for(int j = 0 ; j < m ; j++){
-                ans = Math.max(maxIncreasingPath[i][j], ans);
+        int maxPathLength = 0;
+        for(int i = 0 ; i < n; i++){
+            System.out.println(Arrays.toString(longestIncreaingPath[i]));
+            for(int j = 0; j < m ; j++){
+                maxPathLength = Math.max(maxPathLength, longestIncreaingPath[i][j]);
             }
         }
-        return ans;
-
+        return maxPathLength;
     }
 }
