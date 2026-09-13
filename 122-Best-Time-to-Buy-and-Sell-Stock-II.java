@@ -1,24 +1,37 @@
 class Solution {
+    
+    public int maxProfit(int[] prices, int[][] memoCache, int index, int buy) {
+
+        if(index == prices.length) return 0;
+        if(memoCache[index][buy] != -1) return memoCache[index][buy];
+
+        int optimalValue = 0;
+        if(buy == 0){
+            // buy on that day
+            int a = -prices[index] + maxProfit(prices, memoCache, index + 1, 1);
+
+            // skip buying on that day
+            int b = maxProfit(prices, memoCache, index + 1, buy);
+            optimalValue = Math.max(a, b);
+        }
+        else {
+            // sell that holding stock on that day
+            int a = prices[index] + maxProfit(prices, memoCache, index + 1, 0);
+
+            // skip selling stock on that day
+            int b = maxProfit(prices, memoCache, index + 1, buy);
+            optimalValue = Math.max(a, b);
+        }
+        return memoCache[index][buy] = optimalValue;
+    }
+
     public int maxProfit(int[] prices) {
 
-        int totalProfit = 0;
         int n = prices.length;
-
-        int index = 0;
-
-        while(index < n){
-            while(index + 1 < n && prices[index] > prices[index + 1]){
-                index++;
-            }
-            int startIndex = index;
-
-            while(index + 1 < n && prices[index] < prices[index + 1]){
-                index++;
-            }
-            int endIndex = index;
-            totalProfit += (prices[endIndex] - prices[startIndex]);
-            index++;
+        int[][] memoCache = new int[n][2];
+        for(int[] row : memoCache){
+            Arrays.fill(row, -1);
         }
-        return totalProfit;
+        return maxProfit(prices, memoCache, 0, 0);
     }
 }
