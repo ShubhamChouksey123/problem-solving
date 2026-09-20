@@ -1,7 +1,27 @@
 class Solution {
 
+
+    private boolean dfs(List<Integer>[] adj, Deque<Integer> stack, boolean[] visited, boolean[] inStack, List<Integer> reverseOrderList, int node){
+
+        if(visited[node]) return true;
+        if(inStack[node]) return false;
+
+        inStack[node] = true;
+
+        for(int neighbour : adj[node]){
+            if(visited[neighbour]) continue;
+            if(!dfs(adj, stack, visited, inStack, reverseOrderList, neighbour)){
+                return false;
+            }
+        }
+
+        inStack[node] = false;
+        visited[node] = true;
+        reverseOrderList.add(node);
+        return true;
+    }
     /**
-        Kahn's Algorithm
+        DFS based topological sorting
      */
     public int[] findOrder(int numCourses, int[][] prerequisites) {
 
@@ -9,36 +29,30 @@ class Solution {
         for(int i = 0 ; i < numCourses ; i++){
             adj[i] = new ArrayList<>();
         }
+        
 
-        int[] inwardEdges = new int[numCourses];
         for(int[] prerequisite : prerequisites){
             int u = prerequisite[1];
             int v = prerequisite[0];
-            inwardEdges[v]++;
             adj[u].add(v);
         }
 
-        Deque<Integer> queue = new ArrayDeque<>();
+        Deque<Integer> stack = new ArrayDeque<>();
+        boolean[] visited = new boolean[numCourses];
+        boolean[] inStack = new boolean[numCourses];
+        List<Integer> reverseOrderList = new ArrayList<>();
+
         for(int i = 0 ; i < numCourses ; i++){
-            if(inwardEdges[i] == 0) queue.offerLast(i);
-        }
-
-        int[] ans = new int[numCourses];
-        int indexAt = 0;
-        while(!queue.isEmpty()){
-
-            int node = queue.pollFirst();
-            ans[indexAt++] = node;
-
-            for(int neighbour : adj[node]){
-                inwardEdges[neighbour]--;
-                if(inwardEdges[neighbour] == 0){
-                    queue.offerLast(neighbour);
+           if(!visited[i]){
+                if(!dfs(adj, stack, visited, inStack, reverseOrderList, i)){
+                    return new int[0];
                 }
-            }
+           }
         }
-
-        if(indexAt != numCourses) return new int[0];
-        return ans;
+        int[] ans = new int[numCourses];
+        for(int i = 0 ; i < numCourses ; i++){
+            ans[i] = reverseOrderList.get(numCourses - i - 1);
+        } 
+        return ans;      
     }
 }
