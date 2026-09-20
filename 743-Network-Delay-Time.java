@@ -6,44 +6,51 @@ class Solution {
             adj[i] = new ArrayList<>();
         }
 
-        int u = 0, v = 0, t = 0;
+        int u = 0, v = 0, w = 0;
         for(int[] time : times){
-            u = time[0] - 1; v = time[1] - 1; t = time[2]; 
-            adj[u].add(new int[]{v, t});
+            u = time[0] - 1;
+            v = time[1] - 1;
+            w = time[2];
+            adj[u].add(new int[]{v, w});
         }
         k = k - 1;
 
-        Queue<int[]> queue = new PriorityQueue<>((a, b) -> Integer.compare(a[0], b[0]));
-        queue.add(new int[]{0, k});
         int[] minDistance = new int[n];
         Arrays.fill(minDistance, Integer.MAX_VALUE);
 
-        while(!queue.isEmpty()){
-            
-            int[] distanceNode = queue.poll();
-            int node = distanceNode[1];
-            int distance = distanceNode[0];
+
+        /**
+            Priority queue containing (node, weight)
+         */
+        Queue<int[]> pq = new PriorityQueue<>((a, b) -> Integer.compare(a[1], b[1]));
+        pq.add(new int[]{k, 0});
+        
+
+        while(!pq.isEmpty()){
+            int[] top = pq.poll();
+            int node = top[0];
+            int distance = top[1];
 
             if(minDistance[node] < distance) continue;
             minDistance[node] = distance;
 
-            for(int[] neighbourDistance : adj[node]){
+            for(int[] neighbourNodeInfo : adj[node]){
+                int newDistance = distance + neighbourNodeInfo[1];
+                int neighbourNode =  neighbourNodeInfo[0];
 
-                int neighbourNode = neighbourDistance[0];
-                int edgeWeight = neighbourDistance[1];
-                if(minDistance[neighbourNode] > distance + edgeWeight){
-                    minDistance[neighbourNode] = distance + edgeWeight;
-                    queue.add(new int[]{minDistance[neighbourNode], neighbourNode});
+                if(newDistance < minDistance[neighbourNode]){
+                    pq.add(new int[]{neighbourNode, newDistance});
+                    minDistance[neighbourNode] = newDistance;
                 }
             }
         }
 
-        int maxDistanceFromSource = 0;
+        int maxTime = 0;
         for(int i = 0 ; i < n ; i++){
             if(minDistance[i] == Integer.MAX_VALUE) return -1;
-            maxDistanceFromSource = Math.max(maxDistanceFromSource, minDistance[i]);
+            maxTime = Math.max(maxTime, minDistance[i]);
         }
-        return maxDistanceFromSource;
-
+        return maxTime;
+        
     }
 }
