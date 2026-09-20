@@ -5,17 +5,15 @@ class Solution {
         Map<Integer, Integer> remainderCount = new HashMap<>();
         remainderCount.put(0, 1);
 
-        // sum starting from start of array
         int sum = 0;
-        int countSubArrayDivByK = 0;
-        for(int end = 0 ; end < n ; end++){
-            sum += nums[end];
-            int remainder = ((sum % k) + k) % k;
-
-            countSubArrayDivByK += remainderCount.getOrDefault(remainder, 0);
-            remainderCount.put(remainder, remainderCount.getOrDefault(remainder, 0) + 1);
+        int count = 0;
+        for(int i = 0 ; i < n ; i++){
+            sum += nums[i];
+            int rem = ((sum % k )+ k) % k;
+            count += remainderCount.getOrDefault(rem, 0);
+            remainderCount.put(rem, remainderCount.getOrDefault(rem, 0) + 1);
         }
+        return count;
 
-        return countSubArrayDivByK;
     }
 }
