@@ -1,45 +1,56 @@
 class Solution {
 
     private static final int[][] DIRECTIONS = new int[][]{
-        {1, 0}, {0, 1}, {-1, 0}, {0, -1}
+        {1, 0}, {0, 1}, {-1, 0}, {0, -1}  
     };
+    
+    private void dfs(int[][] grid, int n, int m, boolean[][] visited, int x, int y) {
 
-    private boolean isClosedIsland(int[][] grid, boolean[][] visited, int n, int m, int x, int y){
-
+        if(visited[x][y]) return;
+        if(grid[x][y] == 1) return;
         visited[x][y] = true;
-        boolean isClosed = true;
 
-        if(x == 0 || x == n - 1 || y == 0 || y == m - 1) isClosed = false;
+        for(int[] directon : DIRECTIONS){
+            int x1 = x + directon[0];
+            int y1 = y + directon[1];
 
-        for(int[] direction : DIRECTIONS){
-            int x1 = x + direction[0];
-            int y1 = y + direction[1];
+            if(x1 < 0 || x1 >= n || y1 < 0 || y1 >= m) continue;
+            if(visited[x1][y1] || grid[x1][y1] == 1) continue;
 
-            if(x1 < 0 || x1 >= n || y1 < 0 || y1 >= m || visited[x1][y1] || grid[x1][y1] == 1) continue;
-
-            if(!isClosedIsland(grid, visited, n, m, x1, y1)){
-                isClosed = isClosed && false;
-            }
+            dfs(grid, n, m, visited, x1, y1);
         }
-        return isClosed;
     }
 
     public int closedIsland(int[][] grid) {
 
         int n = grid.length, m = grid[0].length;
-        int count = 0;
-
         boolean[][] visited = new boolean[n][m];
+
         for(int i = 0 ; i < n ; i++){
-            for(int j = 0 ; j < m ; j++){
+            // first column
+            dfs(grid, n, m, visited, i, 0);
+            // last column
+            dfs(grid, n, m, visited, i, m - 1);
+        }
+
+        for(int j = 0 ; j < m ; j++){
+            // first row
+            dfs(grid, n, m, visited, 0, j);
+            // last row
+            dfs(grid, n, m, visited, n - 1, j);
+        }
+
+
+        int countIslands = 0;
+
+        for(int i = 1 ; i < n ; i++){
+            for(int j = 1 ; j < m; j++){
                 if(grid[i][j] == 0 && !visited[i][j]){
-                    if(isClosedIsland(grid, visited, n, m, i, j)){
-                        count++;
-                    }
+                    dfs(grid, n, m, visited, i, j);
+                    countIslands++;
                 }
             }
         }
-        
-        return count;
+        return countIslands;
     }
 }
