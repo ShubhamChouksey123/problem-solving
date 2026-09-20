@@ -1,47 +1,51 @@
 class Solution {
-    
+
     private static final int[][] DIRECTIONS = new int[][]{
         {1, 0}, {0, 1}, {-1, 0}, {0, -1}
-    }; 
+    };
 
     public int orangesRotting(int[][] grid) {
 
         int n = grid.length, m = grid[0].length;
-        int freshCount = 0;
+        // queue containing (x, y, time)
         Deque<int[]> queue = new ArrayDeque<>();
-        
+
+        int countFreshOranges = 0, countRottenOranges = 0;
         for(int i = 0 ; i < n ; i++){
             for(int j = 0 ; j < m ; j++){
+                if(grid[i][j] == 1){
+                    countFreshOranges++;
+                }
                 if(grid[i][j] == 2){
+                    countRottenOranges ++;
                     queue.offerLast(new int[]{i, j, 0});
                 }
-                else if(grid[i][j] == 1){
-                    freshCount++;
-                }
             }
         }
 
-        if(freshCount == 0) return 0; 
+        if(countFreshOranges == 0) return 0;
+        if(countRottenOranges == 0) return -1;
 
-        int a = 0, b = 0, time = Integer.MAX_VALUE;
+        int x = 0, y = 0, time = 0;
         while(!queue.isEmpty()){
             int[] top = queue.pollFirst();
-            a = top[0]; b = top[1]; time = top[2]; 
+            x = top[0]; y = top[1]; time = top[2];
 
             for(int[] direction : DIRECTIONS){
-                int x = a + direction[0];
-                int y = b + direction[1];
+                int x1 = x + direction[0];
+                int y1 = y + direction[1];
 
-                if(x < 0 || x >= n || y < 0 || y >= m || grid[x][y] == 0 || grid[x][y] == 2) continue;
+                if(x1 < 0 || x1 >= n || y1 < 0 || y1 >= m) continue;
+                if(grid[x1][y1] == 0 || grid[x1][y1] == 2) continue;
 
-                grid[x][y] = 2;
-                freshCount--;
-                queue.offerLast(new int[]{x, y, time + 1});
+                queue.offerLast(new int[]{x1, y1, time + 1});
+                grid[x1][y1] = 2;
+                countFreshOranges--;
             }
         }
 
-        if(freshCount == 0) return time;
-        
-        return -1;
+        if(countFreshOranges != 0) return -1;
+        return time;
+
     }
 }
