@@ -15,28 +15,32 @@
  */
 class Solution {
 
-    private int maxPathSum;
+    private long maxPath;
 
-    private int maxPathSumUtil(TreeNode root) {
+    public long pathSum(TreeNode root) {
         
         if(root == null) return 0;
-
-        int leftPathSum = maxPathSumUtil(root.left);
-        int rightPathSum = maxPathSumUtil(root.right);
-
-        if(leftPathSum < 0) leftPathSum = 0;
-        if(rightPathSum < 0) rightPathSum = 0; 
-
-        maxPathSum = Math.max(maxPathSum, root.val + leftPathSum + rightPathSum);
         
-        return root.val + Math.max(0, Math.max(leftPathSum, rightPathSum));
+        long leftPath = pathSum(root.left);
+        long rightPath = pathSum(root.right);  
+
+        long thisPathSum = root.val;
+        if(leftPath >= 0){
+            thisPathSum += leftPath;
+        }
+        if(rightPath >= 0){
+            thisPathSum += rightPath;
+        }
+
+        maxPath = Math.max(maxPath, thisPathSum);
+        return root.val + Math.max(Math.max(leftPath, rightPath), 0);
     }
 
     public int maxPathSum(TreeNode root) {
         
-        maxPathSum = Integer.MIN_VALUE;
-        maxPathSumUtil(root) ;
+        maxPath = Integer.MIN_VALUE;
+        pathSum(root);
 
-        return maxPathSum;
+        return (int)maxPath;
     }
 }
