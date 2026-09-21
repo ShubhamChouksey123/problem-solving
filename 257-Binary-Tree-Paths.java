@@ -15,44 +15,41 @@
  */
 class Solution {
     
-    private void addToList(List<Integer> cur, List<String> ans){
-        if(cur.isEmpty()) return;
-
-        StringBuilder builder = new StringBuilder();
-        builder.append(cur.get(0));
+    private void converToList(List<String> result, List<Integer> cur){
+        if(cur.size() == 0) return;
+        StringBuilder buidler = new StringBuilder();
+        buidler.append(cur.get(0));
 
         for(int i = 1 ; i < cur.size() ; i++){
-            builder.append("->");
-            builder.append(cur.get(i));
-        }  
-        ans.add(builder.toString()); 
+            buidler.append("->");
+            buidler.append(cur.get(i));
+        }
+        result.add(buidler.toString());
     }
 
-    public void binaryTreePaths(TreeNode root, List<Integer> cur, List<String> ans) {
+    public void binaryTreePaths(TreeNode root, List<String> result, List<Integer> cur) {
         
         if(root == null) return;
-        cur.add(root.val);
-
-        if(root.left == null && root.right == null) {
-            addToList(cur, ans);
+        if(root.left == null && root.right == null){
+            cur.add(root.val);
+            converToList(result, cur); 
+            cur.remove(cur.size() - 1);
             return;
         }
-            
-        if(root.left != null){
-            binaryTreePaths(root.left, cur, ans);
-            cur.remove(cur.size() - 1);
-        }
 
-        if(root.right != null){
-            binaryTreePaths(root.right, cur, ans);
-            cur.remove(cur.size() - 1);
-        }
+        cur.add(root.val);
+
+        binaryTreePaths(root.left, result, cur); 
+        binaryTreePaths(root.right, result, cur); 
+
+        cur.remove(cur.size() - 1);
     }
     
     public List<String> binaryTreePaths(TreeNode root) {
-        List<String> ans = new ArrayList<>();
-        binaryTreePaths(root, new ArrayList<>(), ans); 
+        
+        List<String> result = new ArrayList<>();
+        binaryTreePaths(root, result, new ArrayList<>());
 
-        return ans;
+        return result;
     }
 }
