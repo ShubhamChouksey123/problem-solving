@@ -14,34 +14,29 @@
  * }
  */
 class Solution {
+    
+    private int index;
 
-    private TreeNode bstFromPreorder(int[] preorder, int start, int end) {
+    private TreeNode bstFromPreorderUtil(int[] preorder, Integer minValue, Integer maxValue) {
 
-        if(start > end || start == -1 || end == -1) return null;
+        if(index == preorder.length)
+            return null;
 
-        TreeNode root = new TreeNode(preorder[start]);
-       
-        int rightStart = -1;
-        for(int i = start + 1 ; i <= end ; i++){
-            if(preorder[i] > root.val){
-                rightStart = i; break;
-            }
-        }
+        if(preorder[index] > maxValue)  return null;
         
-        if(rightStart == -1){
-            root.left = bstFromPreorder(preorder, start + 1, end); 
-        }
-        else{
-            root.left = bstFromPreorder(preorder, start + 1, rightStart - 1);
-            root.right = bstFromPreorder(preorder, rightStart, end);
-        }
+        TreeNode root = new TreeNode(preorder[index++]);
         
+        if(index < preorder.length && preorder[index] < root.val){
+            root.left = bstFromPreorderUtil(preorder, minValue, root.val);
+            
+        }
+        if(index < preorder.length && preorder[index] > root.val){
+            root.right = bstFromPreorderUtil(preorder, root.val, maxValue);    
+        }
         return root;
     }
 
     public TreeNode bstFromPreorder(int[] preorder) {
-
-        int n = preorder.length;
-        return bstFromPreorder(preorder, 0, n - 1);
-    }
+        return bstFromPreorderUtil(preorder, 0, Integer.MAX_VALUE); 
+    }   
 }
