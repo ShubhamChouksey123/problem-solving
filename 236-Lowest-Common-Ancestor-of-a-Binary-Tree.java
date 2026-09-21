@@ -9,31 +9,32 @@
  */
 class Solution {
 
+    private TreeNode lowCommonAncestor;
 
-    private TreeNode lowestCommonAncestorNode;
-    private boolean found;
-
-    private Pair<Boolean, Boolean> lowestCommonAncestorUtil(TreeNode root, TreeNode p, TreeNode q) {
+    public Pair<Boolean, Boolean> lowestCommonAncestorUtil(TreeNode root, TreeNode p, TreeNode q) {
         
         if(root == null) return new Pair<>(false, false);
 
-        Pair<Boolean, Boolean> leftResult = lowestCommonAncestorUtil(root.left, p, q);
-        Pair<Boolean, Boolean> rightResult = lowestCommonAncestorUtil(root.right, p, q);
+        Boolean pFound = false, qFound = false;
+        if(root == p) pFound = true;
+        if(root == q) qFound = true;
 
-        Boolean pFound = (root == p) || leftResult.getKey() || rightResult.getKey();
-        Boolean qFound = (root == q) ||leftResult.getValue() || rightResult.getValue();
+        Pair<Boolean, Boolean> left = lowestCommonAncestorUtil(root.left, p, q);
+        Pair<Boolean, Boolean> right = lowestCommonAncestorUtil(root.right, p, q);
 
-        if(!found && pFound && qFound){
-            lowestCommonAncestorNode = root; found = true;
+        pFound = pFound || left.getKey() || right.getKey();
+        qFound = qFound || left.getValue() || right.getValue();        
+
+        if(pFound && qFound && lowCommonAncestor == null){
+            lowCommonAncestor = root;
         }
-        return new Pair<>(pFound, qFound);    
+        return new Pair<>(pFound, qFound);
     }
 
     public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
-        found = false;
-        lowestCommonAncestorNode = null;
-
+        
+        lowCommonAncestor = null;
         lowestCommonAncestorUtil(root, p, q);
-        return lowestCommonAncestorNode;
+        return lowCommonAncestor;
     }
 }
