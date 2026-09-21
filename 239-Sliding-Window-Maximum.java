@@ -18,9 +18,8 @@ class Solution {
                 deque.pollLast();
             }
 
-            if(deque.isEmpty() || nums[deque.peekLast()] >= nums[end]){
-                deque.offerLast(end);   
-            }
+            deque.offerLast(end);   
+            
             ans[start] = nums[deque.peekFirst()];
         }   
         return ans;
