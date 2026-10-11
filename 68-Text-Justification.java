@@ -4,9 +4,6 @@ class Solution {
 
     private String createLastLine(String[] words, int start, int end, int wordWidth, int maxWidth){
 
-        int spaces = maxWidth - wordWidth;
-        int totalWords = end - start + 1;
-        
         int equalSpaces = 1;
         
         StringBuilder builder = new StringBuilder();
@@ -29,8 +26,7 @@ class Solution {
 
         int spaces = maxWidth - wordWidth;
         int totalWords = end - start + 1;
-        if(totalWords == 1) return "";
-
+        
         int equalSpaces = spaces / (totalWords - 1);
         int addOneSpaceTillIndex = (spaces % (totalWords - 1)) + start;
 
@@ -51,7 +47,6 @@ class Solution {
 
     private String createLine(String[] words, int start, int end, int wordWidth, int maxWidth){
 
-        int spaces = maxWidth - wordWidth;
         int totalWords = end - start + 1;
         if(totalWords == 1 || end == words.length - 1) 
             return createLastLine(words, start, end, wordWidth, maxWidth);
