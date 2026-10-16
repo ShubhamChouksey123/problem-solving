@@ -1,37 +1,47 @@
 class Solution {
-    
 
-    public int splitArray(int[] nums, int n, int[] prefixSum, int[][] memoCache, int start, int k) {
-
-        if(k == 1) return prefixSum[n] - prefixSum[start];
-        if(memoCache[start][k] != -1) return memoCache[start][k];
-
-        int minMaxSum = Integer.MAX_VALUE;
-        for(int end = start ; end <= n - k ; end++){
-            int thisSum = prefixSum[end + 1] - prefixSum[start];
-            int maxNextSum = splitArray(nums, n, prefixSum, memoCache, end + 1, k - 1);
-            
-            int maxSum = Math.max(thisSum, maxNextSum);
-            minMaxSum = Math.min(minMaxSum, maxSum);
-        } 
-        memoCache[start][k] = minMaxSum;
-        return minMaxSum;
-    }
-    
-    public int splitArray(int[] nums, int k) {
-
-        int n = nums.length;
-        int[] prefixSum = new int[n+1];
-
-        for(int i = 1 ; i <= n ; i++){
-            prefixSum[i] = prefixSum[i-1] + nums[i-1];
-        } 
-
-        int[][] memoCache = new int[n][k + 1];
-        for(int[] row : memoCache){
-            Arrays.fill(row, -1);
+    private int binarySeacrh(int[] nums, int k, int minRange, int maxRange) {
+        
+        if(minRange == maxRange){
+            return minRange;
         }
+        
+        int midRange = minRange + (maxRange - minRange)/2;
 
-        return splitArray(nums, n, prefixSum, memoCache, 0, k) ;
+        if(canSplit(nums, k, midRange)){
+            return binarySeacrh(nums, k, minRange, midRange);
+        }
+        else{
+            return binarySeacrh(nums, k, midRange + 1, maxRange);
+        }
+    }
+
+    private boolean canSplit(int[] nums, int k, int maxValue){
+
+        int start = 0, n = nums.length;
+        int splits = 0;
+        while(start < n){
+            int end = start;
+            int sum = nums[end];
+            while(end + 1 < n &&  sum + nums[end + 1] <= maxValue){
+                end = end + 1;
+                sum += nums[end];
+            } 
+            splits++;
+            start = end + 1;
+        }
+        return splits <= k;
+    }
+
+    public int splitArray(int[] nums, int k) {
+        int maxValue = nums[0];
+        int totalSum = 0;
+
+        for(int num : nums){
+            maxValue = Math.max(maxValue, num);
+            totalSum += num;
+        } 
+
+        return binarySeacrh(nums, k, maxValue, totalSum);
     }
 }
