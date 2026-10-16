@@ -1,15 +1,15 @@
 class Solution {
     
 
-    public int splitArray(int[] nums, int n, int[] predixSum, int[][] memoCache, int start, int k) {
+    public int splitArray(int[] nums, int n, int[] prefixSum, int[][] memoCache, int start, int k) {
 
-        if(k == 1) return predixSum[n] - predixSum[start];
+        if(k == 1) return prefixSum[n] - prefixSum[start];
         if(memoCache[start][k] != -1) return memoCache[start][k];
 
         int minMaxSum = Integer.MAX_VALUE;
         for(int end = start ; end <= n - k ; end++){
-            int thisSum = predixSum[end + 1] - predixSum[start];
-            int maxNextSum = splitArray(nums, n, predixSum, memoCache, end + 1, k - 1);;
+            int thisSum = prefixSum[end + 1] - prefixSum[start];
+            int maxNextSum = splitArray(nums, n, prefixSum, memoCache, end + 1, k - 1);
             
             int maxSum = Math.max(thisSum, maxNextSum);
             minMaxSum = Math.min(minMaxSum, maxSum);
@@ -21,10 +21,10 @@ class Solution {
     public int splitArray(int[] nums, int k) {
 
         int n = nums.length;
-        int[] predixSum = new int[n+1];
+        int[] prefixSum = new int[n+1];
 
         for(int i = 1 ; i <= n ; i++){
-            predixSum[i] = predixSum[i-1] + nums[i-1];
+            prefixSum[i] = prefixSum[i-1] + nums[i-1];
         } 
 
         int[][] memoCache = new int[n][k + 1];
@@ -32,6 +32,6 @@ class Solution {
             Arrays.fill(row, -1);
         }
 
-        return splitArray(nums, n, predixSum, memoCache, 0, k) ;
+        return splitArray(nums, n, prefixSum, memoCache, 0, k) ;
     }
 }
