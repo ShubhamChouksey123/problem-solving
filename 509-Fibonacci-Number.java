@@ -6,7 +6,8 @@ class Solution {
         if(n == 1) return 1;
         if(memoCache[n] != -1) return memoCache[n];
 
-        return memoCache[n] = (fib(n - 1) + fib(n - 2));
+        memoCache[n] = fib(n - 1, memoCache) + fib(n - 2, memoCache);
+        return memoCache[n];
     }
     
     public int fib(int n) {
