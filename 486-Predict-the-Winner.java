@@ -1,24 +1,22 @@
 class Solution {
-    
-    public int predictTheWinner(int[] nums, int[][] memoCache, int start, int end) {
+    public int predictTheWinner(int[] nums, int start, int end) {
         
         if(start == end) return nums[start];
+        if(start > end) return 0;
 
-        if(memoCache[start][end] != -1) return memoCache[start][end];
+        int a = nums[start] - predictTheWinner(nums, start + 1, end); 
+        int b = nums[end] - predictTheWinner(nums, start, end - 1); 
+                
 
-        int takeLeft = nums[start] -  predictTheWinner(nums, memoCache, start + 1, end);
-        int takeRight = nums[end] -  predictTheWinner(nums, memoCache, start, end - 1);
-
-        memoCache[start][end] = Math.max(takeLeft, takeRight);
-        return memoCache[start][end];
+        int optimalValue = Math.max(a, b);
+        return optimalValue;
     }
     
     public boolean predictTheWinner(int[] nums) {
+        
         int n = nums.length;
-        int[][] memoCache = new int[n][n];
-        for(int[] row : memoCache) Arrays.fill(row, -1);
+        int ans = predictTheWinner(nums, 0, n - 1) ;
 
-        return predictTheWinner(nums, memoCache, 0, n - 1) >= 0;    
-
+        return ans >= 0;
     }
 }
