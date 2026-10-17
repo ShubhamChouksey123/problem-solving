@@ -10,11 +10,8 @@ class Solution {
         for(int i = 1 ; i < n ; i++){
             if(target[i] > localMax){
                 result += (target[i] - localMax);
-                localMax = target[i];
             }
-            else{
-                localMax = target[i];
-            }
+            localMax = target[i];
         }
         return result;
     }
