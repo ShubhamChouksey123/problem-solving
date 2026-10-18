@@ -19,27 +19,23 @@ class Node {
 */
 
 class Solution {
-
-    public Node cloneGraph(Node node, Map<Node, Node> actualToClonedNode) {
-
+    
+    private Node cloneGraph(Node node, Map<Node, Node> actualToClonedNode) {
+        
         if(node == null) return null;
         if(actualToClonedNode.containsKey(node)) return actualToClonedNode.get(node);
 
         Node root = new Node(node.val);
-        System.out.println("root : " + root.val);
         actualToClonedNode.put(node, root);
-        
-        List<Node> clonedNeighbors = new ArrayList<>();
-        for(Node actualNeighbour : node.neighbors){
-            root.neighbors.add(cloneGraph(actualNeighbour, actualToClonedNode));
-        } 
 
-        return root;  
+        for(Node neighbour : node.neighbors){
+            root.neighbors.add(cloneGraph(neighbour, actualToClonedNode));
+        }
+        return root;
     }
-
+    
     public Node cloneGraph(Node node) {
-
-        if(node == null) return null;
+        
         Map<Node, Node> actualToClonedNode = new HashMap<>();
 
         return cloneGraph(node, actualToClonedNode);
