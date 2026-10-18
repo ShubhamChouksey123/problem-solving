@@ -7,10 +7,12 @@ class Solution {
         for(int i = 0 ; i < recipes.length ; i++){
             String recipe = recipes[i];
             adj.putIfAbsent(recipe, new ArrayList<>());
+            inwardEdgeCount.put(recipe, ingredients.get(i).size());
+
             for(String ingredient : ingredients.get(i)){
                 adj.putIfAbsent(ingredient, new ArrayList<>());
                 adj.get(ingredient).add(recipe);
-                inwardEdgeCount.put(recipe, inwardEdgeCount.getOrDefault(recipe, 0) + 1);
+                
             }
         }
 
