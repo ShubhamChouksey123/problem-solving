@@ -1,38 +1,43 @@
 class Solution {
-
-    private boolean isAllAvailable(List<String> ingredientsForRecipe, Set<String> available){
-        for(String ingredient : ingredientsForRecipe){
-            if(!available.contains(ingredient)) return false;
-        }
-        return true;
-    }
-
     public List<String> findAllRecipes(String[] recipes, List<List<String>> ingredients, String[] supplies) {
-        Set<String> available = new HashSet<>();
-        List<String> canCreate = new ArrayList<>();
-        for(String supplie : supplies){
-            available.add(supplie);
-        }
+        
+        Map<String, List<String>> adj = new HashMap<>();
+        Map<String, Integer> inwardEdgeCount = new HashMap<>();
 
-        boolean added = true;
-        int n = recipes.length;
-
-        boolean[] visited = new boolean[n];
-
-        while(added){
-            added = false;
-            for(int i = 0 ; i < n ; i++){
-                if(visited[i]) continue;
-
-                if(isAllAvailable(ingredients.get(i), available)){
-                    added = true;
-                    visited[i] = true;
-                    available.add(recipes[i]);
-                    canCreate.add(recipes[i]);
-                }
+        for(int i = 0 ; i < recipes.length ; i++){
+            String recipe = recipes[i];
+            adj.putIfAbsent(recipe, new ArrayList<>());
+            for(String ingredient : ingredients.get(i)){
+                adj.putIfAbsent(ingredient, new ArrayList<>());
+                adj.get(ingredient).add(recipe);
+                inwardEdgeCount.put(recipe, inwardEdgeCount.getOrDefault(recipe, 0) + 1);
             }
         }
-        return canCreate;
+
+        Deque<String> queue = new ArrayDeque<>();
+        for(String supplie : supplies){
+            queue.offerLast(supplie);
+            inwardEdgeCount.put(supplie, 0);
+        }
         
+        List<String> canMake = new ArrayList<>();
+
+        while(!queue.isEmpty()){
+            String item = queue.pollFirst();
+
+            if(!adj.containsKey(item)) continue;
+
+            for(String neighbour : adj.get(item)){
+                int currentEdge = inwardEdgeCount.getOrDefault(neighbour, 0);
+                currentEdge--;
+                inwardEdgeCount.put(neighbour, currentEdge);
+                if(currentEdge == 0){
+                    queue.offerLast(neighbour);
+                    canMake.add(neighbour);
+                }    
+            }
+        }
+        return canMake;
+
     }
 }
