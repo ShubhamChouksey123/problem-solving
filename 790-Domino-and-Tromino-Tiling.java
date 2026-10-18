@@ -22,4 +22,9 @@ class Solution {
         long ans = numTilings(n, memoCache);   
         return (int) ans;
     }
+
+    /*
+    *
+    f(n) = f(n-1) + f(n-2) + 2 * f(n-3) + 2 * f(n-4) + 2 * f(n-5) + ....
+    */
 }
