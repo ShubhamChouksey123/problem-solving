@@ -1,0 +1,36 @@
+class Solution {
+    
+    public boolean isBipartite(int[][] graph, Boolean[] group, boolean[] visited, int node, int parent, boolean groupToAssign) {
+        
+        if(group[node] != null && group[node] != groupToAssign) return false;
+        if(visited[node]) return true; 
+
+        group[node] = groupToAssign;
+        visited[node] = true;
+        
+        for(int neighbour : graph[node]){
+            if(neighbour == parent) continue;
+            if(!isBipartite(graph, group, visited, neighbour, parent, !groupToAssign)) {
+                return false;
+            }           
+        }
+        return true;
+    }
+    
+    
+    public boolean isBipartite(int[][] graph) {
+        int n = graph.length;
+        Boolean[] group = new Boolean[n];   
+        boolean[] visited = new boolean[n];
+
+        for(int i = 0 ; i < n ; i++){
+            if(!visited[i]){
+                if(!isBipartite(graph, group, visited, i, -1, true) ){
+                    return false;
+                }
+            }
+        }
+        return true;
+
+    }
+}
