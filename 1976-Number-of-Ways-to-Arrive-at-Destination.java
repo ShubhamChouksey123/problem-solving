@@ -1,52 +1,47 @@
 class Solution {
 
-    private final int MOD = 1_000_000_007;
-
+    private final long MOD = 1_000_000_007;
     public int countPaths(int n, int[][] roads) {
 
         List<long[]>[] adj = new ArrayList[n];
-        for(int i = 0 ; i < n ; i++){
-            adj[i] = new ArrayList<>();
-        }   
-
+        for(int i = 0 ; i < n ; i++) adj[i] = new ArrayList<>();
+        
         for(int[] road : roads){
-            int u = road[0], v = road[1], t = road[2];
-            adj[u].add(new long[]{v, t});
-            adj[v].add(new long[]{u, t});
+            adj[road[0]].add(new long[]{road[1], road[2]});
+            adj[road[1]].add(new long[]{road[0], road[2]});
         }
 
         long[] minDistance = new long[n];
         Arrays.fill(minDistance, Long.MAX_VALUE);
 
-        // priority queue containing (node , distance)
-        Queue<long[]> pq = new PriorityQueue<>((a, b) -> Long.compare(a[1], b[1]));
-        pq.offer(new long[]{0, 0});
+        long[] paths = new long[n];
+
+        // priority queue containing {node, cost}
+        Queue<long[]> queue = new PriorityQueue<>((a, b) -> Long.compare(a[1], b[1]));
         minDistance[0] = 0;
-        int totalShotestPaths = 0;
+        queue.add(new long[]{0, 0});
+        paths[0] = 1;
 
-        long[] ways = new long[n];
-        ways[0] = 1;
+        while(!queue.isEmpty()){
+            long[] top = queue.poll();
+            int node = (int)top[0]; long distance = top[1];
 
-        while(!pq.isEmpty()){
-            long[] top = pq.poll();
-            int node = (int)top[0]; long curDistance = top[1];
-            
-            if(curDistance > minDistance[node]) continue;
+            if(minDistance[node] < distance) continue;
 
             for(long[] neighbourEdge : adj[node]){
                 int neighbour = (int)neighbourEdge[0];
-                long thisDistance = curDistance + neighbourEdge[1];
+                long thisDistance = distance + neighbourEdge[1];
 
-                if(thisDistance < minDistance[neighbour]){
-                    minDistance[neighbour] = thisDistance;
-                    ways[neighbour] = ways[node];
-                    pq.offer(new long[]{neighbour, thisDistance});   
+                if(minDistance[neighbour] == thisDistance){
+                    paths[neighbour] = (paths[neighbour] + paths[node]) % MOD; 
                 }
-                else if(thisDistance == minDistance[neighbour]){
-                    ways[neighbour] = (ways[node] + ways[neighbour]) % MOD;   
+                else if(minDistance[neighbour] > thisDistance){
+                    queue.add(new long[]{neighbour, thisDistance});
+                    minDistance[neighbour] = thisDistance;
+                    paths[neighbour] = paths[node]; 
                 }
             }
         }
-        return (int)ways[n-1];
+        return (int)paths[n-1];
     }
 }
